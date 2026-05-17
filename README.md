@@ -1,6 +1,8 @@
 # Make Success Your Habit
 
-Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler.
+Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler. Homepage,
+Blog, Medienverwaltung und Admin-Dashboard liegen gemeinsam in dieser Codebase und werden
+zusammen auf Vercel deployed.
 
 ## Lokale Entwicklung
 
@@ -10,7 +12,14 @@ Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler
 3. Dev-Server starten:
    `npm run dev`
 
-Der Adminbereich liegt unter `/admin/login`.
+Der Adminbereich liegt unter `/admin/login`. Nach dem Login sind diese Bereiche enthalten:
+
+- `/admin` Dashboard
+- `/admin/blog` Blogposts verwalten
+- `/admin/blog/new` Blogpost erstellen
+- `/admin/media` Medien hochladen
+- `/admin/website` Website-Texte bearbeiten
+- `/admin/settings` Account- und Deployment-Hinweise
 
 ## Admin Account
 
@@ -78,3 +87,5 @@ In Vercel müssen mindestens diese Environment Variables gesetzt werden:
 Die Tabellen werden beim ersten Request automatisch angelegt und mit Startinhalten gefüllt, falls sie leer sind.
 
 Uploads schreiben lokal nach `public/uploads`. Wenn `BLOB_READ_WRITE_TOKEN` gesetzt ist, werden Uploads über Vercel Blob gespeichert und die öffentliche Blob-URL in der Datenbank abgelegt.
+Der Blog-Editor und die Medienverwaltung akzeptieren Bilder (`JPG`, `PNG`, `WebP`) und Videos
+(`MP4`, `MOV`, `WebM`).
