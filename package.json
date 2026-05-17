@@ -1,38 +1,26 @@
 {
-  "name": "react-example",
+  "name": "make-success-your-habit",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev --port=3000",
-    "build": "next build",
-    "start": "next start --port=3000",
-    "preview": "next start --port=3000",
-    "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit",
-    "hash:admin-password": "node scripts/hash-admin-password.mjs"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
-    "@libsql/client": "^0.17.3",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@vercel/blob": "^2.3.3",
-    "bcryptjs": "^3.0.3",
-    "dotenv": "^17.2.3",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
-    "next": "^16.2.3",
-    "postgres": "^3.4.9",
-    "react": "^19.0.1",
-    "react-dom": "^19.0.1",
-    "vercel": "^54.1.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "autoprefixer": "^10.4.21",
-    "esbuild": "^0.25.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.1.14",
-    "tsx": "^4.21.0",
-    "typescript": "~5.8.2"
+    "@tailwindcss/vite": "^4.1.14",
+    "typescript": "~5.8.2",
+    "vite": "^6.3.5"
   }
 }
