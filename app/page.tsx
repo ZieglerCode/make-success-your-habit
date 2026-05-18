@@ -15,29 +15,29 @@ export default async function HomePage() {
   const [featuredPost, ...secondaryPosts] = recentPosts;
 
   return (
-    <>
-      <SiteHome />
-
-      {/* Editorial Insights Preview */}
-      <section className="bg-[#f9f4e7] px-6 py-20 md:py-28">
+    <SiteHome
+      blogSection={
+      <section id="insights" className="scroll-mt-24 bg-[#f9f4e7] px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           {/* Section Header */}
-          <div className="mb-14 flex items-end justify-between border-b border-[#b49474]/30 pb-8">
-            <div>
+          <div className="mb-14 grid gap-8 border-t border-[#b49474]/30 pt-14 md:grid-cols-[0.95fr_1.05fr] md:items-end">
+            <div className="max-w-3xl">
               <p className="mb-3 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-                Insights
+                Aktuell aus dem Studio
               </p>
               <h2 className="font-serif text-4xl font-normal leading-tight text-[#03182e] md:text-5xl">
                 {content.ctaHeadline}
               </h2>
             </div>
-            <Link
-              className="hidden shrink-0 items-center gap-2 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e] md:inline-flex"
-              href="/blog"
-            >
-              Alle Insights
-              <span className="ml-1 text-[#d4af37]">→</span>
-            </Link>
+            <div className="md:justify-self-end">
+              <p className="max-w-xl text-base leading-8 text-[#4c4235]">{content.ctaText}</p>
+              <Link
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#03182e] px-6 py-3 text-sm font-medium tracking-wide text-[#f9f4e7] transition duration-300 hover:bg-[#100f0f] active:-translate-y-px"
+                href="/blog"
+              >
+                Insights lesen <span className="text-[#d4af37]">→</span>
+              </Link>
+            </div>
           </div>
 
           {recentPosts.length > 0 ? (
@@ -140,9 +140,9 @@ export default async function HomePage() {
               )}
 
               {/* Mobile CTA */}
-              <div className="mt-12 text-center md:hidden">
+              <div className="mt-12 text-center">
                 <Link
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#b49474]/30 px-5 py-3 text-sm font-medium text-[#4c4235] transition hover:border-[#03182e] hover:text-[#03182e] active:-translate-y-px"
                   href="/blog"
                 >
                   Alle Insights lesen <span className="text-[#d4af37]">→</span>
@@ -162,6 +162,7 @@ export default async function HomePage() {
           )}
         </div>
       </section>
-    </>
+      }
+    />
   );
 }

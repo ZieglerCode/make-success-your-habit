@@ -10,9 +10,16 @@ export const metadata: Metadata = {
     title: "Make Success Your Habit | Heike Ziegler",
     description:
       "Für ambitionierte Unternehmerinnen, Coaches und Expertinnen, die Erfolg als neue innere Normalität verkörpern möchten.",
-    images: ["/media/images/hero-image.png"],
+    images: ["/media/images/msyh-logo-512.png"],
     locale: "de_DE",
     type: "website",
+  },
+  icons: {
+    icon: [
+      {url: "/favicon.png", type: "image/png", sizes: "48x48"},
+      {url: "/media/images/msyh-logo-192.png", type: "image/png", sizes: "192x192"},
+    ],
+    apple: [{url: "/media/images/msyh-logo-192.png", sizes: "192x192", type: "image/png"}],
   },
 };
 

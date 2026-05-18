@@ -27,11 +27,18 @@ export function AdminShell({children, user}: {children: ReactNode; user: AdminUs
   return (
     <div className="min-h-[100dvh] bg-[#f8f1e4] font-display text-[#03182e]">
       <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-[#b49474]/24 bg-[#fcf3e3]/92 px-5 py-6 shadow-[12px_0_40px_rgba(16,15,15,0.035)] backdrop-blur lg:block">
-        <Link className="block border-b border-[#b49474]/20 pb-6" href="/admin">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8b6f4e]">
-            Make Success
+        <Link className="flex items-center gap-3 border-b border-[#b49474]/20 pb-6" href="/admin">
+          <img
+            alt=""
+            className="h-12 w-12 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
+            src="/media/images/msyh-logo.webp"
+          />
+          <span>
+            <span className="block text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8b6f4e]">
+              Make Success
+            </span>
+            <span className="mt-1 block text-2xl font-semibold tracking-tight">Content Studio</span>
           </span>
-          <span className="mt-2 block text-2xl font-semibold tracking-tight">Content Studio</span>
         </Link>
         <nav className="mt-8 flex flex-col gap-1">
           {navItems.map((item) => {
@@ -72,8 +79,9 @@ export function AdminShell({children, user}: {children: ReactNode; user: AdminUs
       <div className="lg:pl-72">
         <header className="sticky top-0 z-20 border-b border-[#b49474]/20 bg-[#f9f4e7]/88 px-5 py-4 backdrop-blur lg:hidden">
           <div className="flex items-center justify-between">
-            <Link className="text-xl font-semibold tracking-tight" href="/admin">
-              Content Studio
+            <Link className="flex items-center gap-2 text-xl font-semibold tracking-tight" href="/admin">
+              <img alt="" className="h-8 w-8 rounded-full object-contain" src="/media/images/msyh-logo.webp" />
+              <span>Content Studio</span>
             </Link>
             <button className="text-sm text-[#4c4235]" onClick={logout} type="button">
               Logout

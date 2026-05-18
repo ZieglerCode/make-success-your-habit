@@ -39,11 +39,11 @@ export default async function BlogPostPage({params}: PageProps) {
       <article className="mx-auto max-w-3xl px-6 pb-24 pt-24 md:pt-32">
         {/* Back Navigation */}
         <Link
-          className="inline-flex items-center gap-1.5 text-sm text-[#6b5f50] transition hover:text-[#03182e]"
+          className="inline-flex items-center gap-3 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e]"
           href="/blog"
         >
-          <span className="text-[#d4af37]">←</span>
-          Zurück zu den Insights
+          <img alt="" className="h-10 w-10 rounded-full object-contain" src="/media/images/msyh-logo.webp" />
+          <span>Zurück zu den Insights</span>
         </Link>
 
         {/* Post Header */}

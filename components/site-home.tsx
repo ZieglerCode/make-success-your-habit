@@ -15,6 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import type { ReactNode } from 'react';
 
 const fadeIn: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -31,7 +32,16 @@ const staggerContainer = {
   }
 };
 
-export default function App() {
+const navItems = [
+  {label: "Start", href: "#start"},
+  {label: "Methode", href: "#methode"},
+  {label: "Angebote", href: "#angebote"},
+  {label: "Über Heike", href: "#ueber-heike"},
+  {label: "Insights", href: "#insights"},
+  {label: "Community", href: "#community"},
+];
+
+export default function App({blogSection}: {blogSection?: ReactNode}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -75,26 +85,28 @@ export default function App() {
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center">
-              <span className="text-white font-display font-medium text-xs">M</span>
-            </div>
+          <a className="flex items-center gap-3" href="#start" aria-label="Make Success Your Habit Startseite">
+            <img
+              alt=""
+              className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
+              src="/media/images/msyh-logo.webp"
+            />
             <span className="font-display font-bold tracking-tight text-lg uppercase">Make Success Your Habit</span>
-          </div>
+          </a>
 
           <nav className="hidden lg:flex items-center gap-8">
-            {['Start', 'Methode', 'Angebote', 'Über Heike', 'Insights', 'Community'].map((item) => (
+            {navItems.map((item) => (
               <a 
-                key={item} 
-                href={`#${item.toLowerCase().replace(' ', '-')}`} 
+                key={item.href} 
+                href={item.href} 
                 className="text-sm font-medium text-brand-muted hover:text-brand-primary transition-colors"
               >
-                {item}
+                {item.label}
               </a>
             ))}
-            <button className="bg-brand-primary text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02] shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/30">
+            <a href="#kontakt" className="bg-brand-primary text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02] shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/30">
               Clarity Call
-            </button>
+            </a>
           </nav>
 
           <button className="lg:hidden text-brand-primary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -112,26 +124,26 @@ export default function App() {
             exit={{ opacity: 0, x: '100%' }}
             className="fixed inset-0 z-40 bg-brand-secondary flex flex-col pt-24 px-8 lg:hidden"
           >
-            {['Start', 'Methode', 'Angebote', 'Über Heike', 'Insights', 'Community'].map((item) => (
+            {navItems.map((item) => (
               <a 
-                key={item} 
-                href="#" 
+                key={item.href} 
+                href={item.href} 
                 className="text-2xl font-serif py-4 border-b border-brand-primary/10"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {item}
+                {item.label}
               </a>
             ))}
-            <button className="bg-brand-primary text-white mt-12 py-4 rounded-xl font-bold transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02]">
+            <a href="#kontakt" onClick={() => setIsMenuOpen(false)} className="bg-brand-primary text-white mt-12 py-4 rounded-xl font-bold text-center transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02]">
               Clarity Call anfragen
-            </button>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
 
       <main>
         {/* Section 1: Hero */}
-        <section ref={heroRef} className="relative left-1/2 w-screen -translate-x-1/2 min-h-[100dvh] flex items-center overflow-hidden bg-white">
+        <section id="start" ref={heroRef} className="relative left-1/2 w-screen -translate-x-1/2 min-h-[100dvh] flex items-center overflow-hidden bg-white">
           {/* Video Background */}
           <video
             ref={videoRef}
@@ -210,18 +222,18 @@ export default function App() {
               className="flex flex-col sm:flex-row items-start gap-3"
             >
               {/* Primary — Button-in-Button architecture */}
-              <button className="group flex items-center bg-brand-primary text-white pl-6 pr-1.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-brand-primary/90 active:scale-[0.97] shadow-xl shadow-brand-primary/25">
+              <a href="#kontakt" className="group flex items-center bg-brand-primary text-white pl-6 pr-1.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-brand-primary/90 active:scale-[0.97] shadow-xl shadow-brand-primary/25">
                 <span className="pr-4 tracking-wide">Clarity Call anfragen</span>
                 <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
-              </button>
+              </a>
 
               {/* Secondary */}
-              <button className="group flex items-center gap-2 text-brand-primary text-sm font-medium py-[0.82rem] px-6 rounded-full border border-brand-primary/12 bg-white/45 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/70 hover:border-brand-primary/20 active:scale-[0.97]">
+              <a href="#angebote" className="group flex items-center gap-2 text-brand-primary text-sm font-medium py-[0.82rem] px-6 rounded-full border border-brand-primary/12 bg-white/45 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/70 hover:border-brand-primary/20 active:scale-[0.97]">
                 Instant Success Formula
                 <ChevronRight className="w-3.5 h-3.5 opacity-40 transition-transform duration-500 group-hover:translate-x-0.5" />
-              </button>
+              </a>
             </motion.div>
           </div>
 
@@ -806,6 +818,7 @@ export default function App() {
 
         {/* Section 6.5: Testimonials — Editorial Proof */}
         <section
+          id="community"
           className="py-32 md:py-44 overflow-hidden"
           style={{ background: 'linear-gradient(180deg, #F9F4E7 0%, #FBF8F1 100%)' }}
         >
@@ -938,7 +951,7 @@ export default function App() {
 
         {/* Section 7: Über Heike — Editorial Authority */}
         <section
-          id="über-heike"
+          id="ueber-heike"
           className="py-32 md:py-44 overflow-hidden"
           style={{ background: 'linear-gradient(180deg, #FBF8F1 0%, #F7F1E6 100%)' }}
         >
@@ -1186,7 +1199,7 @@ export default function App() {
         </section>
 
         {/* Section 10: Leadmagnet */}
-        <section className="py-32 relative overflow-hidden">
+        <section id="kontakt" className="py-32 relative overflow-hidden">
           <div className="absolute inset-0 z-0">
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-accent/5 rounded-full blur-[100px]" />
           </div>
@@ -1213,6 +1226,8 @@ export default function App() {
           </div>
         </section>
 
+        {blogSection}
+
         {/* Section 11: Final CTA */}
         <section className="py-40 bg-brand-primary relative overflow-hidden">
           <motion.div 
@@ -1231,10 +1246,10 @@ export default function App() {
             <p className="text-white/60 text-xl mb-12 leading-relaxed">
               Wenn du spürst, dass dein nächstes Wachstum nicht mehr über Druck entstehen soll, ist der Clarity Call dein nächster Schritt.
             </p>
-            <button className="bg-white text-brand-primary px-12 py-6 rounded-full text-lg font-bold transition-all duration-500 hover:scale-[1.02] shadow-2xl shadow-white/10 hover:shadow-white/20 flex items-center gap-3 mx-auto group">
+            <a href="#kontakt" className="bg-white text-brand-primary px-12 py-6 rounded-full text-lg font-bold transition-all duration-500 hover:scale-[1.02] shadow-2xl shadow-white/10 hover:shadow-white/20 flex items-center gap-3 mx-auto group">
               Clarity Call anfragen
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
-            </button>
+            </a>
           </div>
         </section>
       </main>
@@ -1244,10 +1259,12 @@ export default function App() {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-16 md:gap-8 mb-20 text-center md:text-left">
             <div className="md:col-span-1">
-              <div className="flex items-center justify-center md:justify-start gap-2 mb-6">
-                <div className="w-6 h-6 rounded-full bg-brand-primary flex items-center justify-center">
-                  <span className="text-white font-display font-medium text-[10px]">M</span>
-                </div>
+              <div className="mb-6 flex items-center justify-center gap-3 md:justify-start">
+                <img
+                  alt=""
+                  className="h-11 w-11 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
+                  src="/media/images/msyh-logo.webp"
+                />
                 <span className="font-display font-bold tracking-tight text-sm uppercase">Make Success Your Habit</span>
               </div>
               <p className="text-brand-muted text-sm leading-relaxed max-w-xs">
@@ -1258,38 +1275,42 @@ export default function App() {
             <div>
               <h5 className="font-display font-bold text-xs uppercase tracking-widest mb-6">Markenwelt</h5>
               <ul className="space-y-4 text-sm text-brand-muted">
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Instant Success Formula</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Business Launch</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">ISA Alliance</a></li>
+                <li><a href="#angebote" className="hover:text-brand-primary transition-colors">Instant Success Formula</a></li>
+                <li><a href="#angebote" className="hover:text-brand-primary transition-colors">Business Launch</a></li>
+                <li><a href="#community" className="hover:text-brand-primary transition-colors">ISA Alliance</a></li>
+                <li><a href="/blog" className="hover:text-brand-primary transition-colors">Insights</a></li>
               </ul>
             </div>
 
             <div>
               <h5 className="font-display font-bold text-xs uppercase tracking-widest mb-6">Heike Ziegler</h5>
               <ul className="space-y-4 text-sm text-brand-muted">
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Über mich</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Methode</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Kontakt</a></li>
+                <li><a href="#ueber-heike" className="hover:text-brand-primary transition-colors">Über mich</a></li>
+                <li><a href="#methode" className="hover:text-brand-primary transition-colors">Methode</a></li>
+                <li><a href="#kontakt" className="hover:text-brand-primary transition-colors">Kontakt</a></li>
               </ul>
             </div>
 
             <div>
               <h5 className="font-display font-bold text-xs uppercase tracking-widest mb-6">Connect</h5>
               <ul className="space-y-4 text-sm text-brand-muted">
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Instagram</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Podcast</a></li>
+                <li><a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">Instagram</a></li>
+                <li><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">LinkedIn</a></li>
+                <li><a href="#insights" className="hover:text-brand-primary transition-colors">Podcast</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-brand-primary/5 gap-6">
-            <p className="text-xs text-brand-muted">© 2024 Make Success Your Habit. Alle Rechte vorbehalten.</p>
-            <div className="flex items-center gap-8 text-xs text-brand-muted font-medium">
-              <a href="#" className="hover:text-brand-primary">Impressum</a>
-              <a href="#" className="hover:text-brand-primary">Datenschutz</a>
-              <a href="#" className="hover:text-brand-primary">AGB</a>
-            </div>
+          <div className="flex flex-col items-center justify-between gap-6 border-t border-brand-primary/5 pt-10 md:flex-row">
+            <p className="text-xs text-brand-muted">© {new Date().getFullYear()} Heike Ziegler – Make Success Your Habit. Alle Rechte vorbehalten.</p>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-brand-muted">
+              <a className="transition-colors hover:text-brand-primary" href="/legal/impressum">Impressum</a>
+              <a className="transition-colors hover:text-brand-primary" href="/legal/datenschutz">Datenschutz</a>
+              <a className="transition-colors hover:text-brand-primary" href="/legal/agb">AGB</a>
+              <a className="transition-colors hover:text-brand-primary" href="/legal/nutzungsbedingungen">Nutzungsbedingungen</a>
+              <a className="transition-colors hover:text-brand-primary" href="/legal/eula">EULA</a>
+              <a className="transition-colors hover:text-brand-primary" href="/legal/widerruf">Widerruf</a>
+            </nav>
           </div>
         </div>
       </footer>

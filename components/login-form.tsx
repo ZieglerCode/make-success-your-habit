@@ -92,8 +92,13 @@ function LoginShell({children}: {children: React.ReactNode}) {
       </section>
       <section className="flex items-center justify-center">
         <div className="w-full max-w-md">
+          <img
+            alt=""
+            className="mb-5 h-16 w-16 rounded-full object-contain shadow-[0_10px_30px_rgba(16,15,15,0.08)]"
+            src="/media/images/msyh-logo.webp"
+          />
           <p className="mb-4 font-display text-[10px] font-semibold uppercase tracking-[0.24em] text-[#b49474]">
-            Content Studio
+            Make Success Content Studio
           </p>
           <h1 className="mb-8 font-display text-5xl font-semibold leading-none tracking-tight">Einloggen</h1>
           <div className="rounded-[28px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-6 shadow-[0_24px_70px_rgba(16,15,15,0.06)]">

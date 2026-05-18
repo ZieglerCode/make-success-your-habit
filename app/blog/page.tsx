@@ -23,11 +23,11 @@ export default async function BlogIndexPage() {
         <div className="mb-16 grid gap-10 border-b border-[#b49474]/30 pb-14 md:grid-cols-[0.9fr_1.1fr]">
           <div>
             <Link
-              className="inline-flex items-center gap-1.5 text-sm text-[#6b5f50] transition hover:text-[#03182e]"
+              className="inline-flex items-center gap-3 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e]"
               href="/"
             >
-              <span className="text-[#d4af37]">←</span>
-              Zur Website
+              <img alt="" className="h-10 w-10 rounded-full object-contain" src="/media/images/msyh-logo.webp" />
+              <span>Zur Website</span>
             </Link>
           </div>
           <div>
