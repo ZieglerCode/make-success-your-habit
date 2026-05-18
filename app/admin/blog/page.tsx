@@ -1,12 +1,29 @@
 import Link from "next/link";
 import {AdminPageHeader} from "@/components/admin-shell";
+import {AdminBlogList} from "@/components/admin-blog-list";
 import {AdminScreen} from "@/components/admin-screen";
-import {listPosts} from "@/lib/content-store";
+import {listPosts, type PostStatus} from "@/lib/content-store";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminBlogPage() {
-  const posts = await listPosts({includeArchived: true});
+const postStatuses = new Set(["draft", "review", "scheduled", "published", "archived", "all"]);
+
+type PageProps = {
+  searchParams: Promise<{q?: string; status?: string; sort?: string}>;
+};
+
+export default async function AdminBlogPage({searchParams}: PageProps) {
+  const params = await searchParams;
+  const status = postStatuses.has(params.status || "") ? params.status : "all";
+  const sort = params.sort === "newest" || params.sort === "oldest" || params.sort === "title" || params.sort === "updated"
+    ? params.sort
+    : "updated";
+  const posts = await listPosts({
+    includeArchived: true,
+    q: params.q,
+    sort,
+    status: status as PostStatus | "all",
+  });
 
   return (
     <AdminScreen>
@@ -18,37 +35,7 @@ export default async function AdminBlogPage() {
           Neuer Beitrag
         </Link>
       </AdminPageHeader>
-      <div className="divide-y divide-[#b49474]/20 border-y border-[#b49474]/20">
-        {posts.length ? (
-          posts.map((post) => (
-            <Link
-              className="grid gap-4 py-5 transition hover:bg-[#fcf3e3]/70 md:grid-cols-[120px_1fr_auto]"
-              href={`/admin/blog/${post.id}`}
-              key={post.id}
-            >
-              <img
-                alt=""
-                className="aspect-[4/3] w-full rounded-xl object-cover"
-                src={post.coverImage}
-              />
-              <div>
-                <p className="font-medium">{post.title}</p>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#6b5f50]">
-                  {post.excerpt || "Kein Auszug gepflegt."}
-                </p>
-                <p className="mt-2 text-xs text-[#6b5f50]">/{post.slug}</p>
-              </div>
-              <span className="h-fit rounded-full border border-[#b49474]/30 px-3 py-1 text-xs uppercase tracking-[0.14em] text-[#4c4235]">
-                {post.status}
-              </span>
-            </Link>
-          ))
-        ) : (
-          <div className="py-12">
-            <p className="text-[#6b5f50]">Noch keine Blogposts vorhanden.</p>
-          </div>
-        )}
-      </div>
+      <AdminBlogList initialQuery={params.q || ""} initialSort={sort === "oldest" ? "updated" : sort} initialStatus={status as PostStatus | "all"} posts={posts} />
     </AdminScreen>
   );
 }

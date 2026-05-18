@@ -5,7 +5,7 @@ import {createClient, type Client} from "@libsql/client";
 import postgres from "postgres";
 import {slugify} from "@/lib/slug";
 
-export type PostStatus = "draft" | "published" | "archived";
+export type PostStatus = "draft" | "review" | "scheduled" | "published" | "archived";
 
 export type BlogPost = {
   id: string;
@@ -14,12 +14,18 @@ export type BlogPost = {
   excerpt: string;
   content: string;
   coverImage: string;
+  coverAlt: string;
   status: PostStatus;
   publishedAt: string | null;
+  scheduledAt: string | null;
   createdAt: string;
   updatedAt: string;
   seoTitle: string;
   seoDescription: string;
+  authorName: string;
+  category: string;
+  tags: string;
+  readingMinutes: number;
 };
 
 export type SiteContent = {
@@ -41,6 +47,18 @@ export type MediaAsset = {
 };
 
 type Provider = "postgres" | "libsql";
+
+type ListPostsOptions = {
+  includeArchived?: boolean;
+  publishedOnly?: boolean;
+  q?: string;
+  status?: PostStatus | "all";
+  sort?: "newest" | "oldest" | "updated" | "title";
+  limit?: number;
+  offset?: number;
+};
+
+const DEFAULT_AUTHOR = "Heike Ziegler";
 
 const DB_DIR =
   process.env.VERCEL && !process.env.CONTENT_DB_DIR
@@ -118,12 +136,18 @@ async function initialize() {
         excerpt TEXT NOT NULL,
         content TEXT NOT NULL,
         "coverImage" TEXT NOT NULL,
+        "coverAlt" TEXT NOT NULL DEFAULT '',
         status TEXT NOT NULL,
         "publishedAt" TEXT,
+        "scheduledAt" TEXT,
         "createdAt" TEXT NOT NULL,
         "updatedAt" TEXT NOT NULL,
         "seoTitle" TEXT NOT NULL,
-        "seoDescription" TEXT NOT NULL
+        "seoDescription" TEXT NOT NULL,
+        "authorName" TEXT NOT NULL DEFAULT 'Heike Ziegler',
+        category TEXT NOT NULL DEFAULT '',
+        tags TEXT NOT NULL DEFAULT '',
+        "readingMinutes" INTEGER NOT NULL DEFAULT 1
       )
     `;
     await sql`
@@ -154,12 +178,18 @@ async function initialize() {
         excerpt TEXT NOT NULL,
         content TEXT NOT NULL,
         coverImage TEXT NOT NULL,
+        coverAlt TEXT NOT NULL DEFAULT '',
         status TEXT NOT NULL,
         publishedAt TEXT,
+        scheduledAt TEXT,
         createdAt TEXT NOT NULL,
         updatedAt TEXT NOT NULL,
         seoTitle TEXT NOT NULL,
-        seoDescription TEXT NOT NULL
+        seoDescription TEXT NOT NULL,
+        authorName TEXT NOT NULL DEFAULT 'Heike Ziegler',
+        category TEXT NOT NULL DEFAULT '',
+        tags TEXT NOT NULL DEFAULT '',
+        readingMinutes INTEGER NOT NULL DEFAULT 1
       )`,
       `CREATE TABLE IF NOT EXISTS site_content (
         key TEXT PRIMARY KEY,
@@ -177,7 +207,38 @@ async function initialize() {
     ]);
   }
 
+  await ensurePostEditorialColumns();
   await seed();
+}
+
+async function ensurePostEditorialColumns() {
+  const columns = [
+    {name: "coverAlt", definition: "TEXT NOT NULL DEFAULT ''"},
+    {name: "scheduledAt", definition: "TEXT"},
+    {name: "authorName", definition: `TEXT NOT NULL DEFAULT '${DEFAULT_AUTHOR}'`},
+    {name: "category", definition: "TEXT NOT NULL DEFAULT ''"},
+    {name: "tags", definition: "TEXT NOT NULL DEFAULT ''"},
+    {name: "readingMinutes", definition: "INTEGER NOT NULL DEFAULT 1"},
+  ];
+
+  if (provider() === "postgres") {
+    const sql = pgClient();
+    for (const column of columns) {
+      await sql.unsafe(`ALTER TABLE posts ADD COLUMN IF NOT EXISTS "${column.name}" ${column.definition}`);
+    }
+    return;
+  }
+
+  const sql = libsqlClient();
+  for (const column of columns) {
+    try {
+      await sql.execute(`ALTER TABLE posts ADD COLUMN ${column.name} ${column.definition}`);
+    } catch (error) {
+      if (!(error instanceof Error) || !/duplicate column|already exists/i.test(error.message)) {
+        throw error;
+      }
+    }
+  }
 }
 
 async function seed() {
@@ -198,9 +259,13 @@ async function seed() {
       content:
         "Viele Unternehmerinnen versuchen, ihr nächstes Wachstum mit mehr Disziplin zu lösen. Doch manchmal ist nicht mehr Strategie nötig, sondern ein innerer Standard, der Erfolg nicht länger als Ausnahme behandelt.\n\nWenn Erfolg zur Gewohnheit werden soll, braucht er Raum, Klarheit und eine Identität, die das Neue bereits tragen kann.",
       coverImage: "/media/images/heike-ziegler.webp",
+      coverAlt: "Heike Ziegler in ruhiger Portraitsituation",
       status: "published",
       seoTitle: "Erfolg beginnt dort, wo Druck nicht mehr führt",
       seoDescription: "Ein Impuls von Heike Ziegler über nachhaltigen Erfolg ohne Druck.",
+      authorName: DEFAULT_AUTHOR,
+      category: "Selbstführung",
+      tags: "Erfolg, Identität, Klarheit",
     }));
   }
 }
@@ -224,12 +289,18 @@ function normalizePost(row: Record<string, unknown>): BlogPost {
     excerpt: String(row.excerpt),
     content: String(row.content),
     coverImage: String(row.coverImage),
+    coverAlt: row.coverAlt ? String(row.coverAlt) : "",
     status: String(row.status) as PostStatus,
     publishedAt: row.publishedAt ? String(row.publishedAt) : null,
+    scheduledAt: row.scheduledAt ? String(row.scheduledAt) : null,
     createdAt: String(row.createdAt),
     updatedAt: String(row.updatedAt),
     seoTitle: String(row.seoTitle),
     seoDescription: String(row.seoDescription),
+    authorName: row.authorName ? String(row.authorName) : DEFAULT_AUTHOR,
+    category: row.category ? String(row.category) : "",
+    tags: row.tags ? String(row.tags) : "",
+    readingMinutes: Number(row.readingMinutes || estimateReadingMinutes(String(row.content || ""))),
   };
 }
 
@@ -245,30 +316,71 @@ function normalizeAsset(row: Record<string, unknown>): MediaAsset {
   };
 }
 
-export async function listPosts(options: {includeArchived?: boolean; publishedOnly?: boolean} = {}) {
+export async function listPosts(options: ListPostsOptions = {}) {
   await ensureInitialized();
+  await publishDueScheduledPosts();
 
-  const where = options.publishedOnly
-    ? "WHERE status = 'published'"
-    : options.includeArchived
-      ? ""
-      : "WHERE status != 'archived'";
+  const clauses: string[] = [];
+  const args: Array<string | number> = [];
+
+  if (options.publishedOnly) {
+    clauses.push("status = 'published'");
+  } else if (options.status && options.status !== "all") {
+    clauses.push("status = ?");
+    args.push(options.status);
+  } else if (!options.includeArchived) {
+    clauses.push("status != 'archived'");
+  }
+
+  const query = options.q?.trim();
+  if (query) {
+    clauses.push("(lower(title) LIKE ? OR lower(excerpt) LIKE ? OR lower(slug) LIKE ? OR lower(tags) LIKE ?)");
+    const like = `%${query.toLowerCase()}%`;
+    args.push(like, like, like, like);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  const orderBy = postOrderBy(options.sort, provider());
+  const limit = options.limit && options.limit > 0 ? Math.min(options.limit, 100) : null;
+  const offset = options.offset && options.offset > 0 ? options.offset : 0;
+  const pagination = limit ? ` LIMIT ${limit} OFFSET ${offset}` : "";
 
   if (provider() === "postgres") {
-    const rows = await pgClient().unsafe(
-      `SELECT * FROM posts ${where} ORDER BY COALESCE("publishedAt", "updatedAt") DESC`,
-    );
+    const rows = await pgClient().unsafe(`SELECT * FROM posts ${toPostgresWhere(where)} ${orderBy}${pagination}`, args);
     return rows.map((row) => normalizePost(row));
   }
 
   const result = await libsqlClient().execute(
-    `SELECT * FROM posts ${where} ORDER BY COALESCE(publishedAt, updatedAt) DESC`,
+    {sql: `SELECT * FROM posts ${where} ${orderBy}${pagination}`, args},
   );
   return result.rows.map((row) => normalizePost(row));
 }
 
+function toPostgresWhere(where: string) {
+  let index = 0;
+  return where.replace(/\?/g, () => `$${++index}`);
+}
+
+function postOrderBy(sort: ListPostsOptions["sort"], currentProvider: Provider) {
+  const publishedAt = currentProvider === "postgres" ? `"publishedAt"` : "publishedAt";
+  const updatedAt = currentProvider === "postgres" ? `"updatedAt"` : "updatedAt";
+
+  switch (sort) {
+    case "oldest":
+      return `ORDER BY COALESCE(${publishedAt}, ${updatedAt}) ASC`;
+    case "title":
+      return "ORDER BY lower(title) ASC";
+    case "updated":
+      return `ORDER BY ${updatedAt} DESC`;
+    case "newest":
+    default:
+      return `ORDER BY COALESCE(${publishedAt}, ${updatedAt}) DESC`;
+  }
+}
+
 export async function getPostById(id: string) {
   await ensureInitialized();
+  await publishDueScheduledPosts();
 
   if (provider() === "postgres") {
     const [row] = await pgClient()`SELECT * FROM posts WHERE id = ${id}`;
@@ -281,6 +393,7 @@ export async function getPostById(id: string) {
 
 export async function getPostBySlug(slug: string) {
   await ensureInitialized();
+  await publishDueScheduledPosts();
 
   if (provider() === "postgres") {
     const [row] = await pgClient()`SELECT * FROM posts WHERE slug = ${slug} AND status = 'published'`;
@@ -294,25 +407,52 @@ export async function getPostBySlug(slug: string) {
   return result.rows[0] ? normalizePost(result.rows[0]) : undefined;
 }
 
+async function publishDueScheduledPosts() {
+  const now = new Date().toISOString();
+
+  if (provider() === "postgres") {
+    await pgClient()`
+      UPDATE posts
+      SET status = 'published', "publishedAt" = COALESCE("scheduledAt", ${now}), "updatedAt" = ${now}
+      WHERE status = 'scheduled' AND "scheduledAt" IS NOT NULL AND "scheduledAt" <= ${now}
+    `;
+    return;
+  }
+
+  await libsqlClient().execute({
+    sql: `UPDATE posts
+      SET status = 'published', publishedAt = COALESCE(scheduledAt, ?), updatedAt = ?
+      WHERE status = 'scheduled' AND scheduledAt IS NOT NULL AND scheduledAt <= ?`,
+    args: [now, now, now],
+  });
+}
+
 function buildPost(input: Partial<BlogPost>) {
   const now = new Date().toISOString();
   const id = randomUUID();
   const title = input.title?.trim() || "Unbenannter Entwurf";
   const status = input.status || "draft";
   const publishedAt = status === "published" ? input.publishedAt || now : null;
+  const content = input.content?.trim() || "";
   const post: BlogPost = {
     id,
     title,
     slug: input.slug?.trim() || slugify(title),
     excerpt: input.excerpt?.trim() || "",
-    content: input.content?.trim() || "",
+    content,
     coverImage: input.coverImage?.trim() || "/media/images/heike-ziegler.webp",
+    coverAlt: input.coverAlt?.trim() || title,
     status,
     publishedAt,
+    scheduledAt: status === "scheduled" ? input.scheduledAt || now : null,
     createdAt: now,
     updatedAt: now,
     seoTitle: input.seoTitle?.trim() || title,
     seoDescription: input.seoDescription?.trim() || input.excerpt?.trim() || "",
+    authorName: input.authorName?.trim() || DEFAULT_AUTHOR,
+    category: input.category?.trim() || "",
+    tags: input.tags?.trim() || "",
+    readingMinutes: input.readingMinutes || estimateReadingMinutes(content),
   };
   return post;
 }
@@ -321,15 +461,15 @@ async function insertPost(post: BlogPost) {
   if (provider() === "postgres") {
     await pgClient()`
       INSERT INTO posts
-        (id, title, slug, excerpt, content, "coverImage", status, "publishedAt", "createdAt", "updatedAt", "seoTitle", "seoDescription")
+        (id, title, slug, excerpt, content, "coverImage", "coverAlt", status, "publishedAt", "scheduledAt", "createdAt", "updatedAt", "seoTitle", "seoDescription", "authorName", category, tags, "readingMinutes")
       VALUES
-        (${post.id}, ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content}, ${post.coverImage}, ${post.status}, ${post.publishedAt}, ${post.createdAt}, ${post.updatedAt}, ${post.seoTitle}, ${post.seoDescription})
+        (${post.id}, ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content}, ${post.coverImage}, ${post.coverAlt}, ${post.status}, ${post.publishedAt}, ${post.scheduledAt}, ${post.createdAt}, ${post.updatedAt}, ${post.seoTitle}, ${post.seoDescription}, ${post.authorName}, ${post.category}, ${post.tags}, ${post.readingMinutes})
     `;
   } else {
     await libsqlClient().execute({
       sql: `INSERT INTO posts
-        (id, title, slug, excerpt, content, coverImage, status, publishedAt, createdAt, updatedAt, seoTitle, seoDescription)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, title, slug, excerpt, content, coverImage, coverAlt, status, publishedAt, scheduledAt, createdAt, updatedAt, seoTitle, seoDescription, authorName, category, tags, readingMinutes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         post.id,
         post.title,
@@ -337,12 +477,18 @@ async function insertPost(post: BlogPost) {
         post.excerpt,
         post.content,
         post.coverImage,
+        post.coverAlt,
         post.status,
         post.publishedAt,
+        post.scheduledAt,
         post.createdAt,
         post.updatedAt,
         post.seoTitle,
         post.seoDescription,
+        post.authorName,
+        post.category,
+        post.tags,
+        post.readingMinutes,
       ],
     });
   }
@@ -363,6 +509,7 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
   const status = input.status || existing.status;
   const publishedAt =
     status === "published" ? input.publishedAt || existing.publishedAt || now : input.publishedAt ?? null;
+  const content = input.content?.trim() ?? existing.content;
 
   const updated: BlogPost = {
     ...existing,
@@ -370,13 +517,19 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
     title: input.title?.trim() || existing.title,
     slug: input.slug?.trim() || existing.slug,
     excerpt: input.excerpt?.trim() ?? existing.excerpt,
-    content: input.content?.trim() ?? existing.content,
+    content,
     coverImage: input.coverImage?.trim() || existing.coverImage,
+    coverAlt: input.coverAlt?.trim() ?? existing.coverAlt,
     status,
     publishedAt,
+    scheduledAt: status === "scheduled" ? input.scheduledAt || existing.scheduledAt || now : input.scheduledAt ?? null,
     updatedAt: now,
     seoTitle: input.seoTitle?.trim() || input.title?.trim() || existing.seoTitle,
     seoDescription: input.seoDescription?.trim() ?? existing.seoDescription,
+    authorName: input.authorName?.trim() || existing.authorName,
+    category: input.category?.trim() ?? existing.category,
+    tags: input.tags?.trim() ?? existing.tags,
+    readingMinutes: input.readingMinutes || estimateReadingMinutes(content),
   };
 
   if (provider() === "postgres") {
@@ -387,28 +540,41 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
         excerpt = ${updated.excerpt},
         content = ${updated.content},
         "coverImage" = ${updated.coverImage},
+        "coverAlt" = ${updated.coverAlt},
         status = ${updated.status},
         "publishedAt" = ${updated.publishedAt},
+        "scheduledAt" = ${updated.scheduledAt},
         "updatedAt" = ${updated.updatedAt},
         "seoTitle" = ${updated.seoTitle},
-        "seoDescription" = ${updated.seoDescription}
+        "seoDescription" = ${updated.seoDescription},
+        "authorName" = ${updated.authorName},
+        category = ${updated.category},
+        tags = ${updated.tags},
+        "readingMinutes" = ${updated.readingMinutes}
       WHERE id = ${id}
     `;
   } else {
     await libsqlClient().execute({
-      sql: `UPDATE posts SET title = ?, slug = ?, excerpt = ?, content = ?, coverImage = ?, status = ?,
-        publishedAt = ?, updatedAt = ?, seoTitle = ?, seoDescription = ? WHERE id = ?`,
+      sql: `UPDATE posts SET title = ?, slug = ?, excerpt = ?, content = ?, coverImage = ?, coverAlt = ?, status = ?,
+        publishedAt = ?, scheduledAt = ?, updatedAt = ?, seoTitle = ?, seoDescription = ?, authorName = ?,
+        category = ?, tags = ?, readingMinutes = ? WHERE id = ?`,
       args: [
         updated.title,
         updated.slug,
         updated.excerpt,
         updated.content,
         updated.coverImage,
+        updated.coverAlt,
         updated.status,
         updated.publishedAt,
+        updated.scheduledAt,
         updated.updatedAt,
         updated.seoTitle,
         updated.seoDescription,
+        updated.authorName,
+        updated.category,
+        updated.tags,
+        updated.readingMinutes,
         id,
       ],
     });
@@ -483,6 +649,49 @@ export async function listMediaAssets() {
   return result.rows.map((row) => normalizeAsset(row));
 }
 
+export async function getMediaAssetById(id: string) {
+  await ensureInitialized();
+
+  if (provider() === "postgres") {
+    const [row] = await pgClient()`SELECT * FROM media_assets WHERE id = ${id}`;
+    return row ? normalizeAsset(row) : undefined;
+  }
+
+  const result = await libsqlClient().execute({sql: "SELECT * FROM media_assets WHERE id = ?", args: [id]});
+  return result.rows[0] ? normalizeAsset(result.rows[0]) : undefined;
+}
+
+export async function updateMediaAsset(id: string, input: Partial<Pick<MediaAsset, "alt">>) {
+  await ensureInitialized();
+  const existing = await getMediaAssetById(id);
+  if (!existing) return null;
+
+  const updated = {
+    ...existing,
+    alt: input.alt?.trim() ?? existing.alt,
+  };
+
+  if (provider() === "postgres") {
+    await pgClient()`UPDATE media_assets SET alt = ${updated.alt} WHERE id = ${id}`;
+  } else {
+    await libsqlClient().execute({sql: "UPDATE media_assets SET alt = ? WHERE id = ?", args: [updated.alt, id]});
+  }
+
+  return updated;
+}
+
+export async function deleteMediaAsset(id: string) {
+  await ensureInitialized();
+
+  if (provider() === "postgres") {
+    const result = await pgClient()`DELETE FROM media_assets WHERE id = ${id}`;
+    return result.count > 0;
+  }
+
+  const result = await libsqlClient().execute({sql: "DELETE FROM media_assets WHERE id = ?", args: [id]});
+  return result.rowsAffected > 0;
+}
+
 export async function createMediaAsset(input: Omit<MediaAsset, "id" | "createdAt">) {
   await ensureInitialized();
 
@@ -511,4 +720,9 @@ export function contentStorageProvider() {
   if (process.env.TURSO_DATABASE_URL) return "turso";
   if (postgresUrl()) return "postgres";
   return "local-sqlite";
+}
+
+function estimateReadingMinutes(content: string) {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
 }

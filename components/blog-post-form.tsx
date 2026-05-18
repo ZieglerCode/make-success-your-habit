@@ -1,42 +1,158 @@
 "use client";
 
-import {Image, Link2, Loader2, Upload, Video} from "lucide-react";
+import {
+  ArrowSquareOut,
+  CheckCircle,
+  FloppyDisk,
+  ImageSquare,
+  Link as LinkIcon,
+  ListBullets,
+  MagnifyingGlass,
+  Quotes,
+  SpinnerGap,
+  Trash,
+  Upload,
+  VideoCamera,
+  WarningCircle,
+} from "@phosphor-icons/react";
+import Link from "next/link";
 import {useRouter} from "next/navigation";
-import {useMemo, useRef, useState} from "react";
-import type {BlogPost, PostStatus} from "@/lib/content-store";
+import {useEffect, useMemo, useRef, useState} from "react";
+import {BlogContentRenderer} from "@/components/blog-content-renderer";
+import type {BlogPost, MediaAsset, PostStatus} from "@/lib/content-store";
+import {
+  formatDate,
+  formatDateTimeInput,
+  fromDateTimeInput,
+  readingMinutes,
+  seoIssues,
+  statusLabels,
+  wordCount,
+} from "@/lib/editor-insights";
 import {slugify} from "@/lib/slug";
 
 type Draft = Pick<
   BlogPost,
-  "title" | "slug" | "excerpt" | "content" | "coverImage" | "status" | "seoTitle" | "seoDescription"
+  | "title"
+  | "slug"
+  | "excerpt"
+  | "content"
+  | "coverImage"
+  | "coverAlt"
+  | "status"
+  | "seoTitle"
+  | "seoDescription"
+  | "authorName"
+  | "category"
+  | "tags"
+  | "scheduledAt"
 >;
 
 const emptyDraft: Draft = {
-  title: "",
-  slug: "",
-  excerpt: "",
+  authorName: "Heike Ziegler",
+  category: "",
   content: "",
+  coverAlt: "",
   coverImage: "/media/images/heike-ziegler.webp",
-  status: "draft",
-  seoTitle: "",
+  excerpt: "",
+  scheduledAt: null,
   seoDescription: "",
+  seoTitle: "",
+  slug: "",
+  status: "draft",
+  tags: "",
+  title: "",
 };
 
-export function BlogPostForm({post}: {post?: BlogPost}) {
+export function BlogPostForm({
+  initialCover,
+  initialCoverAlt,
+  mediaAssets = [],
+  post,
+}: {
+  initialCover?: string;
+  initialCoverAlt?: string;
+  mediaAssets?: MediaAsset[];
+  post?: BlogPost;
+}) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [draft, setDraft] = useState<Draft>(post ? {...post} : emptyDraft);
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialDraft = post ? postToDraft(post) : {...emptyDraft, coverAlt: initialCoverAlt || "", coverImage: initialCover || emptyDraft.coverImage};
+  const [draft, setDraft] = useState<Draft>(initialDraft);
+  const [savedSnapshot, setSavedSnapshot] = useState(JSON.stringify(initialDraft));
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
   const [lastUpload, setLastUpload] = useState<{url: string; mimeType: string; alt: string} | null>(null);
+  const [mode, setMode] = useState<"write" | "preview">("write");
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
+  const [mediaQuery, setMediaQuery] = useState("");
+  const [recoveryAvailable, setRecoveryAvailable] = useState(false);
 
-  const wordCount = useMemo(
-    () => draft.content.trim().split(/\s+/).filter(Boolean).length,
-    [draft.content],
+  const currentWordCount = useMemo(() => wordCount(draft.content), [draft.content]);
+  const currentReadingMinutes = useMemo(() => readingMinutes(draft.content), [draft.content]);
+  const issues = useMemo(() => seoIssues(draft), [draft]);
+  const blockingIssues = useMemo(
+    () =>
+      issues.filter((issue) =>
+        ["Titel fehlt", "Slug fehlt", "Auszug fehlt", "Inhalt fehlt", "Cover fehlt", "Cover-Alt-Text fehlt"].includes(issue),
+      ),
+    [issues],
   );
+  const isDirty = JSON.stringify(draft) !== savedSnapshot;
   const isCoverVideo = isVideoUrl(draft.coverImage);
+  const canOpenPublic = post && draft.status === "published" && draft.slug;
+  const recoveryKey = `content-studio:draft:${post?.id || "new"}`;
+  const filteredMedia = useMemo(() => {
+    const query = mediaQuery.trim().toLowerCase();
+    return mediaAssets.filter((asset) => {
+      if (!query) return true;
+      return [asset.filename, asset.alt, asset.mimeType, asset.url].join(" ").toLowerCase().includes(query);
+    });
+  }, [mediaAssets, mediaQuery]);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(recoveryKey);
+    if (stored && stored !== savedSnapshot) setRecoveryAvailable(true);
+  }, [recoveryKey, savedSnapshot]);
+
+  useEffect(() => {
+    if (!isDirty) return;
+    window.localStorage.setItem(recoveryKey, JSON.stringify(draft));
+  }, [draft, isDirty, recoveryKey]);
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    function warnBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+
+    function warnBeforeInternalNavigation(event: MouseEvent) {
+      const target = event.target instanceof Element ? event.target.closest("a") : null;
+      if (!target || target.target === "_blank" || event.defaultPrevented) return;
+
+      const href = target.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      const nextUrl = new URL(href, window.location.href);
+      if (nextUrl.origin !== window.location.origin) return;
+
+      const confirmed = window.confirm("Es gibt ungespeicherte Änderungen. Seite trotzdem verlassen?");
+      if (!confirmed) event.preventDefault();
+    }
+
+    window.addEventListener("beforeunload", warnBeforeUnload);
+    document.addEventListener("click", warnBeforeInternalNavigation, true);
+    return () => {
+      window.removeEventListener("beforeunload", warnBeforeUnload);
+      document.removeEventListener("click", warnBeforeInternalNavigation, true);
+    };
+  }, [isDirty]);
 
   function update<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((current) => {
@@ -44,10 +160,13 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
       if (key === "title") {
         if (!post && !current.slug) next.slug = slugify(String(value));
         if (!current.seoTitle) next.seoTitle = String(value);
+        if (!current.coverAlt) next.coverAlt = String(value);
       }
       if (key === "excerpt" && !current.seoDescription) next.seoDescription = String(value);
+      if (key === "status" && value !== "scheduled") next.scheduledAt = null;
       return next;
     });
+    setMessage(null);
   }
 
   function appendToContent(markup: string) {
@@ -55,6 +174,28 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
       ...current,
       content: `${current.content.trimEnd()}${current.content.trim() ? "\n\n" : ""}${markup}\n\n`,
     }));
+    setMessage(null);
+  }
+
+  function insertMarkup(markup: string) {
+    const textarea = contentTextareaRef.current;
+    if (!textarea) {
+      appendToContent(markup);
+      return;
+    }
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = draft.content.slice(start, end);
+    const insertion = selected ? markup.replace("Text", selected) : markup;
+    const nextContent = `${draft.content.slice(0, start)}${insertion}${draft.content.slice(end)}`;
+
+    update("content", nextContent);
+    requestAnimationFrame(() => {
+      textarea.focus();
+      const nextCursor = start + insertion.length;
+      textarea.setSelectionRange(nextCursor, nextCursor);
+    });
   }
 
   function insertUploadedMedia(asset = lastUpload) {
@@ -72,7 +213,7 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("alt", draft.title || file.name.replace(/\.[^.]+$/, ""));
+    formData.append("alt", draft.coverAlt || draft.title || file.name.replace(/\.[^.]+$/, ""));
 
     const response = await fetch("/api/media", {
       body: formData,
@@ -94,15 +235,22 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
       url: data.url,
     };
     setLastUpload(uploaded);
-    setUploadMessage("Upload abgeschlossen. Du kannst die Datei als Cover verwenden oder in den Inhalt einfügen.");
+    setUploadMessage("Upload abgeschlossen. Verwende die Datei als Cover oder füge sie in den Inhalt ein.");
   }
 
   async function save() {
-    setIsSaving(true);
     setError(null);
+    setMessage(null);
 
+    if ((draft.status === "published" || draft.status === "scheduled") && blockingIssues.length) {
+      setError(`Vor dem Veröffentlichen bitte beheben: ${blockingIssues.join(", ")}.`);
+      return;
+    }
+
+    setIsSaving(true);
+    const payload = {...draft, readingMinutes: currentReadingMinutes};
     const response = await fetch(post ? `/api/posts/${post.id}` : "/api/posts", {
-      body: JSON.stringify(draft),
+      body: JSON.stringify(payload),
       headers: {"content-type": "application/json"},
       method: post ? "PATCH" : "POST",
     });
@@ -115,12 +263,50 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
       return;
     }
 
-    router.replace(`/admin/blog/${data.id}`);
+    const nextDraft = postToDraft(data);
+    setDraft(nextDraft);
+    setSavedSnapshot(JSON.stringify(nextDraft));
+    window.localStorage.removeItem(recoveryKey);
+    setRecoveryAvailable(false);
+    setMessage("Gespeichert.");
+
+    if (!post) {
+      router.replace(`/admin/blog/${data.id}`);
+    }
     router.refresh();
+  }
+
+  function restoreLocalDraft() {
+    const stored = window.localStorage.getItem(recoveryKey);
+    if (!stored) return;
+
+    try {
+      setDraft(JSON.parse(stored) as Draft);
+      setRecoveryAvailable(false);
+      setMessage("Lokale Sicherung wiederhergestellt.");
+    } catch {
+      window.localStorage.removeItem(recoveryKey);
+      setRecoveryAvailable(false);
+    }
+  }
+
+  function discardLocalDraft() {
+    window.localStorage.removeItem(recoveryKey);
+    setRecoveryAvailable(false);
+    setMessage("Lokale Sicherung verworfen.");
+  }
+
+  function insertMediaAsset(asset: MediaAsset) {
+    const alt = asset.alt || draft.title || asset.filename;
+    appendToContent(asset.mimeType.startsWith("video/") ? `[video](${asset.url})` : `![${alt}](${asset.url})`);
+    setLastUpload({alt, mimeType: asset.mimeType, url: asset.url});
+    setShowMediaLibrary(false);
   }
 
   async function remove() {
     if (!post) return;
+    const confirmed = window.confirm("Diesen Blogpost dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.");
+    if (!confirmed) return;
 
     setIsSaving(true);
     await fetch(`/api/posts/${post.id}`, {method: "DELETE"});
@@ -129,17 +315,145 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
   }
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[1fr_380px]">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
       <div className="space-y-5">
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-          <Field label="Titel">
-            <input
-              className="admin-input text-lg"
-              value={draft.title}
-              onChange={(event) => update("title", event.target.value)}
-              placeholder="Titel des Insights"
-            />
-          </Field>
+        <div className="sticky top-0 z-10 -mx-5 border-b border-[#b49474]/20 bg-[#f8f1e4]/92 px-5 py-3 backdrop-blur md:top-0 md:mx-0 md:rounded-[22px] md:border md:bg-[#fcf3e3]/76">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex rounded-full border border-[#b49474]/25 bg-[#fffaf0] p-1">
+              <button
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition active:-translate-y-px ${
+                  mode === "write" ? "bg-[#03182e] text-[#f9f4e7]" : "text-[#4c4235] hover:bg-[#f2e2ce]"
+                }`}
+                onClick={() => setMode("write")}
+                type="button"
+              >
+                Schreiben
+              </button>
+              <button
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition active:-translate-y-px ${
+                  mode === "preview" ? "bg-[#03182e] text-[#f9f4e7]" : "text-[#4c4235] hover:bg-[#f2e2ce]"
+                }`}
+                onClick={() => setMode("preview")}
+                type="button"
+              >
+                Vorschau
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <SaveState dirty={isDirty} isSaving={isSaving} message={message} />
+              <button
+                className="inline-flex items-center gap-2 rounded-full bg-[#03182e] px-4 py-2.5 text-sm font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f] active:-translate-y-px disabled:opacity-50"
+                disabled={isSaving}
+                onClick={save}
+                type="button"
+              >
+                {isSaving ? <SpinnerGap className="size-4 animate-spin" /> : <FloppyDisk className="size-4" />}
+                Speichern
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {error ? <Notice tone="error">{error}</Notice> : null}
+        {recoveryAvailable ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[20px] border border-[#b49474]/25 bg-[#fffaf0] px-4 py-3">
+            <div>
+              <p className="text-sm font-semibold text-[#03182e]">Lokale Sicherung gefunden</p>
+              <p className="mt-1 text-xs text-[#6b5f50]">Es gibt eine ungespeicherte Version dieses Beitrags auf diesem Gerät.</p>
+            </div>
+            <div className="flex gap-2">
+              <button className="rounded-full border border-[#b49474]/30 px-3 py-2 text-xs font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce]" onClick={discardLocalDraft} type="button">
+                Verwerfen
+              </button>
+              <button className="rounded-full bg-[#03182e] px-3 py-2 text-xs font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f]" onClick={restoreLocalDraft} type="button">
+                Wiederherstellen
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        {mode === "write" ? (
+          <div className="space-y-5">
+            <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+              <Field label="Titel" helper="Wird für H1, Auto-Slug und Standard-SEO genutzt." error={!draft.title.trim() ? "Pflichtfeld" : undefined}>
+                <input
+                  className="admin-input text-lg font-semibold"
+                  value={draft.title}
+                  onChange={(event) => update("title", event.target.value)}
+                  placeholder="Titel des Insights"
+                />
+              </Field>
+              <Field label="Slug" helper={`URL: /blog/${draft.slug || "neuer-insight"}`} error={!draft.slug.trim() ? "Pflichtfeld" : undefined}>
+                <input
+                  className="admin-input"
+                  value={draft.slug}
+                  onChange={(event) => update("slug", slugify(event.target.value))}
+                  placeholder="erfolg-ohne-druck"
+                />
+              </Field>
+            </div>
+
+            <Field label="Auszug" helper={`${draft.excerpt.length}/220 Zeichen empfohlen`} error={!draft.excerpt.trim() ? "Pflichtfeld" : undefined}>
+              <textarea
+                className="admin-input min-h-28"
+                value={draft.excerpt}
+                onChange={(event) => update("excerpt", event.target.value)}
+                placeholder="Kurzer Teaser für Blogübersicht und SEO."
+              />
+            </Field>
+
+            <section className="overflow-hidden rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/50">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#b49474]/20 px-4 py-4">
+                <div>
+                  <p className="text-sm font-semibold text-[#03182e]">Inhalt</p>
+                  <p className="mt-1 text-xs text-[#6b5f50]">
+                    {currentWordCount} Wörter · {currentReadingMinutes} Min. Lesezeit
+                  </p>
+                </div>
+                <EditorToolbar
+                  canInsertUpload={Boolean(lastUpload)}
+                  hasMediaLibrary={mediaAssets.length > 0}
+                  onHeading={() => insertMarkup("## Text")}
+                  onInsertUpload={() => insertUploadedMedia()}
+                  onLink={() => insertMarkup("[Text](https://)")}
+                  onList={() => insertMarkup("- Text")}
+                  onMediaLibrary={() => setShowMediaLibrary((current) => !current)}
+                  onQuote={() => insertMarkup("> Text")}
+                />
+              </div>
+              {showMediaLibrary ? (
+                <MediaLibraryPanel
+                  assets={filteredMedia}
+                  onInsert={insertMediaAsset}
+                  query={mediaQuery}
+                  setQuery={setMediaQuery}
+                />
+              ) : null}
+              <textarea
+                ref={contentTextareaRef}
+                className="min-h-[620px] w-full resize-y border-0 bg-[#fffaf0] px-5 py-5 font-sans text-[15px] leading-7 text-[#03182e] outline-none transition focus:bg-white md:px-6"
+                value={draft.content}
+                onChange={(event) => update("content", event.target.value)}
+                placeholder="Absätze mit einer Leerzeile trennen. Bilder werden als ![Alt](URL), Videos als [video](URL) eingefügt."
+              />
+            </section>
+          </div>
+        ) : (
+          <PreviewPane draft={draft} />
+        )}
+      </div>
+
+      <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
+        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-[#03182e]">Veröffentlichung</p>
+              <p className="mt-1 text-xs text-[#6b5f50]">{post ? `Bearbeitet ${formatDate(post.updatedAt)}` : "Neuer Entwurf"}</p>
+            </div>
+            <span className="rounded-full border border-[#b49474]/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#4c4235]">
+              {statusLabels[draft.status]}
+            </span>
+          </div>
           <Field label="Status">
             <select
               className="admin-input"
@@ -147,68 +461,43 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
               onChange={(event) => update("status", event.target.value as PostStatus)}
             >
               <option value="draft">Entwurf</option>
+              <option value="review">Review</option>
+              <option value="scheduled">Geplant</option>
               <option value="published">Veröffentlicht</option>
               <option value="archived">Archiviert</option>
             </select>
           </Field>
-        </div>
-
-        <Field label="Slug" helper={`URL: /blog/${draft.slug || "neuer-insight"}`}>
-          <input
-            className="admin-input"
-            value={draft.slug}
-            onChange={(event) => update("slug", slugify(event.target.value))}
-            placeholder="erfolg-ohne-druck"
-          />
-        </Field>
-
-        <Field label="Auszug" helper={`${draft.excerpt.length}/220 Zeichen empfohlen`}>
-          <textarea
-            className="admin-input min-h-28"
-            value={draft.excerpt}
-            onChange={(event) => update("excerpt", event.target.value)}
-            placeholder="Kurzer Teaser für Blogübersicht und SEO."
-          />
-        </Field>
-
-        <section className="rounded-[20px] border border-[#b49474]/20 bg-[#fcf3e3]/45 p-4">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-medium text-[#03182e]">Inhalt</p>
-              <p className="mt-1 text-xs text-[#6b5f50]">{wordCount} Wörter</p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                className="inline-flex items-center gap-2 rounded-full border border-[#b49474]/30 px-3 py-2 text-xs text-[#4c4235] transition hover:bg-[#f2e2ce]"
-                disabled={!lastUpload}
-                onClick={() => insertUploadedMedia()}
-                type="button"
-              >
-                <Link2 size={14} />
-                Medium einfügen
-              </button>
-            </div>
-          </div>
-          <textarea
-            className="admin-input min-h-[520px] resize-y bg-[#fffaf0]"
-            value={draft.content}
-            onChange={(event) => update("content", event.target.value)}
-            placeholder="Absätze mit einer Leerzeile trennen. Bilder werden als ![Alt](URL), Videos als [video](URL) eingefügt."
-          />
+          {draft.status === "scheduled" ? (
+            <Field label="Geplant für" helper="Speichert den geplanten Zeitpunkt redaktionell. Automatische Veröffentlichung ist nicht aktiv.">
+              <input
+                className="admin-input"
+                type="datetime-local"
+                value={formatDateTimeInput(draft.scheduledAt)}
+                onChange={(event) => update("scheduledAt", fromDateTimeInput(event.target.value))}
+              />
+            </Field>
+          ) : null}
+          {canOpenPublic ? (
+            <Link
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-4 py-3 text-sm font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
+              href={`/blog/${draft.slug}`}
+              target="_blank"
+            >
+              <ArrowSquareOut className="size-4" />
+              Öffentliche Seite öffnen
+            </Link>
+          ) : null}
         </section>
-      </div>
 
-      <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
-        {error ? <div className="rounded-xl bg-[#7f1d1d]/10 px-4 py-3 text-sm text-[#7f1d1d]">{error}</div> : null}
-        <section className="rounded-[20px] border border-[#b49474]/20 bg-[#fcf3e3]/55 p-4">
+        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-medium text-[#03182e]">Medien</p>
+              <p className="text-sm font-semibold text-[#03182e]">Medien</p>
               <p className="mt-1 text-xs text-[#6b5f50]">JPG, PNG, WebP, MP4, MOV, WebM</p>
             </div>
-            {isUploading ? <Loader2 className="animate-spin text-[#b49474]" size={18} /> : <Upload size={18} />}
+            {isUploading ? <SpinnerGap className="size-5 animate-spin text-[#8b6f4e]" /> : <Upload className="size-5 text-[#8b6f4e]" />}
           </div>
-          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#b49474]/40 bg-[#fffaf0] px-4 py-8 text-center transition hover:border-[#b49474] hover:bg-[#fcf3e3]">
+          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#b49474]/40 bg-[#fffaf0] px-4 py-7 text-center transition hover:border-[#8b6f4e] hover:bg-[#fcf3e3]">
             <input
               ref={fileInputRef}
               className="sr-only"
@@ -216,85 +505,100 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
               accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime,video/webm"
               onChange={(event) => uploadSelectedFile(event.target.files?.[0] || null)}
             />
-            <Upload className="mb-3 text-[#b49474]" size={24} />
-            <span className="text-sm font-medium text-[#03182e]">Datei auswählen</span>
+            <Upload className="mb-3 size-6 text-[#8b6f4e]" />
+            <span className="text-sm font-semibold text-[#03182e]">Datei auswählen</span>
             <span className="mt-1 text-xs text-[#6b5f50]">Bilder bis 8 MB, Videos bis 80 MB</span>
           </label>
-          {uploadMessage ? (
-            <p className="mt-3 rounded-xl bg-[#0f5132]/10 px-3 py-2 text-xs leading-5 text-[#0f5132]">
-              {uploadMessage}
-            </p>
-          ) : null}
+          {uploadMessage ? <Notice tone="success">{uploadMessage}</Notice> : null}
           {lastUpload ? (
             <div className="mt-4 space-y-3">
               <MediaPreview asset={lastUpload} />
               <p className="break-all text-xs text-[#6b5f50]">{lastUpload.url}</p>
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-3 py-2 text-xs text-[#4c4235] transition hover:bg-[#f2e2ce]"
-                  onClick={() => update("coverImage", lastUpload.url)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-3 py-2 text-xs font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
+                  onClick={() => {
+                    update("coverImage", lastUpload.url);
+                    update("coverAlt", lastUpload.alt || draft.coverAlt || draft.title);
+                  }}
                   type="button"
                 >
-                  {lastUpload.mimeType.startsWith("video/") ? <Video size={14} /> : <Image size={14} />}
+                  {lastUpload.mimeType.startsWith("video/") ? <VideoCamera className="size-4" /> : <ImageSquare className="size-4" />}
                   Als Cover
                 </button>
                 <button
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#03182e] px-3 py-2 text-xs text-[#f9f4e7] transition hover:bg-[#100f0f]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#03182e] px-3 py-2 text-xs font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f] active:-translate-y-px"
                   onClick={() => insertUploadedMedia(lastUpload)}
                   type="button"
                 >
-                  <Link2 size={14} />
+                  <LinkIcon className="size-4" />
                   Einfügen
                 </button>
               </div>
             </div>
           ) : null}
         </section>
-        <Field label="Cover-Medium URL">
-          <input
-            className="admin-input"
-            value={draft.coverImage}
-            onChange={(event) => update("coverImage", event.target.value)}
-          />
-        </Field>
-        <div className="overflow-hidden rounded-[20px] border border-[#b49474]/20 bg-[#fcf3e3]">
-          {isCoverVideo ? (
-            <video className="aspect-[16/10] w-full object-cover" controls muted src={draft.coverImage} />
-          ) : (
-            <img alt="" className="aspect-[16/10] w-full object-cover" src={draft.coverImage} />
-          )}
-        </div>
-        <Field label="SEO Titel">
-          <input
-            className="admin-input"
-            value={draft.seoTitle}
-            onChange={(event) => update("seoTitle", event.target.value)}
-          />
-        </Field>
-        <Field label="SEO Beschreibung">
-          <textarea
-            className="admin-input min-h-24"
-            value={draft.seoDescription}
-            onChange={(event) => update("seoDescription", event.target.value)}
-          />
-        </Field>
+
+        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+          <p className="mb-4 text-sm font-semibold text-[#03182e]">Cover</p>
+          <Field label="Cover-Medium URL" error={!draft.coverImage.trim() ? "Pflichtfeld" : undefined}>
+            <input
+              className="admin-input"
+              value={draft.coverImage}
+              onChange={(event) => update("coverImage", event.target.value)}
+            />
+          </Field>
+          <Field label="Cover-Alt-Text" helper="Kurz beschreiben, was sichtbar ist." error={!draft.coverAlt.trim() ? "Pflichtfeld" : undefined}>
+            <input
+              className="admin-input"
+              value={draft.coverAlt}
+              onChange={(event) => update("coverAlt", event.target.value)}
+            />
+          </Field>
+          <div className="mt-4 overflow-hidden rounded-[18px] border border-[#b49474]/20 bg-[#fffaf0]">
+            {isCoverVideo ? (
+              <video className="aspect-[16/10] w-full object-cover" controls muted src={draft.coverImage} />
+            ) : (
+              <img alt={draft.coverAlt || ""} className="aspect-[16/10] w-full object-cover" src={draft.coverImage} />
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+          <p className="mb-4 text-sm font-semibold text-[#03182e]">SEO und Redaktion</p>
+          <div className="grid gap-4">
+            <Field label="Autorin">
+              <input className="admin-input" value={draft.authorName} onChange={(event) => update("authorName", event.target.value)} />
+            </Field>
+            <Field label="Kategorie">
+              <input className="admin-input" value={draft.category} onChange={(event) => update("category", event.target.value)} placeholder="Selbstführung" />
+            </Field>
+            <Field label="Tags" helper="Durch Kommas getrennt.">
+              <input className="admin-input" value={draft.tags} onChange={(event) => update("tags", event.target.value)} placeholder="Erfolg, Klarheit, Identität" />
+            </Field>
+            <Field label="SEO Titel" helper={`${draft.seoTitle.length}/65 Zeichen`}>
+              <input className="admin-input" value={draft.seoTitle} onChange={(event) => update("seoTitle", event.target.value)} />
+            </Field>
+            <Field label="SEO Beschreibung" helper={`${draft.seoDescription.length}/160 Zeichen`}>
+              <textarea className="admin-input min-h-24" value={draft.seoDescription} onChange={(event) => update("seoDescription", event.target.value)} />
+            </Field>
+          </div>
+          <SeoPreview draft={draft} />
+          <IssueList issues={issues} />
+        </section>
+
         <div className="flex flex-col gap-3">
-          <button
-            className="rounded-full bg-[#03182e] px-5 py-3 text-sm font-medium text-[#f9f4e7] transition hover:bg-[#100f0f] active:-translate-y-px disabled:opacity-50"
-            disabled={isSaving}
-            onClick={save}
-            type="button"
-          >
-            {isSaving ? "Speichern..." : "Speichern"}
-          </button>
           {post ? (
             <button
-              className="rounded-full border border-[#b49474]/30 px-5 py-3 text-sm text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
+              className="rounded-full border border-[#7f1d1d]/25 px-5 py-3 text-sm font-semibold text-[#7f1d1d] transition hover:bg-[#7f1d1d]/10 active:-translate-y-px disabled:opacity-50"
               disabled={isSaving}
               onClick={remove}
               type="button"
             >
-              Löschen
+              <span className="inline-flex items-center justify-center gap-2">
+                <Trash className="size-4" />
+                Löschen
+              </span>
             </button>
           ) : null}
         </div>
@@ -303,20 +607,261 @@ export function BlogPostForm({post}: {post?: BlogPost}) {
   );
 }
 
+function postToDraft(post: BlogPost): Draft {
+  return {
+    authorName: post.authorName,
+    category: post.category,
+    content: post.content,
+    coverAlt: post.coverAlt,
+    coverImage: post.coverImage,
+    excerpt: post.excerpt,
+    scheduledAt: post.scheduledAt,
+    seoDescription: post.seoDescription,
+    seoTitle: post.seoTitle,
+    slug: post.slug,
+    status: post.status,
+    tags: post.tags,
+    title: post.title,
+  };
+}
+
+function PreviewPane({draft}: {draft: Draft}) {
+  return (
+    <article className="rounded-[28px] border border-[#b49474]/20 bg-[#fffaf0] px-5 py-8 md:px-10 md:py-12">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6f4e]">
+        {draft.category || "Insight"} · {draft.authorName}
+      </p>
+      <h2 className="mt-4 text-4xl font-semibold leading-[1.02] tracking-tight text-[#03182e] md:text-6xl">
+        {draft.title || "Unbenannter Entwurf"}
+      </h2>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-[#4c4235]">{draft.excerpt || "Noch kein Auszug gepflegt."}</p>
+      {isVideoUrl(draft.coverImage) ? (
+        <video className="mt-8 aspect-[16/9] w-full rounded-[24px] object-cover" controls playsInline src={draft.coverImage} />
+      ) : (
+        <img alt={draft.coverAlt || ""} className="mt-8 aspect-[16/9] w-full rounded-[24px] object-cover" src={draft.coverImage} />
+      )}
+      <BlogContentRenderer className="prose-brand mt-10" content={draft.content} />
+    </article>
+  );
+}
+
+function EditorToolbar({
+  canInsertUpload,
+  hasMediaLibrary,
+  onHeading,
+  onInsertUpload,
+  onLink,
+  onList,
+  onMediaLibrary,
+  onQuote,
+}: {
+  canInsertUpload: boolean;
+  hasMediaLibrary: boolean;
+  onHeading: () => void;
+  onInsertUpload: () => void;
+  onLink: () => void;
+  onList: () => void;
+  onMediaLibrary: () => void;
+  onQuote: () => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <ToolButton label="H2" onClick={onHeading} />
+      <ToolButton icon={<Quotes className="size-4" />} label="Zitat" onClick={onQuote} />
+      <ToolButton icon={<ListBullets className="size-4" />} label="Liste" onClick={onList} />
+      <ToolButton icon={<LinkIcon className="size-4" />} label="Link" onClick={onLink} />
+      <ToolButton
+        disabled={!hasMediaLibrary}
+        icon={<MagnifyingGlass className="size-4" />}
+        label="Bibliothek"
+        onClick={onMediaLibrary}
+      />
+      <ToolButton
+        disabled={!canInsertUpload}
+        icon={<ImageSquare className="size-4" />}
+        label="Letzter Upload"
+        onClick={onInsertUpload}
+      />
+    </div>
+  );
+}
+
+function MediaLibraryPanel({
+  assets,
+  onInsert,
+  query,
+  setQuery,
+}: {
+  assets: MediaAsset[];
+  onInsert: (asset: MediaAsset) => void;
+  query: string;
+  setQuery: (query: string) => void;
+}) {
+  return (
+    <div className="border-b border-[#b49474]/20 bg-[#f9f4e7] px-4 py-4">
+      <label className="relative block">
+        <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#8b6f4e]" />
+        <input
+          className="admin-input bg-[#fffaf0] pl-11"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Medienbibliothek durchsuchen"
+        />
+      </label>
+      {assets.length ? (
+        <div className="mt-4 grid max-h-80 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
+          {assets.map((asset) => (
+            <button
+              className="group rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] p-2 text-left transition hover:border-[#8b6f4e] hover:bg-white active:-translate-y-px"
+              key={asset.id}
+              onClick={() => onInsert(asset)}
+              type="button"
+            >
+              {asset.mimeType.startsWith("video/") ? (
+                <video className="aspect-[4/3] w-full rounded-xl object-cover" muted preload="metadata" src={asset.url} />
+              ) : (
+                <img alt={asset.alt} className="aspect-[4/3] w-full rounded-xl object-cover" src={asset.url} />
+              )}
+              <p className="mt-2 truncate text-xs font-semibold text-[#03182e]">{asset.filename}</p>
+              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#6b5f50]">{asset.alt || "Kein Alt-Text"}</p>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-4 rounded-2xl border border-dashed border-[#b49474]/35 px-4 py-8 text-center text-sm text-[#6b5f50]">
+          Keine Medien gefunden.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SeoPreview({draft}: {draft: Draft}) {
+  const title = draft.seoTitle || draft.title || "Unbenannter Insight";
+  const description = draft.seoDescription || draft.excerpt || "Noch keine SEO-Beschreibung gepflegt.";
+  const slug = draft.slug || "neuer-insight";
+
+  return (
+    <div className="mt-5 space-y-4">
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Google Preview</p>
+        <div className="rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] p-4">
+          <p className="truncate text-sm text-[#0f5132]">make-success-your-habit.com/blog/{slug}</p>
+          <p className="mt-1 line-clamp-2 text-base font-semibold text-[#1a0dab]">{title}</p>
+          <p className="mt-1 line-clamp-3 text-sm leading-6 text-[#4c4235]">{description}</p>
+        </div>
+      </div>
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Social Preview</p>
+        <div className="overflow-hidden rounded-2xl border border-[#b49474]/20 bg-[#fffaf0]">
+          {isVideoUrl(draft.coverImage) ? (
+            <video className="aspect-[1.91/1] w-full object-cover" muted preload="metadata" src={draft.coverImage} />
+          ) : (
+            <img alt={draft.coverAlt || ""} className="aspect-[1.91/1] w-full object-cover" src={draft.coverImage} />
+          )}
+          <div className="p-4">
+            <p className="text-xs uppercase tracking-[0.14em] text-[#6b5f50]">make-success-your-habit.com</p>
+            <p className="mt-1 line-clamp-2 text-sm font-semibold text-[#03182e]">{title}</p>
+            <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#6b5f50]">{description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ToolButton({
+  disabled,
+  icon,
+  label,
+  onClick,
+}: {
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[#b49474]/30 bg-[#fffaf0] px-3 text-xs font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px disabled:cursor-not-allowed disabled:opacity-45"
+      disabled={disabled}
+      onClick={onClick}
+      type="button"
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
+
+function SaveState({dirty, isSaving, message}: {dirty: boolean; isSaving: boolean; message: string | null}) {
+  if (isSaving) {
+    return (
+      <span className="inline-flex items-center gap-2 text-sm font-medium text-[#6b5f50]">
+        <SpinnerGap className="size-4 animate-spin" />
+        Speichert
+      </span>
+    );
+  }
+
+  if (message) {
+    return (
+      <span className="inline-flex items-center gap-2 text-sm font-medium text-[#0f5132]">
+        <CheckCircle className="size-4" />
+        {message}
+      </span>
+    );
+  }
+
+  return <span className="text-sm font-medium text-[#6b5f50]">{dirty ? "Ungespeicherte Änderungen" : "Keine Änderungen"}</span>;
+}
+
+function IssueList({issues}: {issues: string[]}) {
+  if (!issues.length) {
+    return (
+      <div className="mt-4 rounded-2xl bg-[#0f5132]/10 px-3 py-3 text-sm font-medium text-[#0f5132]">
+        Keine redaktionellen Hinweise.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 rounded-2xl bg-[#7f1d1d]/10 px-3 py-3 text-sm text-[#7f1d1d]">
+      <p className="mb-2 flex items-center gap-2 font-semibold">
+        <WarningCircle className="size-4" />
+        Hinweise
+      </p>
+      <ul className="space-y-1">
+        {issues.map((issue) => (
+          <li key={issue}>{issue}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Notice({children, tone}: {children: React.ReactNode; tone: "error" | "success"}) {
+  const styles = tone === "error" ? "bg-[#7f1d1d]/10 text-[#7f1d1d]" : "bg-[#0f5132]/10 text-[#0f5132]";
+  return <div className={`mt-3 rounded-xl px-4 py-3 text-sm leading-6 ${styles}`}>{children}</div>;
+}
+
 function Field({
   label,
   helper,
+  error,
   children,
 }: {
   label: string;
   helper?: string;
+  error?: string;
   children: React.ReactNode;
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-[#03182e]">{label}</span>
+      <span className="mb-2 block text-sm font-semibold text-[#03182e]">{label}</span>
       {children}
       {helper ? <span className="mt-2 block text-xs leading-5 text-[#6b5f50]">{helper}</span> : null}
+      {error ? <span className="mt-2 block text-xs font-semibold text-[#7f1d1d]">{error}</span> : null}
     </label>
   );
 }

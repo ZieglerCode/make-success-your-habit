@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import Link from "next/link";
 import {notFound} from "next/navigation";
+import {BlogContentRenderer} from "@/components/blog-content-renderer";
 import {getPostBySlug} from "@/lib/content-store";
 
 type PageProps = {
@@ -35,17 +36,38 @@ export default async function BlogPostPage({params}: PageProps) {
 
   return (
     <main className="min-h-[100dvh] bg-[#f9f4e7] text-[#03182e]">
-      <article className="mx-auto max-w-4xl px-6 pb-24 pt-24 md:pt-32">
-        <Link className="text-sm text-[#6b5f50] transition hover:text-[#03182e]" href="/blog">
+      <article className="mx-auto max-w-3xl px-6 pb-24 pt-24 md:pt-32">
+        {/* Back Navigation */}
+        <Link
+          className="inline-flex items-center gap-1.5 text-sm text-[#6b5f50] transition hover:text-[#03182e]"
+          href="/blog"
+        >
+          <span className="text-[#d4af37]">←</span>
           Zurück zu den Insights
         </Link>
-        <p className="mt-12 text-xs uppercase tracking-[0.2em] text-[#b49474]">
-          {post.publishedAt
-            ? new Intl.DateTimeFormat("de-DE", {dateStyle: "long"}).format(new Date(post.publishedAt))
-            : "Insight"}
-        </p>
-        <h1 className="mt-5 font-serif text-5xl leading-[0.98] md:text-7xl">{post.title}</h1>
-        <p className="mt-8 max-w-3xl text-xl leading-9 text-[#4c4235]">{post.excerpt}</p>
+
+        {/* Post Header */}
+        <header className="mt-12 border-b border-[#b49474]/25 pb-10">
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            {post.category && (
+              <span className="rounded-full bg-[#f2e2ce] px-3 py-1 text-xs font-medium tracking-wide text-[#4c4235]">
+                {post.category}
+              </span>
+            )}
+            <p className="text-xs uppercase tracking-[0.2em] text-[#b49474]">
+              {post.publishedAt
+                ? new Intl.DateTimeFormat("de-DE", {dateStyle: "long"}).format(new Date(post.publishedAt))
+                : "Insight"}
+              {post.readingMinutes ? ` · ${post.readingMinutes} Min. Lesezeit` : ""}
+            </p>
+          </div>
+          <h1 className="font-serif text-5xl leading-[0.98] md:text-7xl">{post.title}</h1>
+          {post.excerpt && (
+            <p className="mt-8 max-w-3xl text-xl leading-9 text-[#4c4235]">{post.excerpt}</p>
+          )}
+        </header>
+
+        {/* Cover Media */}
         {isVideoUrl(post.coverImage) ? (
           <video
             className="mt-12 aspect-[16/9] w-full rounded-[28px] object-cover shadow-[0_32px_80px_rgba(16,15,15,0.14)]"
@@ -55,48 +77,59 @@ export default async function BlogPostPage({params}: PageProps) {
           />
         ) : (
           <img
-            alt={post.title}
+            alt={post.coverAlt || post.title}
             className="mt-12 aspect-[16/9] w-full rounded-[28px] object-cover shadow-[0_32px_80px_rgba(16,15,15,0.14)]"
             src={post.coverImage}
           />
         )}
-        <div className="prose-brand mt-14">
-          {post.content.split(/\n{2,}/).map((block) => (
-            <ContentBlock block={block} key={block} />
-          ))}
-        </div>
+
+        {/* Tags */}
+        {post.tags ? (
+          <div className="mt-8 flex flex-wrap gap-2">
+            {post.tags
+              .split(",")
+              .map((tag) => tag.trim())
+              .filter(Boolean)
+              .map((tag) => (
+                <span
+                  className="rounded-full border border-[#b49474]/30 px-3 py-1 text-xs text-[#6b5f50]"
+                  key={tag}
+                >
+                  {tag}
+                </span>
+              ))}
+          </div>
+        ) : null}
+
+        {/* Content */}
+        <BlogContentRenderer className="prose-brand mt-14" content={post.content} />
       </article>
+
+      {/* Footer CTA */}
+      <section className="border-t border-[#b49474]/20 bg-[#fcf3e3] px-6 py-16 text-center">
+        <p className="mb-3 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
+          Weitere Impulse
+        </p>
+        <h2 className="font-serif text-3xl font-normal text-[#03182e] md:text-4xl">
+          Mehr ruhige Gedanken entdecken.
+        </h2>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link
+            className="rounded-full border border-[#03182e] bg-[#03182e] px-6 py-3 text-sm font-medium text-[#f9f4e7] transition duration-300 hover:border-[#d4af37] hover:bg-[#100f0f] active:-translate-y-px"
+            href="/blog"
+          >
+            Alle Insights
+          </Link>
+          <Link
+            className="rounded-full border border-[#03182e]/20 px-6 py-3 text-sm font-medium text-[#03182e] transition duration-300 hover:border-[#d4af37] active:-translate-y-px"
+            href="/"
+          >
+            Zur Website
+          </Link>
+        </div>
+      </section>
     </main>
   );
-}
-
-function ContentBlock({block}: {block: string}) {
-  const trimmed = block.trim();
-  const imageMatch = trimmed.match(/^!\[(.*)]\((.+)\)$/);
-  const videoMatch = trimmed.match(/^\[video]\((.+)\)$/i);
-
-  if (imageMatch) {
-    return (
-      <img
-        alt={imageMatch[1] || ""}
-        className="my-10 aspect-[16/10] w-full rounded-[24px] object-cover"
-        src={imageMatch[2]}
-      />
-    );
-  }
-
-  if (videoMatch) {
-    return (
-      <video
-        className="my-10 aspect-video w-full rounded-[24px] object-cover"
-        controls
-        playsInline
-        src={videoMatch[1]}
-      />
-    );
-  }
-
-  return <p>{trimmed}</p>;
 }
 
 function isVideoUrl(url: string) {

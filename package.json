@@ -10,11 +10,13 @@
     "preview": "next start --port=3000",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
+    "test:content": "tsx scripts/test-editor-insights.ts",
     "hash:admin-password": "node scripts/hash-admin-password.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
     "@libsql/client": "^0.17.3",
+    "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/postcss": "^4.2.2",
     "@vercel/blob": "^2.3.3",
     "bcryptjs": "^3.0.3",
