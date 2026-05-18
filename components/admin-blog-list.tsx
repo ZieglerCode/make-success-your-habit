@@ -1,6 +1,6 @@
 "use client";
 
-import {Article, CalendarBlank, MagnifyingGlass, WarningCircle} from "@phosphor-icons/react";
+import {Article, CalendarBlank, CaretDown, MagnifyingGlass, WarningCircle} from "@phosphor-icons/react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useMemo, useState} from "react";
@@ -81,12 +81,12 @@ export function AdminBlogList({
   }
 
   return (
-    <section className="space-y-5">
-      <div className="grid gap-3 rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-3 md:grid-cols-[1fr_auto]">
+    <section className="space-y-6">
+      <div className="grid gap-3 rounded-[22px] border border-[#b49474]/18 bg-[#fcf3e3]/50 p-2.5 shadow-[0_14px_40px_rgba(16,15,15,0.025)] md:grid-cols-[1fr_260px]">
         <label className="relative block">
-          <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#8b6f4e]" />
+          <MagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#8b6f4e]/75" />
           <input
-            className="admin-input bg-[#fffaf0] pl-11"
+            className="h-14 w-full rounded-[18px] border border-[#b49474]/24 bg-[#fffaf0] pl-12 pr-4 text-base text-[#03182e] outline-none transition placeholder:text-[#6b5f50]/65 focus:border-[#8b6f4e] focus:bg-white focus:shadow-[0_0_0_4px_rgba(180,148,116,0.12)]"
             value={query}
             onBlur={() => syncUrl({query})}
             onChange={(event) => setQuery(event.target.value)}
@@ -96,28 +96,32 @@ export function AdminBlogList({
             placeholder="Titel, Slug, Kategorie oder Tags suchen"
           />
         </label>
-        <select
-          className="admin-input bg-[#fffaf0] md:w-56"
-          value={sort}
-          onChange={(event) => {
-            const nextSort = event.target.value as SortKey;
-            setSort(nextSort);
-            syncUrl({sort: nextSort});
-          }}
-        >
-          <option value="updated">Zuletzt bearbeitet</option>
-          <option value="newest">Neueste Veröffentlichung</option>
-          <option value="title">Titel A-Z</option>
-        </select>
+        <label className="relative block">
+          <span className="sr-only">Sortierung</span>
+          <select
+            className="h-14 w-full appearance-none rounded-[18px] border border-[#b49474]/24 bg-[#fffaf0] px-4 pr-11 text-base font-medium text-[#03182e] outline-none transition focus:border-[#8b6f4e] focus:bg-white focus:shadow-[0_0_0_4px_rgba(180,148,116,0.12)]"
+            value={sort}
+            onChange={(event) => {
+              const nextSort = event.target.value as SortKey;
+              setSort(nextSort);
+              syncUrl({sort: nextSort});
+            }}
+          >
+            <option value="updated">Zuletzt bearbeitet</option>
+            <option value="newest">Neueste Veröffentlichung</option>
+            <option value="title">Titel A-Z</option>
+          </select>
+          <CaretDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[#8b6f4e]" />
+        </label>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="flex gap-2 overflow-x-auto border-b border-[#b49474]/20 pb-5">
         {tabs.map((tab) => (
           <button
-            className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition active:-translate-y-px ${
+            className={`shrink-0 rounded-full border px-4 py-2.5 text-sm font-semibold transition active:-translate-y-px ${
               status === tab.value
                 ? "border-[#03182e] bg-[#03182e] text-[#f9f4e7]"
-                : "border-[#b49474]/24 bg-[#fcf3e3]/55 text-[#4c4235] hover:bg-[#f2e2ce]"
+                : "border-[#b49474]/22 bg-[#fcf3e3]/45 text-[#4c4235] hover:bg-[#f2e2ce]"
             }`}
             key={tab.value}
             onClick={() => {
@@ -126,18 +130,18 @@ export function AdminBlogList({
             }}
             type="button"
           >
-            {tab.label} <span className="ml-1 opacity-70">{counts[tab.value]}</span>
+            {tab.label} <span className="ml-1 text-current opacity-55">{counts[tab.value]}</span>
           </button>
         ))}
       </div>
 
       {filtered.length ? (
-        <div className="divide-y divide-[#b49474]/18 border-y border-[#b49474]/24">
+        <div className="overflow-hidden rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/26">
           {filtered.map((post) => {
             const issues = seoIssues(post);
             return (
               <Link
-                className="grid gap-4 py-5 transition hover:bg-[#fcf3e3]/70 md:grid-cols-[120px_1fr_220px]"
+                className="grid gap-4 border-b border-[#b49474]/16 px-4 py-4 transition last:border-b-0 hover:bg-[#fffaf0] md:grid-cols-[116px_minmax(0,1fr)_210px] md:items-center"
                 href={`/admin/blog/${post.id}`}
                 key={post.id}
               >
@@ -157,19 +161,19 @@ export function AdminBlogList({
                       </span>
                     ) : null}
                   </div>
-                  <p className="truncate text-base font-semibold tracking-tight">{post.title}</p>
-                  <p className="mt-2 line-clamp-2 max-w-3xl text-sm leading-6 text-[#6b5f50]">
+                  <p className="truncate text-base font-semibold tracking-tight text-[#03182e]">{post.title}</p>
+                  <p className="mt-1.5 line-clamp-2 max-w-3xl text-sm leading-6 text-[#6b5f50]">
                     {post.excerpt || "Kein Auszug gepflegt."}
                   </p>
-                  <p className="mt-2 truncate text-xs text-[#6b5f50]">/blog/{post.slug}</p>
+                  <p className="mt-1.5 truncate text-xs font-medium text-[#8b6f4e]">/blog/{post.slug}</p>
                 </div>
                 <div className="grid gap-2 text-sm text-[#4c4235] md:justify-items-end md:text-right">
                   <span className="inline-flex items-center gap-2">
                     <CalendarBlank className="size-4 text-[#8b6f4e]" />
                     Bearbeitet {formatDate(post.updatedAt)}
                   </span>
-                  <span>{wordCount(post.content)} Wörter</span>
-                  <span>{post.readingMinutes} Min. Lesezeit</span>
+                  <span className="text-[#6b5f50]">{wordCount(post.content)} Wörter</span>
+                  <span className="text-[#6b5f50]">{post.readingMinutes} Min. Lesezeit</span>
                 </div>
               </Link>
             );
@@ -190,10 +194,10 @@ export function AdminBlogList({
 
 function MediaThumb({post}: {post: BlogPost}) {
   if (isVideoUrl(post.coverImage)) {
-    return <video className="aspect-[4/3] w-full rounded-xl object-cover" muted preload="metadata" src={post.coverImage} />;
+    return <video className="aspect-[4/3] w-full rounded-[18px] object-cover" muted preload="metadata" src={post.coverImage} />;
   }
 
-  return <img alt={post.coverAlt || post.title} className="aspect-[4/3] w-full rounded-xl object-cover" src={post.coverImage} />;
+  return <img alt={post.coverAlt || post.title} className="aspect-[4/3] w-full rounded-[18px] object-cover" src={post.coverImage} />;
 }
 
 export function StatusBadge({status}: {status: PostStatus}) {
@@ -201,7 +205,7 @@ export function StatusBadge({status}: {status: PostStatus}) {
     archived: "border-[#6b5f50]/25 bg-[#6b5f50]/8 text-[#4c4235]",
     draft: "border-[#b49474]/30 bg-[#fcf3e3] text-[#4c4235]",
     published: "border-[#0f5132]/20 bg-[#0f5132]/10 text-[#0f5132]",
-    review: "border-[#8b5cf6]/20 bg-[#8b5cf6]/10 text-[#4c1d95]",
+    review: "border-[#8b6f4e]/24 bg-[#b49474]/10 text-[#4c4235]",
     scheduled: "border-[#0f4c81]/20 bg-[#0f4c81]/10 text-[#0f4c81]",
   };
 

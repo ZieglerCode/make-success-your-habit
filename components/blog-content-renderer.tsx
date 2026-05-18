@@ -27,7 +27,9 @@ function ContentBlock({block}: {block: string}) {
   const imageMatch = block.match(/^!\[(.*)]\((.+)\)$/);
   const videoMatch = block.match(/^\[video]\((.+)\)$/i);
   const headingMatch = block.match(/^##\s+(.+)$/);
+  const subheadingMatch = block.match(/^###\s+(.+)$/);
   const quoteMatch = block.match(/^>\s+(.+)$/);
+  const calloutMatch = block.match(/^\[callout](.+)$/i);
 
   if (imageMatch) {
     return (
@@ -50,8 +52,24 @@ function ContentBlock({block}: {block: string}) {
     );
   }
 
+  if (subheadingMatch) {
+    return <h3 className="mt-10 text-2xl font-semibold leading-tight tracking-tight text-[#03182e]">{subheadingMatch[1]}</h3>;
+  }
+
   if (headingMatch) {
     return <h2 className="mt-12 text-3xl font-semibold leading-tight tracking-tight text-[#03182e]">{headingMatch[1]}</h2>;
+  }
+
+  if (calloutMatch) {
+    return (
+      <div className="my-10 rounded-[24px] border border-[#b49474]/24 bg-[#fcf3e3]/70 px-5 py-5 text-lg leading-8 text-[#4c4235]">
+        {calloutMatch[1].trim()}
+      </div>
+    );
+  }
+
+  if (block === "---") {
+    return <hr className="my-12 border-[#b49474]/24" />;
   }
 
   if (quoteMatch) {

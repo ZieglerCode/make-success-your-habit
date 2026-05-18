@@ -8,6 +8,7 @@ import {
   Link as LinkIcon,
   ListBullets,
   MagnifyingGlass,
+  Minus,
   Quotes,
   SpinnerGap,
   Trash,
@@ -413,7 +414,10 @@ export function BlogPostForm({
                 <EditorToolbar
                   canInsertUpload={Boolean(lastUpload)}
                   hasMediaLibrary={mediaAssets.length > 0}
+                  onCallout={() => insertMarkup("[callout]Text")}
+                  onDivider={() => insertMarkup("---")}
                   onHeading={() => insertMarkup("## Text")}
+                  onSubheading={() => insertMarkup("### Text")}
                   onInsertUpload={() => insertUploadedMedia()}
                   onLink={() => insertMarkup("[Text](https://)")}
                   onList={() => insertMarkup("- Text")}
@@ -443,9 +447,9 @@ export function BlogPostForm({
         )}
       </div>
 
-      <aside className="space-y-5 xl:sticky xl:top-6 xl:self-start">
-        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
-          <div className="mb-4 flex items-center justify-between gap-3">
+      <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
+        <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-[#03182e]">Veröffentlichung</p>
               <p className="mt-1 text-xs text-[#6b5f50]">{post ? `Bearbeitet ${formatDate(post.updatedAt)}` : "Neuer Entwurf"}</p>
@@ -454,19 +458,18 @@ export function BlogPostForm({
               {statusLabels[draft.status]}
             </span>
           </div>
-          <Field label="Status">
-            <select
-              className="admin-input"
-              value={draft.status}
-              onChange={(event) => update("status", event.target.value as PostStatus)}
-            >
-              <option value="draft">Entwurf</option>
-              <option value="review">Review</option>
-              <option value="scheduled">Geplant</option>
-              <option value="published">Veröffentlicht</option>
-              <option value="archived">Archiviert</option>
-            </select>
-          </Field>
+          <SelectField
+            label="Status"
+            value={draft.status}
+            onChange={(value) => update("status", value as PostStatus)}
+            options={[
+              {label: "Entwurf", value: "draft"},
+              {label: "Review", value: "review"},
+              {label: "Geplant", value: "scheduled"},
+              {label: "Veröffentlicht", value: "published"},
+              {label: "Archiviert", value: "archived"},
+            ]}
+          />
           {draft.status === "scheduled" ? (
             <Field label="Geplant für" helper="Speichert den geplanten Zeitpunkt redaktionell. Automatische Veröffentlichung ist nicht aktiv.">
               <input
@@ -489,7 +492,7 @@ export function BlogPostForm({
           ) : null}
         </section>
 
-        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+        <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-[#03182e]">Medien</p>
@@ -497,7 +500,7 @@ export function BlogPostForm({
             </div>
             {isUploading ? <SpinnerGap className="size-5 animate-spin text-[#8b6f4e]" /> : <Upload className="size-5 text-[#8b6f4e]" />}
           </div>
-          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#b49474]/40 bg-[#fffaf0] px-4 py-7 text-center transition hover:border-[#8b6f4e] hover:bg-[#fcf3e3]">
+          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#b49474]/40 bg-[#fffaf0] px-4 py-6 text-center transition hover:border-[#8b6f4e] hover:bg-[#fcf3e3]">
             <input
               ref={fileInputRef}
               className="sr-only"
@@ -539,7 +542,7 @@ export function BlogPostForm({
           ) : null}
         </section>
 
-        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+        <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
           <p className="mb-4 text-sm font-semibold text-[#03182e]">Cover</p>
           <Field label="Cover-Medium URL" error={!draft.coverImage.trim() ? "Pflichtfeld" : undefined}>
             <input
@@ -564,23 +567,23 @@ export function BlogPostForm({
           </div>
         </section>
 
-        <section className="rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-4">
+        <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
           <p className="mb-4 text-sm font-semibold text-[#03182e]">SEO und Redaktion</p>
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             <Field label="Autorin">
-              <input className="admin-input" value={draft.authorName} onChange={(event) => update("authorName", event.target.value)} />
+              <input className="admin-input admin-input-compact" value={draft.authorName} onChange={(event) => update("authorName", event.target.value)} />
             </Field>
             <Field label="Kategorie">
-              <input className="admin-input" value={draft.category} onChange={(event) => update("category", event.target.value)} placeholder="Selbstführung" />
+              <input className="admin-input admin-input-compact" value={draft.category} onChange={(event) => update("category", event.target.value)} placeholder="Selbstführung" />
             </Field>
             <Field label="Tags" helper="Durch Kommas getrennt.">
-              <input className="admin-input" value={draft.tags} onChange={(event) => update("tags", event.target.value)} placeholder="Erfolg, Klarheit, Identität" />
+              <input className="admin-input admin-input-compact" value={draft.tags} onChange={(event) => update("tags", event.target.value)} placeholder="Erfolg, Klarheit, Identität" />
             </Field>
             <Field label="SEO Titel" helper={`${draft.seoTitle.length}/65 Zeichen`}>
-              <input className="admin-input" value={draft.seoTitle} onChange={(event) => update("seoTitle", event.target.value)} />
+              <input className="admin-input admin-input-compact" value={draft.seoTitle} onChange={(event) => update("seoTitle", event.target.value)} />
             </Field>
             <Field label="SEO Beschreibung" helper={`${draft.seoDescription.length}/160 Zeichen`}>
-              <textarea className="admin-input min-h-24" value={draft.seoDescription} onChange={(event) => update("seoDescription", event.target.value)} />
+              <textarea className="admin-input min-h-20" value={draft.seoDescription} onChange={(event) => update("seoDescription", event.target.value)} />
             </Field>
           </div>
           <SeoPreview draft={draft} />
@@ -648,27 +651,36 @@ function PreviewPane({draft}: {draft: Draft}) {
 function EditorToolbar({
   canInsertUpload,
   hasMediaLibrary,
+  onCallout,
+  onDivider,
   onHeading,
   onInsertUpload,
   onLink,
   onList,
   onMediaLibrary,
   onQuote,
+  onSubheading,
 }: {
   canInsertUpload: boolean;
   hasMediaLibrary: boolean;
+  onCallout: () => void;
+  onDivider: () => void;
   onHeading: () => void;
   onInsertUpload: () => void;
   onLink: () => void;
   onList: () => void;
   onMediaLibrary: () => void;
   onQuote: () => void;
+  onSubheading: () => void;
 }) {
   return (
     <div className="flex flex-wrap gap-2">
       <ToolButton label="H2" onClick={onHeading} />
+      <ToolButton label="H3" onClick={onSubheading} />
       <ToolButton icon={<Quotes className="size-4" />} label="Zitat" onClick={onQuote} />
+      <ToolButton label="Callout" onClick={onCallout} />
       <ToolButton icon={<ListBullets className="size-4" />} label="Liste" onClick={onList} />
+      <ToolButton icon={<Minus className="size-4" />} label="Linie" onClick={onDivider} />
       <ToolButton icon={<LinkIcon className="size-4" />} label="Link" onClick={onLink} />
       <ToolButton
         disabled={!hasMediaLibrary}
@@ -742,24 +754,24 @@ function SeoPreview({draft}: {draft: Draft}) {
   const slug = draft.slug || "neuer-insight";
 
   return (
-    <div className="mt-5 space-y-4">
+    <div className="mt-4 space-y-3">
       <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Google Preview</p>
-        <div className="rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] p-4">
-          <p className="truncate text-sm text-[#0f5132]">make-success-your-habit.com/blog/{slug}</p>
-          <p className="mt-1 line-clamp-2 text-base font-semibold text-[#1a0dab]">{title}</p>
-          <p className="mt-1 line-clamp-3 text-sm leading-6 text-[#4c4235]">{description}</p>
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Google Preview</p>
+        <div className="rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] p-3">
+          <p className="truncate text-xs text-[#0f5132]">make-success-your-habit.com/blog/{slug}</p>
+          <p className="mt-1 line-clamp-2 text-sm font-semibold text-[#1a0dab]">{title}</p>
+          <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#4c4235]">{description}</p>
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Social Preview</p>
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Social Preview</p>
         <div className="overflow-hidden rounded-2xl border border-[#b49474]/20 bg-[#fffaf0]">
           {isVideoUrl(draft.coverImage) ? (
             <video className="aspect-[1.91/1] w-full object-cover" muted preload="metadata" src={draft.coverImage} />
           ) : (
             <img alt={draft.coverAlt || ""} className="aspect-[1.91/1] w-full object-cover" src={draft.coverImage} />
           )}
-          <div className="p-4">
+          <div className="p-3">
             <p className="text-xs uppercase tracking-[0.14em] text-[#6b5f50]">make-success-your-habit.com</p>
             <p className="mt-1 line-clamp-2 text-sm font-semibold text-[#03182e]">{title}</p>
             <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#6b5f50]">{description}</p>
@@ -862,6 +874,38 @@ function Field({
       {children}
       {helper ? <span className="mt-2 block text-xs leading-5 text-[#6b5f50]">{helper}</span> : null}
       {error ? <span className="mt-2 block text-xs font-semibold text-[#7f1d1d]">{error}</span> : null}
+    </label>
+  );
+}
+
+function SelectField({
+  label,
+  onChange,
+  options,
+  value,
+}: {
+  label: string;
+  onChange: (value: string) => void;
+  options: Array<{label: string; value: string}>;
+  value: string;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-sm font-semibold text-[#03182e]">{label}</span>
+      <span className="relative block">
+        <select
+          className="admin-input admin-input-compact appearance-none pr-10"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8b6f4e]">▼</span>
+      </span>
     </label>
   );
 }

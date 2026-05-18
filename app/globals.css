@@ -56,3 +56,10 @@
   background: #fcf3e3;
   box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
 }
+
+.admin-input-compact {
+  border-radius: 14px;
+  padding: 10px 13px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
