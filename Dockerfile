@@ -6,7 +6,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 FROM base AS deps
 ENV NODE_ENV=development
 COPY package.json package-lock.json ./
-RUN npm ci --include=dev
+RUN npm install --include=dev
 
 FROM base AS builder
 ENV NODE_ENV=development
