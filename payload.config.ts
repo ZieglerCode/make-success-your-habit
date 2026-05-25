@@ -9,6 +9,7 @@ import {Media} from "./payload/collections/Media";
 import {Posts} from "./payload/collections/Posts";
 import {Users} from "./payload/collections/Users";
 import {SiteContent} from "./payload/globals/SiteContent";
+import {migrations} from "./migrations";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -28,6 +29,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || "",
     },
+    prodMigrations: migrations,
     schemaName: process.env.PAYLOAD_DATABASE_SCHEMA || "payload",
   }),
   editor: lexicalEditor(),
