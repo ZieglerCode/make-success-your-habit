@@ -34,18 +34,74 @@ const staggerContainer = {
 
 const navItems = [
   {label: "Start", href: "#start"},
-  {label: "Methode", href: "#methode"},
-  {label: "Angebote", href: "#angebote"},
-  {label: "Über Heike", href: "#ueber-heike"},
+  {label: "Method", href: "#methode"},
+  {label: "Services", href: "#angebote"},
+  {label: "About Heike", href: "#ueber-heike"},
   {label: "Insights", href: "#insights"},
   {label: "Community", href: "#community"},
 ];
 
+type SiteLang = "de" | "en";
+
+const successSectionImages: Record<SiteLang, string> = {
+  de: "/media/images/success-section_de.png",
+  en: "/media/images/success-section_eng.png",
+};
+
+function LanguageToggle({
+  lang,
+  onChange,
+  className = "",
+}: {
+  lang: SiteLang;
+  onChange: (lang: SiteLang) => void;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`inline-flex items-center rounded-full border border-brand-primary/10 bg-white/70 p-1 backdrop-blur-sm ${className}`}
+      role="group"
+      aria-label="Sprache wählen"
+    >
+      {(["de", "en"] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          aria-pressed={lang === option}
+          onClick={() => onChange(option)}
+          className={`rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+            lang === option
+              ? "bg-brand-primary text-white shadow-sm"
+              : "text-brand-muted hover:text-brand-primary"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function App({blogSection}: {blogSection?: ReactNode}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lang, setLang] = useState<SiteLang>("de");
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("site-lang");
+    if (stored === "de" || stored === "en") {
+      setLang(stored);
+      document.documentElement.lang = stored;
+    }
+  }, []);
+
+  function selectLang(next: SiteLang) {
+    setLang(next);
+    window.localStorage.setItem("site-lang", next);
+    document.documentElement.lang = next;
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -77,21 +133,27 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white selection:bg-brand-accent/30">
+    <div className="min-h-screen overflow-x-hidden bg-brand-secondary selection:bg-brand-accent/30">
+      <a
+        href="#start"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-6 focus:top-6 focus:z-[60] focus:rounded-full focus:bg-brand-primary focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-brand-secondary"
+      >
+        Zum Inhalt springen
+      </a>
       {/* Navigation */}
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-brand-secondary/90 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-6'
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,padding,backdrop-filter] duration-300 ${
+          scrolled ? 'bg-brand-secondary/92 backdrop-blur-md py-4 shadow-[0_16px_50px_rgba(3,24,46,0.08)]' : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <a className="flex items-center gap-3" href="#start" aria-label="Make Success Your Habit Startseite">
             <img
-              alt=""
+              alt="Make Success Your Habit"
               className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
               src="/media/images/msyh-logo.webp"
             />
-            <span className="font-display font-bold tracking-tight text-lg uppercase">Make Success Your Habit</span>
+            <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-brand-primary">Make Success Your Habit</span>
           </a>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -104,7 +166,8 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 {item.label}
               </a>
             ))}
-            <a href="#kontakt" className="bg-brand-primary text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02] shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/30">
+            <LanguageToggle lang={lang} onChange={selectLang} />
+            <a href="#kontakt" className="rounded-full border border-brand-primary bg-brand-primary px-6 py-2.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-500 hover:-translate-y-px hover:bg-brand-shadow hover:border-brand-accent active:translate-y-0">
               Clarity Call
             </a>
           </nav>
@@ -134,7 +197,8 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 {item.label}
               </a>
             ))}
-            <a href="#kontakt" onClick={() => setIsMenuOpen(false)} className="bg-brand-primary text-white mt-12 py-4 rounded-xl font-bold text-center transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02]">
+            <LanguageToggle lang={lang} onChange={selectLang} className="mt-8 self-start" />
+            <a href="#kontakt" onClick={() => setIsMenuOpen(false)} className="mt-12 rounded-full bg-brand-primary py-4 text-center font-medium text-brand-secondary transition-colors duration-500 hover:bg-brand-shadow">
               Clarity Call anfragen
             </a>
           </motion.div>
@@ -143,7 +207,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
 
       <main>
         {/* Section 1: Hero */}
-        <section id="start" ref={heroRef} className="relative left-1/2 w-screen -translate-x-1/2 min-h-[100dvh] flex items-center overflow-hidden bg-white">
+        <section id="start" ref={heroRef} className="relative left-1/2 w-screen -translate-x-1/2 min-h-[100dvh] flex items-center overflow-hidden bg-brand-secondary">
           {/* Video Background */}
           <video
             ref={videoRef}
@@ -157,10 +221,10 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
           {/* Angled editorial gradient — lighter, more video visible */}
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(108deg, rgba(249,248,246,0.92) 12%, rgba(249,248,246,0.5) 35%, rgba(249,248,246,0.04) 55%, transparent 70%)' }}
+            style={{ background: 'linear-gradient(108deg, rgba(249,244,231,0.94) 10%, rgba(249,244,231,0.66) 34%, rgba(249,244,231,0.12) 56%, transparent 72%)' }}
           />
           {/* Top vignette */}
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-secondary/20 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-secondary/25 via-transparent to-transparent" />
           {/* Bottom vignette */}
           <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-brand-secondary/50 to-transparent" />
           {/* Main Content */}
@@ -174,23 +238,22 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               className="flex items-center gap-3 mb-10"
             >
               <div className="w-7 h-px bg-brand-accent" />
-              <span className="inline-flex items-center bg-brand-accent/12 text-brand-accent px-3.5 py-1.5 rounded-full text-[10px] font-display font-semibold tracking-[0.28em] uppercase">
-                The Art of Becoming
+              <span className="text-[10px] font-display font-semibold tracking-[0.28em] uppercase text-brand-accent">
+                Make Success Your Habit
               </span>
             </motion.div>
 
-            {/* Headline — left border accent, reduced size for editorial refinement */}
+            {/* Headline — left border accent, refined brand hook */}
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.12, ease: [0.32, 0.72, 0, 1] }}
               className="pl-5 border-l-[1.5px] border-brand-accent/35 mb-7"
             >
-              <h1 className="font-serif text-[2.6rem] md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] text-brand-primary leading-[1.13] max-w-[22rem] md:max-w-[30rem] lg:max-w-[34rem]">
-                Success is not<br />something you chase.
-                <br />
-                <span className="italic font-light text-brand-primary/60 text-[0.88em] leading-[1.25]">
-                  It is something<br />you become.
+              <h1 className="max-w-[21rem] text-balance font-serif text-[2.85rem] leading-[1.02] text-brand-primary md:max-w-[32rem] md:text-[4.15rem] lg:max-w-[40rem] lg:text-[5.25rem] xl:text-[5.85rem]">
+                Become the Woman Who{' '}
+                <span className="italic font-light text-brand-primary/62">
+                  Succeeds by Default.
                 </span>
               </h1>
             </motion.div>
@@ -209,9 +272,9 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.52, ease: [0.32, 0.72, 0, 1] }}
-              className="text-[0.925rem] text-brand-muted max-w-[22rem] leading-[1.88] mb-11"
+              className="mb-11 max-w-[34rem] text-base leading-[1.85] text-brand-muted md:text-lg"
             >
-              Für ambitionierte Unternehmerinnen und Coaches, die Erfolg nicht länger erzwingen — sondern als natürliche Gewohnheit verkörpern möchten.
+              Für ambitionierte Unternehmerinnen und Coaches, die Erfolg als natürliche Gewohnheit verkörpern.
             </motion.p>
 
             {/* CTAs */}
@@ -222,16 +285,16 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               className="flex flex-col sm:flex-row items-start gap-3"
             >
               {/* Primary — Button-in-Button architecture */}
-              <a href="#kontakt" className="group flex items-center bg-brand-primary text-white pl-6 pr-1.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-brand-primary/90 active:scale-[0.97] shadow-xl shadow-brand-primary/25">
+              <a href="#kontakt" className="group flex items-center rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0">
                 <span className="pr-4 tracking-wide">Clarity Call anfragen</span>
-                <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
+                <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </a>
 
               {/* Secondary */}
-              <a href="#angebote" className="group flex items-center gap-2 text-brand-primary text-sm font-medium py-[0.82rem] px-6 rounded-full border border-brand-primary/12 bg-white/45 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/70 hover:border-brand-primary/20 active:scale-[0.97]">
-                Instant Success Formula
+              <a href="/instant-success-formula?from=start" className="group flex items-center gap-2 rounded-full border border-brand-primary/18 bg-brand-secondary/55 px-6 py-[0.82rem] text-sm font-medium text-brand-primary backdrop-blur-sm transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-brand-accent/60 hover:bg-brand-ivory active:scale-[0.98]">
+                Instant Success Formula ansehen
                 <ChevronRight className="w-3.5 h-3.5 opacity-40 transition-transform duration-500 group-hover:translate-x-0.5" />
               </a>
             </motion.div>
@@ -256,7 +319,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         </section>
 
         {/* Section 2: Emotionaler Einstieg */}
-        <section className="py-24 bg-white/50 backdrop-blur-sm border-y border-brand-primary/5">
+        <section className="border-y border-brand-primary/5 bg-brand-secondary py-24 backdrop-blur-sm">
           <div className="container mx-auto px-6 max-w-4xl">
             <motion.div 
               variants={staggerContainer}
@@ -266,12 +329,12 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               className="text-center"
             >
               <motion.h2 variants={fadeIn} className="font-serif text-3xl md:text-5xl mb-8 leading-tight">
-                Vielleicht brauchst du nicht mehr Strategie. <br />
+                Vielleicht brauchst du keine neue Strategie. <br />
                 Vielleicht brauchst du eine neue <span className="italic">innere Grundlage</span> für Erfolg.
               </motion.h2>
               <motion.div variants={fadeIn} className="space-y-6 text-lg text-brand-muted leading-relaxed">
                 <p>
-                  Du hast Erfahrung, Fähigkeiten und Vision. Und trotzdem spürst du, dass etwas in dir noch nicht vollständig mit deinem nächsten Wachstum übereinstimmt.
+                  Du hast Erfahrung, Fähigkeiten und eine Vision. Und trotzdem spürst du, dass etwas innen noch nicht vollständig mit deinem nächsten Level übereinstimmt.
                 </p>
                 <p>
                   Sichtbarkeit fühlt sich schwer an. Entscheidungen kosten Energie. Kundengewinnung ist nicht so klar, wie sie sein könnte.
@@ -288,13 +351,13 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         <section id="markenphilosophie" className="relative overflow-hidden bg-[#d8c3a6] text-brand-primary">
           <div
             className="absolute inset-0 bg-cover bg-center md:bg-[center_right]"
-            style={{ backgroundImage: "url('/media/images/success-section.png')" }}
+            style={{ backgroundImage: `url('${successSectionImages[lang]}')` }}
             aria-hidden="true"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(249,248,246,0.88)_0%,rgba(249,248,246,0.70)_35%,rgba(249,248,246,0.22)_63%,rgba(26,26,26,0.14)_100%)] md:bg-[linear-gradient(90deg,rgba(249,248,246,0.76)_0%,rgba(249,248,246,0.46)_38%,rgba(249,248,246,0.04)_64%,rgba(26,26,26,0.06)_100%)]" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-brand-primary/20 to-transparent" aria-hidden="true" />
 
-          <div className="container relative mx-auto grid min-h-[760px] items-center gap-12 px-6 py-24 md:grid-cols-[0.92fr_1.08fr] md:py-28 lg:min-h-[820px]">
+          <div className="container relative mx-auto flex min-h-[760px] items-center px-6 py-24 md:py-28 lg:min-h-[820px]">
             <motion.div
               variants={staggerContainer}
               initial="hidden"
@@ -318,37 +381,6 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   Er wird zu deinem natürlichen Standard.
                 </p>
               </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="relative mx-auto flex aspect-square w-full max-w-[540px] items-center justify-center md:mr-2 md:translate-x-6 md:-translate-y-24 lg:max-w-[640px] lg:translate-x-4 lg:-translate-y-32"
-              aria-label="SEE CLEAR BECOME: Identity, Clarity, Action lead to Aligned Success"
-            >
-              <div className="absolute inset-[7%] rounded-full border border-brand-accent/55" />
-
-              <div className="absolute left-1/2 top-[9%] -translate-x-1/2 text-center">
-                <span className="font-display text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-primary/70 md:text-xs">Identity</span>
-              </div>
-              <div className="absolute right-[5%] top-1/2 -translate-y-1/2 text-right">
-                <span className="font-display text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-primary/70 md:text-xs">Clarity</span>
-              </div>
-              <div className="absolute bottom-[11%] left-[13%]">
-                <span className="font-display text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-primary/70 md:text-xs">Action</span>
-              </div>
-
-              <div className="relative text-center">
-                <p className="mb-4 font-display text-[11px] font-semibold uppercase tracking-[0.36em] text-brand-accent md:text-xs">
-                  SEE <span className="mx-2 text-brand-primary/35">→</span> CLEAR <span className="mx-2 text-brand-primary/35">→</span> BECOME
-                </p>
-                <div className="mx-auto h-px w-24 bg-brand-accent/60" />
-                <p className="mt-5 font-serif text-3xl leading-none text-brand-primary md:text-5xl">
-                  Aligned<br />Success
-                </p>
-              </div>
             </motion.div>
           </div>
         </section>
@@ -458,7 +490,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         whileInView={{ scaleX: 1, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, delay: 0.3 + idx * 0.16, ease: [0.16, 1, 0.3, 1] }}
-                        className={`h-px w-10 origin-right transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:w-28 ${item.id === 'become' ? 'bg-brand-accent/60' : 'bg-brand-accent/70'}`}
+                        className={`h-px w-10 origin-right transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:w-28 ${item.id === 'become' ? 'bg-brand-accent/60' : 'bg-brand-accent/70'}`}
                       />
                     </div>
 
@@ -471,7 +503,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                       {item.desc}
                     </p>
 
-                    <div className={`my-7 h-px w-full transition-all duration-700 group-hover:w-[85%] ${item.id === 'become' ? 'bg-white/16' : 'bg-brand-primary/10'}`} />
+                    <div className={`my-7 h-px w-full transition-[width] duration-700 group-hover:w-[85%] ${item.id === 'become' ? 'bg-white/16' : 'bg-brand-primary/10'}`} />
 
                     <p className="font-display text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-accent">
                       Ergebnis:
@@ -501,12 +533,12 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               transition={{ duration: 0.95, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="mt-12 flex justify-start md:mt-14 xl:ml-[calc(42%-1rem)]"
             >
-              <button className="group flex w-full max-w-[430px] items-center justify-between rounded-full bg-white py-2 pl-6 pr-2 text-left text-sm font-semibold text-brand-primary shadow-xl shadow-brand-primary/25 transition-all duration-500 hover:bg-brand-secondary active:scale-[0.98] sm:w-auto sm:min-w-[430px] sm:pl-7">
+              <a href="/instant-success-formula?from=methode" className="group flex w-full max-w-[430px] items-center justify-between rounded-full bg-brand-secondary py-2 pl-6 pr-2 text-left text-sm font-medium text-brand-primary shadow-xl shadow-brand-primary/25 transition-[background-color,transform] duration-500 hover:bg-brand-ivory active:scale-[0.98] sm:w-auto sm:min-w-[430px] sm:pl-7">
                 <span className="pr-5">Instant Success Formula entdecken</span>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-all duration-500 group-hover:translate-x-0.5 group-hover:bg-brand-accent">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-[background-color,transform] duration-500 group-hover:translate-x-0.5 group-hover:bg-brand-accent">
                   <ArrowRight className="h-4 w-4" />
                 </span>
-              </button>
+              </a>
             </motion.div>
           </div>
         </section>
@@ -649,7 +681,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         <section
           className="relative py-36 md:py-48 overflow-hidden text-white"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 36%), linear-gradient(180deg, #171614 0%, #10100F 100%)'
+            background: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 36%), linear-gradient(180deg, #03182E 0%, #100F0F 100%)'
           }}
         >
           {/* Subtle top fade from previous section */}
@@ -674,9 +706,8 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 Was entsteht, wenn Erfolg zu deinem{' '}
                 <span className="italic font-light text-white/55">inneren Standard</span> wird.
               </h2>
-              <p className="text-white/45 text-[0.9rem] leading-[1.9] max-w-xl mx-auto font-light">
-                Nicht mehr Druck. Nicht mehr ständiges Beweisen. Sondern Klarheit,
-                Selbstführung und Wachstum aus einer Identität, die Erfolg halten kann.
+              <p className="mx-auto max-w-xl text-base leading-[1.9] text-white/72">
+                Ruhiger. Klarer. Stabiler. Wachstum aus einer Identität, die Erfolg halten kann.
               </p>
             </motion.div>
 
@@ -728,17 +759,17 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                     }}
                     className="group relative rounded-[1.75rem] p-8 md:p-10 cursor-default transition-[background,border-color] duration-500"
                     style={{
-                      background: 'rgba(249,244,231,0.045)',
-                      border: '1px solid rgba(249,244,231,0.10)',
+                      background: 'rgba(249,244,231,0.065)',
+                      border: '1px solid rgba(249,244,231,0.18)',
                       backdropFilter: 'blur(16px)'
                     }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.background = 'rgba(249,244,231,0.075)';
-                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(212,175,55,0.28)';
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(249,244,231,0.095)';
+                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(212,175,55,0.38)';
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.background = 'rgba(249,244,231,0.045)';
-                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(249,244,231,0.10)';
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(249,244,231,0.065)';
+                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(249,244,231,0.18)';
                     }}
                   >
                     {/* Number + line — cascade first */}
@@ -779,7 +810,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         hidden: { opacity: 0, y: 10 },
                         visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } }
                       }}
-                      className="text-white/50 text-[0.875rem] leading-[1.85] font-light group-hover:text-white/65 transition-colors duration-500"
+                      className="text-base leading-[1.8] text-white/72 transition-colors duration-500 group-hover:text-white/82"
                     >
                       {card.body}
                     </motion.p>
@@ -803,10 +834,10 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.65, delay: 0.3 + i * 0.1, ease: [0.32, 0.72, 0, 1] }}
                   className="flex items-center justify-center gap-2.5 px-5 py-4 rounded-2xl text-center cursor-default transition-[border-color] duration-500 hover:border-brand-accent/30"
-                  style={{ background: 'rgba(249,244,231,0.03)', border: '1px solid rgba(249,244,231,0.07)' }}
+                  style={{ background: 'rgba(249,244,231,0.055)', border: '1px solid rgba(249,244,231,0.14)' }}
                 >
                   <div className="w-1 h-1 rounded-full bg-brand-accent/50 shrink-0" />
-                  <span className="font-display text-[0.7rem] font-medium tracking-[0.18em] uppercase text-white/45">
+                  <span className="font-display text-[0.7rem] font-medium tracking-[0.18em] uppercase text-white/68">
                     {label}
                   </span>
                 </motion.div>
@@ -1098,16 +1129,16 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="flex flex-col sm:flex-row items-start gap-5"
                 >
-                  <button className="group flex items-center bg-brand-primary text-white pl-6 pr-1.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-brand-primary/90 active:scale-[0.97] shadow-lg shadow-brand-primary/20">
+                  <a href="#kontakt" className="group flex items-center rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0">
                     <span className="pr-4 tracking-wide">Clarity Call buchen</span>
-                    <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-all duration-500 group-hover:bg-brand-accent group-hover:translate-x-0.5">
+                    <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 group-hover:bg-brand-accent group-hover:translate-x-0.5">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
-                  </button>
-                  <button className="text-brand-primary text-sm font-medium py-3 flex items-center gap-1.5 border-b border-brand-primary/20 transition-all duration-300 hover:border-brand-accent hover:text-brand-accent group">
+                  </a>
+                  <a href="/about-heike?from=ueber-heike" className="text-brand-primary text-sm font-medium py-3 flex items-center gap-1.5 border-b border-brand-primary/20 transition-[border-color,color] duration-300 hover:border-brand-accent hover:text-brand-accent group">
                     Mehr über Heike
                     <ChevronRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </button>
+                  </a>
                 </motion.div>
 
                 {/* Trust line */}
@@ -1127,100 +1158,134 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         </section>
 
         {/* Section 8: Angebotswelt / Ökosystem */}
-        <section id="angebote" className="py-32 bg-brand-secondary/50">
+        <section id="angebote" className="bg-brand-secondary py-32 md:py-40">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-20">
-              <h2 className="font-serif text-5xl mb-4 italic">Das Ökosystem</h2>
-              <div className="h-1 w-24 bg-brand-accent mx-auto mb-6" />
+            <div className="mx-auto mb-20 grid max-w-6xl gap-8 border-t border-brand-brass/30 pt-14 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+              <div>
+                <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.32em] text-brand-accent">
+                  Services
+                </p>
+                <h2 className="font-serif text-[2.6rem] leading-[1.05] text-brand-primary md:text-[4rem]">
+                  Die Wege in Heikes <span className="italic font-light text-brand-primary/58">Ökosystem.</span>
+                </h2>
+              </div>
+              <p className="max-w-xl text-base leading-[1.85] text-brand-muted md:justify-self-end">
+                Die Homepage zeigt die Angebotswelt bewusst als Orientierung. Die tieferen Entscheidungen entstehen auf den Angebotsseiten und im Clarity Call.
+              </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
-               {/* Highlighted Offer */}
-               <motion.div 
-                 whileHover={{ y: -10 }}
-                 className="lg:col-span-2 bg-brand-primary text-white p-12 md:p-16 rounded-[4rem] shadow-3xl shadow-brand-primary/30 flex flex-col md:flex-row gap-12 items-center"
-               >
-                 <div className="md:w-2/3">
-                   <span className="bg-brand-accent/20 text-brand-accent px-4 py-1 rounded-full text-xs font-display tracking-widest uppercase mb-4 inline-block">Premium Core Offer</span>
-                   <h3 className="font-serif text-4xl md:text-5xl mb-6">Instant Success Formula</h3>
-                   <p className="text-white/70 text-lg mb-8 leading-relaxed max-w-xl">
-                     Die exklusive 1:1 Transformation für Unternehmerinnen, die Identität, emotionale Klarheit und Erfolg als ihre neue natürliche Gewohnheit etablieren wollen.
-                   </p>
-                   <button className="bg-white text-brand-primary px-8 py-4 rounded-full font-bold flex items-center gap-2 transition-all duration-500 hover:scale-[1.02] group">
-                     Mehr erfahren
-                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
-                   </button>
-                 </div>
-                 <div className="md:w-1/3 flex justify-center">
-                   <div className="w-32 h-32 rounded-full border-2 border-white/10 flex items-center justify-center p-2">
-                     <div className="w-full h-full rounded-full border-2 border-brand-accent/40 animate-spin-slow" />
-                   </div>
-                 </div>
-               </motion.div>
+            <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-2">
+              <motion.a
+                href="/instant-success-formula?from=angebote"
+                whileHover={{ y: -8 }}
+                className="group relative overflow-hidden rounded-[2rem] bg-brand-primary p-9 text-brand-secondary shadow-[0_32px_80px_rgba(3,24,46,0.22)] ring-1 ring-brand-accent/20 transition-shadow duration-500 hover:shadow-[0_40px_90px_rgba(3,24,46,0.3)] md:p-12 lg:col-span-2"
+              >
+                <div className="absolute right-8 top-8 hidden h-32 w-32 rounded-full border border-brand-accent/35 md:block" aria-hidden="true">
+                  <div className="absolute inset-4 rounded-full border border-brand-secondary/12" />
+                  <div className="absolute inset-10 rounded-full bg-brand-accent/18" />
+                </div>
+                <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.32em] text-brand-accent">
+                  Premium Core Offer
+                </p>
+                <h3 className="max-w-3xl font-serif text-[2.35rem] leading-[1.08] md:text-[4rem]">
+                  Instant Success Formula
+                </h3>
+                <p className="mt-7 max-w-2xl text-base leading-[1.85] text-brand-secondary/78 md:text-lg">
+                  Die tiefe 1:1 Transformation für Identität, emotionale Klarheit und Erfolg als natürlichen Standard.
+                </p>
+                <span className="mt-10 inline-flex items-center gap-3 rounded-full bg-brand-secondary px-6 py-3 text-sm font-medium text-brand-primary transition duration-500 group-hover:bg-brand-ivory">
+                  Instant Success Formula ansehen
+                  <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
+                </span>
+              </motion.a>
 
-               {/* Secondary Offers */}
-               {[
-                 {
-                   title: 'ISOBL',
-                   subtitle: 'Business Launch',
-                   desc: 'Moderner Einstieg in digitale Einkommensmodelle und Online-Business-Strukturen.'
-                 },
-                 {
-                   title: 'ISA Alliance',
-                   subtitle: 'Community & Growth',
-                   desc: 'Exklusives Netzwerk für gemeinsames Wachstum und strategische Partnerschaften.'
-                 },
-                 {
-                   title: 'Quantum Lab',
-                   subtitle: 'Future Academy',
-                   desc: 'Die Plattform für personalisierte Lernpfade, AI-Tools und zukunftsorientierte Entwicklung.'
-                 }
-               ].map((item, idx) => (
-                 <motion.div 
-                   key={idx}
-                   whileHover={{ y: -5 }}
-                   className="bg-white p-10 rounded-[3rem] shadow-sm hover:shadow-lg transition-all"
-                 >
-                   <h4 className="font-display font-bold text-brand-accent text-xs tracking-widest uppercase mb-2">{item.subtitle}</h4>
-                   <h3 className="font-serif text-2xl mb-4">{item.title}</h3>
-                   <p className="text-brand-muted mb-8">{item.desc}</p>
-                   <button className="text-brand-primary font-medium flex items-center gap-1 transition-all duration-500 hover:gap-2">
-                     Entdecken <ChevronRight className="w-4 h-4" />
-                   </button>
-                 </motion.div>
-               ))}
-               
-               <div className="lg:col-span-1 bg-brand-accent/10 p-10 rounded-[3rem] flex flex-col justify-center items-center text-center">
-                  <h3 className="font-serif text-2xl mb-2">Future Vision</h3>
-                  <p className="text-brand-muted text-sm italic">Hormonelle Intelligenz & AI personalisiert</p>
-               </div>
+              {[
+                {
+                  title: 'ISOBL',
+                  subtitle: 'Business Launch',
+                  desc: 'Ein digitales Zusatzgeschäft, das sich sinnvoll in dein bestehendes Business integriert.',
+                  href: '/isobl?from=angebote',
+                  cta: 'ISOBL ansehen'
+                },
+                {
+                  title: 'ISA Alliance',
+                  subtitle: 'Community & Growth',
+                  desc: 'Ein ruhiger, klarer Raum für Wachstum, Austausch und neue strategische Verbindung.',
+                  href: '/isa-alliance?from=angebote',
+                  cta: 'Community ansehen'
+                },
+                {
+                  title: 'Quantum Lifedesign Lab',
+                  subtitle: 'Future Academy',
+                  desc: 'Die langfristige Plattform für Lernpfade, Community, AI-Tools und zukunftsorientierte Entwicklung.',
+                  href: '/community?from=angebote',
+                  cta: 'Future Vision ansehen'
+                },
+                {
+                  title: 'Future Vision',
+                  subtitle: 'AI-ready Intelligence',
+                  desc: 'Hormonelle Intelligenz, personalisierte Systeme und eine Academy-Struktur als behutsame Zukunftsebene.',
+                  href: '/method?from=angebote',
+                  cta: 'Methode verstehen'
+                }
+              ].map((item) => (
+                <motion.a
+                  key={item.title}
+                  href={item.href}
+                  whileHover={{ y: -6 }}
+                  className="group flex min-h-[300px] flex-col rounded-[1.75rem] border border-brand-brass/18 bg-brand-ivory/72 p-8 shadow-[0_24px_70px_rgba(16,15,15,0.06)] transition duration-500 hover:border-brand-accent/45 hover:bg-brand-ivory md:p-10"
+                >
+                  <p className="mb-4 font-display text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-accent">
+                    {item.subtitle}
+                  </p>
+                  <h3 className="font-serif text-3xl leading-tight text-brand-primary md:text-[2.4rem]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-5 flex-1 text-base leading-[1.75] text-brand-muted">
+                    {item.desc}
+                  </p>
+                  <span className="mt-8 inline-flex w-fit items-center gap-2 border-b border-brand-primary/20 pb-1 text-sm font-medium text-brand-primary transition duration-300 group-hover:border-brand-accent group-hover:text-brand-muted">
+                    {item.cta}
+                    <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </motion.a>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Section 10: Leadmagnet */}
-        <section id="kontakt" className="py-32 relative overflow-hidden">
+        <section id="kontakt" className="py-32 relative overflow-hidden bg-brand-secondary">
           <div className="absolute inset-0 z-0">
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-accent/5 rounded-full blur-[100px]" />
           </div>
           
           <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-            <div className="bg-white/80 backdrop-blur-xl p-12 md:p-20 rounded-[4rem] text-center shadow-xl border border-brand-primary/5">
-              <h2 className="font-serif text-4xl mb-6 italic">Gönne dir den ersten Schritt.</h2>
-              <p className="text-brand-muted text-xl mb-12 max-w-2xl mx-auto">
-                Sichere dir das <strong>Instant Success Framework</strong> und erkenne, welches innere Muster deinen Erfolg noch bremst.
+            <div className="rounded-[2.25rem] border border-brand-brass/18 bg-brand-ivory/80 p-10 text-center shadow-[0_24px_70px_rgba(16,15,15,0.08)] backdrop-blur-xl md:p-20">
+              <h2 className="mb-6 font-serif text-4xl leading-tight text-brand-primary md:text-5xl">
+                Der erste Schritt ist <span className="italic font-light text-brand-primary/58">Klarheit.</span>
+              </h2>
+              <p className="mx-auto mb-12 max-w-2xl text-lg leading-[1.75] text-brand-muted">
+                Sichere dir das <strong>Instant Success Framework</strong> und erkenne, welches innere Muster deinen nächsten Schritt noch bindet.
               </p>
               
-              <div className="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
+              <form className="mx-auto flex max-w-md flex-col gap-4 md:flex-row">
+                <label className="sr-only" htmlFor="lead-email">
+                  E-Mail Adresse
+                </label>
                 <input 
+                  id="lead-email"
+                  name="email"
                   type="email" 
-                  placeholder="Deine E-Mail Adresse" 
-                  className="flex-grow px-8 py-4 rounded-full border border-brand-primary/10 focus:outline-none focus:border-brand-accent bg-white"
+                  autoComplete="email"
+                  spellCheck={false}
+                  placeholder="z. B. heike@example.com…"
+                  className="flex-grow rounded-full border border-brand-muted/20 bg-brand-secondary px-7 py-4 text-base text-brand-primary outline-none transition focus:border-brand-accent focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)]"
                 />
-                <button className="bg-brand-primary text-white px-8 py-4 rounded-full font-bold transition-all duration-500 hover:bg-brand-primary/90 hover:scale-[1.02]">
+                <button type="submit" className="rounded-full border border-brand-primary bg-brand-primary px-8 py-4 font-medium text-brand-secondary transition-colors duration-500 hover:border-brand-accent hover:bg-brand-shadow active:translate-y-px">
                   Erhalten
                 </button>
-              </div>
+              </form>
               <p className="mt-6 text-xs text-brand-muted font-display tracking-wide uppercase">Kostenfreies PDF & Video-Impuls</p>
             </div>
           </div>
@@ -1246,7 +1311,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             <p className="text-white/60 text-xl mb-12 leading-relaxed">
               Wenn du spürst, dass dein nächstes Wachstum nicht mehr über Druck entstehen soll, ist der Clarity Call dein nächster Schritt.
             </p>
-            <a href="#kontakt" className="bg-white text-brand-primary px-12 py-6 rounded-full text-lg font-bold transition-all duration-500 hover:scale-[1.02] shadow-2xl shadow-white/10 hover:shadow-white/20 flex items-center gap-3 mx-auto group">
+            <a href="#kontakt" className="mx-auto flex w-fit items-center gap-3 rounded-full bg-brand-secondary px-10 py-5 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:px-12 md:py-6 md:text-lg group">
               Clarity Call anfragen
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
             </a>
