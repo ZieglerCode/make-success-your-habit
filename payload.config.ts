@@ -28,6 +28,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || "",
     },
+    schemaName: process.env.PAYLOAD_DATABASE_SCHEMA || "payload",
   }),
   editor: lexicalEditor(),
   globals: [SiteContent],
