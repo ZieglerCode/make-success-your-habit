@@ -43,9 +43,15 @@ const navItems = [
 
 type SiteLang = "de" | "en";
 
-const successSectionImages: Record<SiteLang, string> = {
-  de: "/media/images/success-section_de.png",
-  en: "/media/images/success-section_eng.png",
+const successSectionImages: Record<SiteLang, {png: string; webp: string}> = {
+  de: {
+    png: "/media/images/success-section_de.png",
+    webp: "/media/images/success-section_de.webp",
+  },
+  en: {
+    png: "/media/images/success-section_eng.png",
+    webp: "/media/images/success-section_eng.webp",
+  },
 };
 
 function LanguageToggle({
@@ -151,9 +157,11 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             <img
               alt="Make Success Your Habit"
               className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
+              width={40}
+              height={40}
               src="/media/images/msyh-logo.webp"
             />
-            <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-brand-primary">Make Success Your Habit</span>
+            <span className="max-w-[11rem] truncate font-display text-xs font-semibold uppercase tracking-[0.14em] text-brand-primary sm:max-w-none sm:text-sm sm:tracking-[0.16em]">Make Success Your Habit</span>
           </a>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -214,28 +222,29 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             src="/media/videos/hero-image-new.mp4"
             muted
             playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover object-[68%_50%]"
+            preload="metadata"
+            poster="/media/images/hero-image.webp"
+            className="absolute inset-0 h-full w-full object-cover object-[72%_50%] sm:object-[68%_50%]"
           />
 
           {/* Angled editorial gradient — lighter, more video visible */}
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(108deg, rgba(249,244,231,0.94) 10%, rgba(249,244,231,0.66) 34%, rgba(249,244,231,0.12) 56%, transparent 72%)' }}
+            style={{ background: 'linear-gradient(108deg, rgba(249,244,231,0.96) 0%, rgba(249,244,231,0.78) 44%, rgba(249,244,231,0.22) 68%, transparent 88%)' }}
           />
           {/* Top vignette */}
           <div className="absolute inset-0 bg-gradient-to-b from-brand-secondary/25 via-transparent to-transparent" />
           {/* Bottom vignette */}
           <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-brand-secondary/50 to-transparent" />
           {/* Main Content */}
-          <div className="relative z-10 w-full container mx-auto px-6 pt-32 pb-24">
+          <div className="relative z-10 w-full container mx-auto px-5 pt-28 pb-24 sm:px-6 sm:pt-32">
 
             {/* Eyebrow pill */}
             <motion.div
               initial={{ opacity: 0, x: -14 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-              className="flex items-center gap-3 mb-10"
+              className="mb-8 flex items-center gap-3 sm:mb-10"
             >
               <div className="w-7 h-px bg-brand-accent" />
               <span className="text-[10px] font-display font-semibold tracking-[0.28em] uppercase text-brand-accent">
@@ -248,9 +257,9 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.12, ease: [0.32, 0.72, 0, 1] }}
-              className="pl-5 border-l-[1.5px] border-brand-accent/35 mb-7"
+              className="mb-6 border-l-[1.5px] border-brand-accent/35 pl-4 sm:mb-7 sm:pl-5"
             >
-              <h1 className="max-w-[21rem] text-balance font-serif text-[2.85rem] leading-[1.02] text-brand-primary md:max-w-[32rem] md:text-[4.15rem] lg:max-w-[40rem] lg:text-[5.25rem] xl:text-[5.85rem]">
+              <h1 className="max-w-[20rem] text-balance font-serif text-[2.45rem] leading-[1.02] text-brand-primary min-[380px]:text-[2.85rem] md:max-w-[32rem] md:text-[4.15rem] lg:max-w-[40rem] lg:text-[5.25rem] xl:text-[5.85rem]">
                 Become the Woman Who{' '}
                 <span className="italic font-light text-brand-primary/62">
                   Succeeds by Default.
@@ -272,7 +281,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.52, ease: [0.32, 0.72, 0, 1] }}
-              className="mb-11 max-w-[34rem] text-base leading-[1.85] text-brand-muted md:text-lg"
+              className="mb-9 max-w-[31rem] text-[0.98rem] leading-[1.75] text-brand-primary/76 sm:mb-11 md:text-lg md:leading-[1.85]"
             >
               Für ambitionierte Unternehmerinnen und Coaches, die Erfolg als natürliche Gewohnheit verkörpern.
             </motion.p>
@@ -282,10 +291,10 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.68, ease: [0.32, 0.72, 0, 1] }}
-              className="flex flex-col sm:flex-row items-start gap-3"
+              className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start"
             >
               {/* Primary — Button-in-Button architecture */}
-              <a href="#kontakt" className="group flex items-center rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0">
+              <a href="#kontakt" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                 <span className="pr-4 tracking-wide">Clarity Call anfragen</span>
                 <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -293,7 +302,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               </a>
 
               {/* Secondary */}
-              <a href="/instant-success-formula?from=start" className="group flex items-center gap-2 rounded-full border border-brand-primary/18 bg-brand-secondary/55 px-6 py-[0.82rem] text-sm font-medium text-brand-primary backdrop-blur-sm transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-brand-accent/60 hover:bg-brand-ivory active:scale-[0.98]">
+              <a href="/instant-success-formula?from=start" className="group flex items-center justify-center gap-2 rounded-full border border-brand-primary/18 bg-brand-secondary/70 px-6 py-[0.82rem] text-sm font-medium text-brand-primary backdrop-blur-sm transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-brand-accent/60 hover:bg-brand-ivory active:scale-[0.98] sm:justify-start">
                 Instant Success Formula ansehen
                 <ChevronRight className="w-3.5 h-3.5 opacity-40 transition-transform duration-500 group-hover:translate-x-0.5" />
               </a>
@@ -319,8 +328,8 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         </section>
 
         {/* Section 2: Emotionaler Einstieg */}
-        <section className="border-y border-brand-primary/5 bg-brand-secondary py-24 backdrop-blur-sm">
-          <div className="container mx-auto px-6 max-w-4xl">
+        <section className="border-y border-brand-primary/5 bg-brand-secondary py-16 backdrop-blur-sm sm:py-20 md:py-24">
+          <div className="container mx-auto max-w-4xl px-5 sm:px-6">
             <motion.div 
               variants={staggerContainer}
               initial="hidden"
@@ -328,18 +337,18 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               viewport={{ once: true, margin: "-100px" }}
               className="text-center"
             >
-              <motion.h2 variants={fadeIn} className="font-serif text-3xl md:text-5xl mb-8 leading-tight">
+              <motion.h2 variants={fadeIn} className="mb-7 font-serif text-[2rem] leading-tight min-[380px]:text-3xl md:mb-8 md:text-5xl">
                 Vielleicht brauchst du keine neue Strategie. <br />
                 Vielleicht brauchst du eine neue <span className="italic">innere Grundlage</span> für Erfolg.
               </motion.h2>
-              <motion.div variants={fadeIn} className="space-y-6 text-lg text-brand-muted leading-relaxed">
+              <motion.div variants={fadeIn} className="space-y-5 text-base leading-relaxed text-brand-muted md:space-y-6 md:text-lg">
                 <p>
                   Du hast Erfahrung, Fähigkeiten und eine Vision. Und trotzdem spürst du, dass etwas innen noch nicht vollständig mit deinem nächsten Level übereinstimmt.
                 </p>
                 <p>
                   Sichtbarkeit fühlt sich schwer an. Entscheidungen kosten Energie. Kundengewinnung ist nicht so klar, wie sie sein könnte.
                 </p>
-                <p className="font-display font-medium text-brand-primary pt-4 text-xl">
+                <p className="pt-3 font-display text-lg font-medium text-brand-primary md:pt-4 md:text-xl">
                   Genau hier beginnt Make Success Your Habit.
                 </p>
               </motion.div>
@@ -347,41 +356,45 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
           </div>
         </section>
 
-        {/* Section 3: Markenphilosophie */}
-        <section id="markenphilosophie" className="relative overflow-hidden bg-[#d8c3a6] text-brand-primary">
-          <div
-            className="absolute inset-0 bg-cover bg-center md:bg-[center_right]"
-            style={{ backgroundImage: `url('${successSectionImages[lang]}')` }}
-            aria-hidden="true"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(249,248,246,0.88)_0%,rgba(249,248,246,0.70)_35%,rgba(249,248,246,0.22)_63%,rgba(26,26,26,0.14)_100%)] md:bg-[linear-gradient(90deg,rgba(249,248,246,0.76)_0%,rgba(249,248,246,0.46)_38%,rgba(249,248,246,0.04)_64%,rgba(26,26,26,0.06)_100%)]" aria-hidden="true" />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-brand-primary/20 to-transparent" aria-hidden="true" />
-
-          <div className="container relative mx-auto flex min-h-[760px] items-center px-6 py-24 md:py-28 lg:min-h-[820px]">
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-120px" }}
-              className="max-w-2xl"
-            >
-              <motion.p variants={fadeIn} className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.34em] text-brand-accent">
+        {/* Section 3: Markenphilosophie — full image, no crop (text is baked into asset) */}
+        <section id="markenphilosophie" className="relative bg-[#d8c3a6]">
+          <motion.picture
+            key={lang}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <source media="(max-width: 767px)" srcSet="/media/images/succes-section-mobile.webp" type="image/webp" />
+            <source media="(max-width: 767px)" srcSet="/media/images/succes-section-mobile.png" type="image/png" />
+            <source srcSet={successSectionImages[lang].webp} type="image/webp" />
+            <img
+              src={successSectionImages[lang].png}
+              alt={
+                lang === "de"
+                  ? "Markenphilosophie: Ausrichtung führt zu Erfolg - Identität, Erkennen, Klären, Werden, Umsetzung"
+                  : "Brand philosophy: Aligned Success - Identity, See, Clear, Become, Action"
+              }
+              width={1718}
+              height={916}
+              className="block h-auto w-full max-w-full"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+            />
+          </motion.picture>
+          <div className="pointer-events-none absolute inset-0 flex items-start px-6 pt-24 md:hidden">
+            <div className="max-w-[18rem]">
+              <p className="mb-4 font-display text-[9px] font-semibold uppercase tracking-[0.24em] text-brand-accent">
                 The Philosophy of Aligned Success
-              </motion.p>
-              <motion.h2 variants={fadeIn} className="font-serif text-5xl leading-[0.98] md:text-7xl lg:text-8xl">
-                Success is a <span className="italic">habit</span>.
-              </motion.h2>
-              <motion.div variants={fadeIn} className="mt-9 max-w-xl space-y-6 text-lg leading-relaxed text-brand-primary/78 md:text-xl">
-                <p>
-                  Erfolg wird stabil, wenn du ihn nicht länger aus Druck erzeugst -
-                  sondern aus Identität, emotionaler Klarheit und strategischer Führung.
-                </p>
-                <p>
-                  Wenn innen und außen übereinstimmen, wird Erfolg nicht mehr gejagt.
-                  Er wird zu deinem natürlichen Standard.
-                </p>
-              </motion.div>
-            </motion.div>
+              </p>
+              <h2 className="font-serif text-[2.7rem] leading-[0.98] text-brand-primary min-[380px]:text-[3rem]">
+                Success is a <span className="italic font-light text-brand-primary/62">habit.</span>
+              </h2>
+              <p className="mt-6 text-[0.95rem] leading-[1.72] text-brand-primary/72">
+                Erfolg wird stabil, wenn du ihn aus Identität, emotionaler Klarheit und strategischer Führung verkörperst.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -398,62 +411,63 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             }}
             aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/96 via-brand-primary/72 to-brand-primary/18" />
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/40 via-transparent to-brand-primary/68" />
-          <div className="relative z-10 mx-auto max-w-[1440px] px-5 py-24 sm:px-8 md:py-28 lg:px-10 lg:py-34 xl:py-36">
-            <div className="grid items-end gap-12 xl:grid-cols-[0.84fr_1.16fr] xl:gap-16">
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-primary via-brand-primary/86 via-46% to-brand-primary/28" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/36 via-brand-primary/8 to-brand-primary/62" />
+          <div className="absolute inset-0 bg-brand-shadow/18" />
+          <div className="relative z-10 mx-auto flex min-h-[auto] max-w-[1600px] items-center px-5 py-16 sm:px-8 sm:py-20 md:py-28 lg:min-h-[900px] lg:px-16 xl:px-20">
+            <div className="grid w-full items-center gap-14 xl:grid-cols-[0.7fr_1.3fr] xl:gap-16">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-120px" }}
                 transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-2xl xl:max-w-xl"
+                className="max-w-2xl xl:max-w-[520px]"
               >
-                <div className="mb-6 flex items-center gap-4">
+                <div className="mb-7 flex items-center gap-4 sm:mb-9">
                   <motion.span
                     initial={{ scaleX: 0, opacity: 0 }}
                     whileInView={{ scaleX: 1, opacity: 1 }}
                     viewport={{ once: true, margin: "-120px" }}
                     transition={{ duration: 1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-                    className="h-px w-8 origin-left bg-brand-accent sm:w-10"
+                    className="h-px w-8 origin-left bg-brand-accent sm:w-12"
                   />
-                  <p className="font-display text-[10px] font-semibold uppercase tracking-[0.24em] text-brand-accent sm:text-[11px] sm:tracking-[0.32em]">
+                  <p className="font-display text-[9px] font-semibold uppercase tracking-[0.24em] text-brand-accent sm:text-[11px] sm:tracking-[0.32em]">
                     SEE → CLEAR → BECOME
                   </p>
                 </div>
-                <h2 className="max-w-[11ch] font-serif text-[2.65rem] leading-[1.02] sm:text-5xl md:text-6xl lg:text-7xl">
+                <h2 className="max-w-[10ch] font-serif text-[2.85rem] leading-[0.98] tracking-[-0.02em] min-[380px]:text-[3.2rem] sm:text-6xl md:text-7xl lg:text-[5.4rem] lg:tracking-[-0.035em] xl:text-[5.85rem]">
                   The Instant Success Formula
                 </h2>
-                <p className="mt-7 max-w-2xl text-base leading-[1.85] text-white/78 md:text-lg xl:max-w-lg">
+                <p className="mt-7 max-w-2xl text-[0.98rem] leading-[1.75] text-white/78 sm:mt-9 md:text-[1.35rem] md:leading-[1.85] xl:max-w-[34rem]">
                   Eine Methode, die dich nicht nur informiert, sondern innerlich neu ausrichtet — damit Erfolg nicht länger mit Druck verbunden ist, sondern mit Klarheit, Identität und bewusster Führung.
                 </p>
               </motion.div>
 
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:items-end xl:gap-5">
+              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:items-center xl:gap-6">
                 {[
                   {
                     id: 'see',
                     step: '01',
                     title: 'SEE',
-                    desc: 'Erkenne die unbewussten Muster, inneren Grenzen und emotionalen Dynamiken, die deinen nächsten Schritt bisher noch zurückhalten.',
-                    result: 'Klarheit über das, was im Hintergrund wirkt.',
-                    className: 'bg-white/80 text-brand-primary lg:mb-10'
+                    desc: 'Erkenne unbewusste Muster, innere Grenzen und emotionale Dynamiken.',
+                    result: 'Klarheit',
+                    className: 'bg-white/78 text-brand-primary lg:min-h-[510px] lg:translate-y-8'
                   },
                   {
                     id: 'clear',
                     step: '02',
                     title: 'CLEAR',
-                    desc: 'Löse emotionale Widerstände, innere Anspannung und Selbstsabotage — damit mehr Ruhe, Freiheit und bewusste Ausrichtung entstehen.',
-                    result: 'Innere Entlastung und neue Handlungsfreiheit.',
-                    className: 'bg-white/95 text-brand-primary shadow-2xl shadow-brand-primary/35 ring-1 ring-brand-accent/55 md:row-span-2 lg:row-span-1 lg:-translate-y-5'
+                    desc: 'Löse emotionale Widerstände, innere Anspannung und Selbstsabotage.',
+                    result: 'Freiheit',
+                    className: 'bg-white/96 text-brand-primary shadow-2xl shadow-brand-primary/35 ring-1 ring-brand-accent/70 md:row-span-2 lg:row-span-1 lg:min-h-[570px] lg:-translate-y-4'
                   },
                   {
                     id: 'become',
                     step: '03',
                     title: 'BECOME',
-                    desc: 'Verkörpere eine neue Erfolgsidentität, aus der du sichtbar wirst, klarer entscheidest und nachhaltiger wächst.',
-                    result: 'Erfolg als natürlicher Zustand statt als ständiger Kampf.',
-                    className: 'bg-[#24211e]/88 text-white ring-1 ring-white/18 md:col-span-2 lg:col-span-1 lg:mb-20'
+                    desc: 'Verkörpere eine neue Erfolgsidentität, aus der du sichtbar wirst.',
+                    result: 'Identität',
+                    className: 'bg-brand-shadow/90 text-white ring-1 ring-white/12 md:col-span-2 lg:col-span-1 lg:min-h-[480px] lg:translate-y-6'
                   }
                 ].map((item, idx) => (
                   <motion.article
@@ -463,90 +477,44 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                     whileHover={{ y: -10, transition: { duration: 0.45, ease: [0.32, 0.72, 0, 1] } }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 1.1, delay: idx * 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className={`group relative overflow-hidden rounded-lg border border-white/18 p-6 shadow-xl shadow-brand-primary/18 backdrop-blur-md transition-shadow duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:shadow-2xl hover:shadow-brand-primary/30 sm:p-7 lg:min-h-[500px] xl:min-h-[540px] ${item.className}`}
+                    className={`group relative flex min-h-[300px] flex-col overflow-hidden rounded-lg border border-white/16 p-7 shadow-xl shadow-brand-primary/18 backdrop-blur-md transition-[box-shadow,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:shadow-2xl hover:shadow-brand-primary/30 sm:min-h-[360px] sm:p-9 lg:min-h-[430px] xl:p-10 ${item.className}`}
                   >
-                    {/* Top accent bar — sweeps in after card */}
-                    <motion.div
-                      initial={{ scaleX: 0 }}
-                      whileInView={{ scaleX: 1 }}
-                      viewport={{ once: true, amount: 0.5 }}
-                      transition={{ duration: 1.2, delay: 0.25 + idx * 0.16, ease: [0.16, 1, 0.3, 1] }}
-                      className={`absolute left-0 top-0 h-[1.5px] w-full origin-left ${item.id === 'clear' ? 'bg-brand-accent' : item.id === 'become' ? 'bg-white/30' : 'bg-brand-primary/15'}`}
-                    />
-
-                    {/* Step + expanding line */}
-                    <div className="mb-8 flex items-center justify-between">
+                    <div className="mb-10 flex items-center justify-between sm:mb-16">
                       <motion.span
                         initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 0.55 }}
+                        whileInView={{ opacity: item.id === 'become' ? 0.45 : 0.62 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.35 + idx * 0.16 }}
-                        className="font-display text-[11px] font-semibold uppercase tracking-[0.26em]"
+                        className="font-display text-[11px] font-medium uppercase tracking-[0.32em]"
                       >
                         {item.step}
                       </motion.span>
-                      <motion.span
-                        initial={{ scaleX: 0, opacity: 0 }}
-                        whileInView={{ scaleX: 1, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.3 + idx * 0.16, ease: [0.16, 1, 0.3, 1] }}
-                        className={`h-px w-10 origin-right transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:w-28 ${item.id === 'become' ? 'bg-brand-accent/60' : 'bg-brand-accent/70'}`}
-                      />
                     </div>
 
-                    {/* Title */}
-                    <h3 className={`font-serif text-3xl leading-none transition-colors duration-500 sm:text-4xl lg:text-[2.7rem] ${item.id === 'become' ? 'group-hover:text-brand-accent' : 'group-hover:text-brand-primary'}`}>
+                    <h3 className={`font-serif text-[2.35rem] leading-none transition-colors duration-500 sm:text-5xl ${item.id === 'become' ? 'lg:text-[2.85rem] xl:text-[3rem] group-hover:text-brand-accent' : 'lg:text-[3.35rem] group-hover:text-brand-primary'}`}>
                       {item.title}
                     </h3>
 
-                    <p className={`mt-6 text-[0.95rem] leading-[1.72] sm:text-base ${item.id === 'become' ? 'text-white/76' : 'text-brand-muted'}`}>
+                    <p className={`mt-6 max-w-[18rem] text-[0.98rem] leading-[1.68] sm:mt-8 sm:max-w-[14rem] sm:text-lg ${item.id === 'become' ? 'text-white/72' : 'text-brand-muted'}`}>
                       {item.desc}
                     </p>
 
-                    <div className={`my-7 h-px w-full transition-[width] duration-700 group-hover:w-[85%] ${item.id === 'become' ? 'bg-white/16' : 'bg-brand-primary/10'}`} />
+                    <div className={`mt-auto h-px w-full transition-[width] duration-700 group-hover:w-[85%] ${item.id === 'become' ? 'bg-white/14' : 'bg-brand-primary/10'}`} />
 
-                    <p className="font-display text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-accent">
-                      Ergebnis:
-                    </p>
-                    <p className={`mt-3 text-sm leading-relaxed sm:text-[0.95rem] ${item.id === 'become' ? 'text-white/86' : 'text-brand-primary/80'}`}>
+                    <p className="mt-8 font-display text-[10px] font-medium uppercase tracking-[0.32em] text-brand-accent">
                       {item.result}
                     </p>
-
-                    {/* CLEAR: pulsing corner glow */}
-                    {item.id === 'clear' && (
-                      <motion.span
-                        animate={{ opacity: [0.1, 0.22, 0.1], scale: [1, 1.08, 1] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                        className="pointer-events-none absolute bottom-0 right-0 h-28 w-28 rounded-tl-full bg-brand-accent/20"
-                        aria-hidden="true"
-                      />
-                    )}
                   </motion.article>
                 ))}
               </div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.95, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-12 flex justify-start md:mt-14 xl:ml-[calc(42%-1rem)]"
-            >
-              <a href="/instant-success-formula?from=methode" className="group flex w-full max-w-[430px] items-center justify-between rounded-full bg-brand-secondary py-2 pl-6 pr-2 text-left text-sm font-medium text-brand-primary shadow-xl shadow-brand-primary/25 transition-[background-color,transform] duration-500 hover:bg-brand-ivory active:scale-[0.98] sm:w-auto sm:min-w-[430px] sm:pl-7">
-                <span className="pr-5">Instant Success Formula entdecken</span>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-[background-color,transform] duration-500 group-hover:translate-x-0.5 group-hover:bg-brand-accent">
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </a>
-            </motion.div>
           </div>
         </section>
 
         {/* Section 5: Für wen ist das? */}
-        <section className="bg-brand-secondary py-32 md:py-44 overflow-hidden">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="grid lg:grid-cols-[1fr_1fr] gap-16 lg:gap-24 items-start">
+        <section className="overflow-hidden bg-brand-secondary py-20 sm:py-28 md:py-44">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6">
+            <div className="grid items-start gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
 
               {/* Left: Editorial image */}
               <motion.div
@@ -557,19 +525,22 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 className="relative lg:sticky lg:top-28"
               >
                 {/* Outer frame — thin gold hairline */}
-                <div className="relative rounded-[1.75rem] overflow-hidden ring-1 ring-brand-accent/15">
+                <div className="relative overflow-hidden rounded-2xl ring-1 ring-brand-accent/15 sm:rounded-[1.75rem]">
                   <picture>
                     <source srcSet="/media/images/fuer-wen.webp" type="image/webp" />
                     <img
                       src="/media/images/für-wen.png"
                       alt="Heike Ziegler – Transformationsmentorin für Unternehmerinnen"
                       className="w-full h-auto block object-cover"
+                      width={900}
+                      height={1125}
                       loading="lazy"
                       decoding="async"
+                      sizes="(min-width: 1024px) 50vw, 100vw"
                     />
                   </picture>
                   {/* Bottom quote overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 px-9 pb-9 pt-24 bg-gradient-to-t from-brand-primary/75 via-brand-primary/30 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-primary/75 via-brand-primary/30 to-transparent px-6 pb-6 pt-20 sm:px-9 sm:pb-9 sm:pt-24">
                     <motion.div
                       initial={{ scaleX: 0 }}
                       whileInView={{ scaleX: 1 }}
@@ -582,7 +553,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.9, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                      className="font-serif text-xl md:text-2xl text-white leading-[1.4]"
+                      className="font-serif text-lg leading-[1.4] text-white md:text-2xl"
                     >
                       Klarheit ist keine Pause.
                       <br />
@@ -600,7 +571,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-                  className="flex items-center gap-3 mb-10"
+                  className="mb-8 flex items-center gap-3 sm:mb-10"
                 >
                   <div className="w-6 h-px bg-brand-accent" />
                   <span className="font-display font-semibold text-[10px] uppercase tracking-[0.32em] text-brand-accent">
@@ -614,7 +585,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-serif text-[2.4rem] md:text-[3rem] lg:text-[3.25rem] leading-[1.12] text-brand-primary mb-10"
+                  className="mb-8 font-serif text-[2.05rem] leading-[1.12] text-brand-primary min-[380px]:text-[2.3rem] md:mb-10 md:text-[3rem] lg:text-[3.25rem]"
                 >
                   Für Frauen, die Erfolg nicht länger
                   <br className="hidden md:block" /> erzwingen wollen —
@@ -630,7 +601,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-brand-muted text-[0.925rem] leading-[1.9] mb-12 max-w-[38ch] font-light"
+                  className="mb-10 max-w-[38ch] text-[0.925rem] font-light leading-[1.85] text-brand-muted md:mb-12 md:leading-[1.9]"
                 >
                   Für Unternehmerinnen, Coaches, Consultants, Therapeutinnen
                   und Expertinnen, die spüren: Mehr Strategie allein reicht nicht,
@@ -679,7 +650,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
 
         {/* Section 6: Transformation Outcomes */}
         <section
-          className="relative py-36 md:py-48 overflow-hidden text-white"
+          className="relative overflow-hidden py-20 text-white sm:py-28 md:py-48"
           style={{
             background: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 36%), linear-gradient(180deg, #03182E 0%, #100F0F 100%)'
           }}
@@ -687,7 +658,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
           {/* Subtle top fade from previous section */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-brand-secondary/8 to-transparent pointer-events-none" />
 
-          <div className="container mx-auto px-6 max-w-6xl">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
 
             {/* Editorial Intro — centered */}
             <motion.div
@@ -695,24 +666,24 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-center mb-20 md:mb-28"
+              className="mb-14 text-center md:mb-28"
             >
-              <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="mb-7 flex items-center justify-center gap-3 md:mb-8">
                 <div className="w-8 h-px bg-brand-accent/50" />
                 <span className="font-display text-[9px] font-semibold uppercase tracking-[0.36em] text-brand-accent/70">Ergebnisse</span>
                 <div className="w-8 h-px bg-brand-accent/50" />
               </div>
-              <h2 className="font-serif text-[2.4rem] md:text-[3.4rem] lg:text-[4rem] leading-[1.1] text-white max-w-3xl mx-auto mb-8">
+              <h2 className="mx-auto mb-6 max-w-3xl font-serif text-[2.05rem] leading-[1.1] text-white min-[380px]:text-[2.35rem] md:mb-8 md:text-[3.4rem] lg:text-[4rem]">
                 Was entsteht, wenn Erfolg zu deinem{' '}
                 <span className="italic font-light text-white/55">inneren Standard</span> wird.
               </h2>
-              <p className="mx-auto max-w-xl text-base leading-[1.9] text-white/72">
+              <p className="mx-auto max-w-xl text-[0.98rem] leading-[1.75] text-white/72 md:text-base md:leading-[1.9]">
                 Ruhiger. Klarer. Stabiler. Wachstum aus einer Identität, die Erfolg halten kann.
               </p>
             </motion.div>
 
             {/* 4 Large Outcome Cards — 2×2 grid */}
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
+            <div className="mb-4 grid gap-4 md:grid-cols-2">
               {[
                 {
                   num: '01',
@@ -757,7 +728,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         }
                       }
                     }}
-                    className="group relative rounded-[1.75rem] p-8 md:p-10 cursor-default transition-[background,border-color] duration-500"
+                    className="group relative cursor-default rounded-2xl p-6 transition-[background,border-color] duration-500 sm:rounded-[1.75rem] sm:p-8 md:p-10"
                     style={{
                       background: 'rgba(249,244,231,0.065)',
                       border: '1px solid rgba(249,244,231,0.18)',
@@ -778,7 +749,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         hidden: { opacity: 0 },
                         visible: { opacity: 1, transition: { duration: 0.5 } }
                       }}
-                      className="flex items-center gap-4 mb-7"
+                      className="mb-6 flex items-center gap-4 md:mb-7"
                     >
                       <span className="font-display text-[10px] font-semibold tracking-[0.3em] text-brand-accent/55 group-hover:text-brand-accent transition-colors duration-500">
                         {card.num}
@@ -799,7 +770,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         hidden: { opacity: 0, y: 14 },
                         visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } }
                       }}
-                      className="font-serif text-[1.6rem] md:text-[1.85rem] text-white leading-tight mb-5"
+                      className="mb-4 font-serif text-[1.45rem] leading-tight text-white md:mb-5 md:text-[1.85rem]"
                     >
                       {card.title}
                     </motion.h3>
@@ -810,7 +781,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                         hidden: { opacity: 0, y: 10 },
                         visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } }
                       }}
-                      className="text-base leading-[1.8] text-white/72 transition-colors duration-500 group-hover:text-white/82"
+                      className="text-[0.95rem] leading-[1.72] text-white/72 transition-colors duration-500 group-hover:text-white/82 md:text-base md:leading-[1.8]"
                     >
                       {card.body}
                     </motion.p>
@@ -820,7 +791,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             </div>
 
             {/* 4 Small Outcome Pills */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
               {[
                 'Klarere Entscheidungen',
                 'Magnetischere Kundengewinnung',
@@ -833,11 +804,11 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.65, delay: 0.3 + i * 0.1, ease: [0.32, 0.72, 0, 1] }}
-                  className="flex items-center justify-center gap-2.5 px-5 py-4 rounded-2xl text-center cursor-default transition-[border-color] duration-500 hover:border-brand-accent/30"
+                  className="flex min-h-14 cursor-default items-center justify-center gap-2.5 rounded-2xl px-4 py-4 text-center transition-[border-color] duration-500 hover:border-brand-accent/30 sm:px-5"
                   style={{ background: 'rgba(249,244,231,0.055)', border: '1px solid rgba(249,244,231,0.14)' }}
                 >
                   <div className="w-1 h-1 rounded-full bg-brand-accent/50 shrink-0" />
-                  <span className="font-display text-[0.7rem] font-medium tracking-[0.18em] uppercase text-white/68">
+                  <span className="font-display text-[0.66rem] font-medium uppercase tracking-[0.14em] text-white/68 sm:text-[0.7rem] sm:tracking-[0.18em]">
                     {label}
                   </span>
                 </motion.div>
@@ -850,10 +821,10 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         {/* Section 6.5: Testimonials — Editorial Proof */}
         <section
           id="community"
-          className="py-32 md:py-44 overflow-hidden"
+          className="overflow-hidden py-20 sm:py-28 md:py-44"
           style={{ background: 'linear-gradient(180deg, #F9F4E7 0%, #FBF8F1 100%)' }}
         >
-          <div className="container mx-auto px-6 max-w-6xl">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
 
             {/* Header */}
             <motion.div
@@ -861,27 +832,27 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-16 md:mb-20 max-w-2xl"
+              className="mb-12 max-w-2xl md:mb-20"
             >
-              <div className="flex items-center gap-3 mb-7">
+              <div className="mb-6 flex items-center gap-3 md:mb-7">
                 <div className="w-6 h-px bg-brand-accent" />
                 <span className="font-display font-semibold text-[9px] uppercase tracking-[0.36em] text-brand-accent">
                   Kundinnenstimmen
                 </span>
               </div>
-              <h2 className="font-serif text-[2.2rem] md:text-[3rem] lg:text-[3.4rem] leading-[1.12] text-brand-primary mb-6">
+              <h2 className="mb-5 font-serif text-[2rem] leading-[1.12] text-brand-primary min-[380px]:text-[2.2rem] md:mb-6 md:text-[3rem] lg:text-[3.4rem]">
                 Was Kundinnen erleben,
                 <br />
                 <span className="italic font-light text-brand-primary/55">wenn Erfolg leichter wird.</span>
               </h2>
-              <p className="text-brand-muted text-[0.9rem] leading-[1.85] font-light max-w-md">
+              <p className="max-w-md text-[0.9rem] font-light leading-[1.75] text-brand-muted md:leading-[1.85]">
                 Nicht lauter. Nicht härter. Sondern klarer, stabiler
                 und mehr aus sich selbst heraus.
               </p>
             </motion.div>
 
             {/* Grid: 1 featured + 2 stacked */}
-            <div className="grid lg:grid-cols-[3fr_2fr] gap-4 lg:gap-5 items-start">
+            <div className="grid items-start gap-4 lg:grid-cols-[3fr_2fr] lg:gap-5">
 
               {/* Featured Testimonial */}
               <motion.div
@@ -889,7 +860,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-                className="relative flex flex-col rounded-[2.25rem] p-10 md:p-16"
+                className="relative flex flex-col rounded-2xl p-7 sm:p-10 md:rounded-[2.25rem] md:p-16"
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid rgba(3,24,46,0.08)',
@@ -899,7 +870,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 {/* Decorative quote mark */}
                 <div
                   className="font-serif leading-none select-none pointer-events-none mb-4"
-                  style={{ fontSize: '7rem', color: 'rgba(196,164,132,0.13)', lineHeight: 1 }}
+                  style={{ fontSize: 'clamp(4.5rem, 20vw, 7rem)', color: 'rgba(196,164,132,0.13)', lineHeight: 1 }}
                   aria-hidden="true"
                 >
                   "
@@ -910,7 +881,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-serif text-[1.25rem] md:text-[1.45rem] text-brand-primary leading-[1.72] font-light flex-1 mb-12"
+                  className="mb-9 flex-1 font-serif text-[1.08rem] font-light leading-[1.65] text-brand-primary md:mb-12 md:text-[1.45rem] md:leading-[1.72]"
                 >
                   Die Arbeit mit Heike hat nicht nur mein Business verändert,
                   sondern meine Art, mich selbst zu führen. Ich erreiche heute mehr —
@@ -951,7 +922,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
                     viewport={{ once: true, amount: 0.25 }}
                     transition={{ duration: 1, delay: t.delay, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative flex flex-col rounded-[1.75rem] p-8 md:p-9"
+                    className="relative flex flex-col rounded-2xl p-7 md:rounded-[1.75rem] md:p-9"
                     style={{
                       background: 'rgba(255,255,255,0.72)',
                       border: '1px solid rgba(3,24,46,0.08)',
@@ -964,7 +935,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                     >
                       "
                     </div>
-                    <p className="font-serif text-[1rem] md:text-[1.05rem] text-brand-primary/80 leading-[1.75] font-light flex-1 mb-8">
+                    <p className="mb-7 flex-1 font-serif text-[0.98rem] font-light leading-[1.7] text-brand-primary/80 md:mb-8 md:text-[1.05rem] md:leading-[1.75]">
                       {t.quote}
                     </p>
                     <div>
@@ -983,11 +954,11 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         {/* Section 7: Über Heike — Editorial Authority */}
         <section
           id="ueber-heike"
-          className="py-32 md:py-44 overflow-hidden"
+          className="overflow-hidden py-20 sm:py-28 md:py-44"
           style={{ background: 'linear-gradient(180deg, #FBF8F1 0%, #F7F1E6 100%)' }}
         >
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-start">
+          <div className="container mx-auto max-w-6xl px-5 sm:px-6">
+            <div className="grid items-start gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
 
               {/* Left: Portrait image */}
               <motion.div
@@ -997,19 +968,22 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
                 className="relative lg:sticky lg:top-28"
               >
-                <div className="relative rounded-[2rem] overflow-hidden ring-1 ring-brand-accent/15">
+                <div className="relative overflow-hidden rounded-2xl ring-1 ring-brand-accent/15 md:rounded-[2rem]">
                   <picture>
                     <source srcSet="/media/images/heike-ziegler.webp" type="image/webp" />
                     <img
                       src="/media/images/heike-ziegler.png"
                       alt="Heike Ziegler – Identitätsarbeit & Business-Führung"
                       className="w-full h-auto block object-cover"
+                      width={900}
+                      height={1125}
                       loading="lazy"
                       decoding="async"
+                      sizes="(min-width: 1024px) 50vw, 100vw"
                     />
                   </picture>
                   {/* Bottom overlay with identity line */}
-                  <div className="absolute bottom-0 left-0 right-0 px-8 pb-8 pt-20 bg-gradient-to-t from-brand-primary/65 via-brand-primary/20 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-primary/65 via-brand-primary/20 to-transparent px-6 pb-6 pt-20 sm:px-8 sm:pb-8">
                     <motion.p
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -1032,7 +1006,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-                  className="flex items-center gap-3 mb-9"
+                  className="mb-8 flex items-center gap-3 md:mb-9"
                 >
                   <div className="w-6 h-px bg-brand-accent" />
                   <span className="font-display font-semibold text-[9px] uppercase tracking-[0.34em] text-brand-accent">
@@ -1046,7 +1020,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 1, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-serif text-[2.2rem] md:text-[2.8rem] lg:text-[3rem] leading-[1.13] text-brand-primary mb-8"
+                  className="mb-7 font-serif text-[2rem] leading-[1.13] text-brand-primary min-[380px]:text-[2.18rem] md:mb-8 md:text-[2.8rem] lg:text-[3rem]"
                 >
                   Heike Ziegler verbindet
                   <br />Identitätsarbeit mit{' '}
@@ -1061,7 +1035,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  className="space-y-5 text-brand-muted text-[0.925rem] leading-[1.88] font-light mb-12 max-w-md"
+                  className="mb-10 max-w-md space-y-5 text-[0.925rem] font-light leading-[1.78] text-brand-muted md:mb-12 md:leading-[1.88]"
                 >
                   <p>
                     Ihre Arbeit richtet sich an ambitionierte Frauen, die Erfolg nicht länger aus Druck, Überforderung oder Selbstzweifel heraus aufbauen wollen — sondern aus innerer Klarheit, Identität und bewusster Führung.
@@ -1077,7 +1051,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.28 }}
-                  className="space-y-0 mb-12 border-t border-brand-primary/[0.07]"
+                  className="mb-10 space-y-0 border-t border-brand-primary/[0.07] md:mb-12"
                 >
                   {[
                     {
@@ -1127,9 +1101,9 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex flex-col sm:flex-row items-start gap-5"
+                  className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-start sm:gap-5"
                 >
-                  <a href="#kontakt" className="group flex items-center rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0">
+                  <a href="#kontakt" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                     <span className="pr-4 tracking-wide">Clarity Call buchen</span>
                     <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 group-hover:bg-brand-accent group-hover:translate-x-0.5">
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -1158,18 +1132,18 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         </section>
 
         {/* Section 8: Angebotswelt / Ökosystem */}
-        <section id="angebote" className="bg-brand-secondary py-32 md:py-40">
-          <div className="container mx-auto px-6">
-            <div className="mx-auto mb-20 grid max-w-6xl gap-8 border-t border-brand-brass/30 pt-14 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+        <section id="angebote" className="bg-brand-secondary py-20 sm:py-28 md:py-40">
+          <div className="container mx-auto px-5 sm:px-6">
+            <div className="mx-auto mb-12 grid max-w-6xl gap-7 border-t border-brand-brass/30 pt-10 md:mb-20 md:grid-cols-[0.9fr_1.1fr] md:items-end md:pt-14">
               <div>
                 <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.32em] text-brand-accent">
                   Services
                 </p>
-                <h2 className="font-serif text-[2.6rem] leading-[1.05] text-brand-primary md:text-[4rem]">
+                <h2 className="font-serif text-[2.1rem] leading-[1.08] text-brand-primary min-[380px]:text-[2.35rem] md:text-[4rem] md:leading-[1.05]">
                   Die Wege in Heikes <span className="italic font-light text-brand-primary/58">Ökosystem.</span>
                 </h2>
               </div>
-              <p className="max-w-xl text-base leading-[1.85] text-brand-muted md:justify-self-end">
+              <p className="max-w-xl text-[0.98rem] leading-[1.75] text-brand-muted md:justify-self-end md:text-base md:leading-[1.85]">
                 Die Homepage zeigt die Angebotswelt bewusst als Orientierung. Die tieferen Entscheidungen entstehen auf den Angebotsseiten und im Clarity Call.
               </p>
             </div>
@@ -1178,7 +1152,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               <motion.a
                 href="/instant-success-formula?from=angebote"
                 whileHover={{ y: -8 }}
-                className="group relative overflow-hidden rounded-[2rem] bg-brand-primary p-9 text-brand-secondary shadow-[0_32px_80px_rgba(3,24,46,0.22)] ring-1 ring-brand-accent/20 transition-shadow duration-500 hover:shadow-[0_40px_90px_rgba(3,24,46,0.3)] md:p-12 lg:col-span-2"
+                className="group relative overflow-hidden rounded-2xl bg-brand-primary p-7 text-brand-secondary shadow-[0_32px_80px_rgba(3,24,46,0.22)] ring-1 ring-brand-accent/20 transition-shadow duration-500 hover:shadow-[0_40px_90px_rgba(3,24,46,0.3)] sm:p-9 md:rounded-[2rem] md:p-12 lg:col-span-2"
               >
                 <div className="absolute right-8 top-8 hidden h-32 w-32 rounded-full border border-brand-accent/35 md:block" aria-hidden="true">
                   <div className="absolute inset-4 rounded-full border border-brand-secondary/12" />
@@ -1187,13 +1161,13 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                 <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.32em] text-brand-accent">
                   Premium Core Offer
                 </p>
-                <h3 className="max-w-3xl font-serif text-[2.35rem] leading-[1.08] md:text-[4rem]">
+                <h3 className="max-w-3xl font-serif text-[2rem] leading-[1.08] min-[380px]:text-[2.25rem] md:text-[4rem]">
                   Instant Success Formula
                 </h3>
-                <p className="mt-7 max-w-2xl text-base leading-[1.85] text-brand-secondary/78 md:text-lg">
+                <p className="mt-6 max-w-2xl text-[0.98rem] leading-[1.75] text-brand-secondary/78 md:mt-7 md:text-lg md:leading-[1.85]">
                   Die tiefe 1:1 Transformation für Identität, emotionale Klarheit und Erfolg als natürlichen Standard.
                 </p>
-                <span className="mt-10 inline-flex items-center gap-3 rounded-full bg-brand-secondary px-6 py-3 text-sm font-medium text-brand-primary transition duration-500 group-hover:bg-brand-ivory">
+                <span className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-brand-secondary px-5 py-3 text-center text-sm font-medium text-brand-primary transition duration-500 group-hover:bg-brand-ivory sm:w-fit sm:px-6 md:mt-10">
                   Instant Success Formula ansehen
                   <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
                 </span>
@@ -1233,7 +1207,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   key={item.title}
                   href={item.href}
                   whileHover={{ y: -6 }}
-                  className="group flex min-h-[300px] flex-col rounded-[1.75rem] border border-brand-brass/18 bg-brand-ivory/72 p-8 shadow-[0_24px_70px_rgba(16,15,15,0.06)] transition duration-500 hover:border-brand-accent/45 hover:bg-brand-ivory md:p-10"
+                  className="group flex min-h-[240px] flex-col rounded-2xl border border-brand-brass/18 bg-brand-ivory/72 p-7 shadow-[0_24px_70px_rgba(16,15,15,0.06)] transition duration-500 hover:border-brand-accent/45 hover:bg-brand-ivory md:min-h-[300px] md:rounded-[1.75rem] md:p-10"
                 >
                   <p className="mb-4 font-display text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-accent">
                     {item.subtitle}
@@ -1255,21 +1229,21 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         </section>
 
         {/* Section 10: Leadmagnet */}
-        <section id="kontakt" className="py-32 relative overflow-hidden bg-brand-secondary">
+        <section id="kontakt" className="relative overflow-hidden bg-brand-secondary py-20 sm:py-28 md:py-32">
           <div className="absolute inset-0 z-0">
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-accent/5 rounded-full blur-[100px]" />
           </div>
           
-          <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-            <div className="rounded-[2.25rem] border border-brand-brass/18 bg-brand-ivory/80 p-10 text-center shadow-[0_24px_70px_rgba(16,15,15,0.08)] backdrop-blur-xl md:p-20">
-              <h2 className="mb-6 font-serif text-4xl leading-tight text-brand-primary md:text-5xl">
+          <div className="container relative z-10 mx-auto max-w-4xl px-5 sm:px-6">
+            <div className="rounded-2xl border border-brand-brass/18 bg-brand-ivory/80 p-6 text-center shadow-[0_24px_70px_rgba(16,15,15,0.08)] backdrop-blur-xl sm:p-10 md:rounded-[2.25rem] md:p-20">
+              <h2 className="mb-5 font-serif text-[2rem] leading-tight text-brand-primary min-[380px]:text-4xl md:mb-6 md:text-5xl">
                 Der erste Schritt ist <span className="italic font-light text-brand-primary/58">Klarheit.</span>
               </h2>
-              <p className="mx-auto mb-12 max-w-2xl text-lg leading-[1.75] text-brand-muted">
+              <p className="mx-auto mb-9 max-w-2xl text-base leading-[1.7] text-brand-muted md:mb-12 md:text-lg md:leading-[1.75]">
                 Sichere dir das <strong>Instant Success Framework</strong> und erkenne, welches innere Muster deinen nächsten Schritt noch bindet.
               </p>
               
-              <form className="mx-auto flex max-w-md flex-col gap-4 md:flex-row">
+              <form className="mx-auto flex max-w-md flex-col gap-3 md:flex-row md:gap-4">
                 <label className="sr-only" htmlFor="lead-email">
                   E-Mail Adresse
                 </label>
@@ -1280,7 +1254,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   autoComplete="email"
                   spellCheck={false}
                   placeholder="z. B. heike@example.com…"
-                  className="flex-grow rounded-full border border-brand-muted/20 bg-brand-secondary px-7 py-4 text-base text-brand-primary outline-none transition focus:border-brand-accent focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)]"
+                  className="min-w-0 flex-grow rounded-full border border-brand-muted/20 bg-brand-secondary px-6 py-4 text-base text-brand-primary outline-none transition focus:border-brand-accent focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)] md:px-7"
                 />
                 <button type="submit" className="rounded-full border border-brand-primary bg-brand-primary px-8 py-4 font-medium text-brand-secondary transition-colors duration-500 hover:border-brand-accent hover:bg-brand-shadow active:translate-y-px">
                   Erhalten
@@ -1294,7 +1268,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
         {blogSection}
 
         {/* Section 11: Final CTA */}
-        <section className="py-40 bg-brand-primary relative overflow-hidden">
+        <section className="relative overflow-hidden bg-brand-primary py-24 sm:py-32 md:py-40">
           <motion.div 
             animate={{ 
               scale: [1, 1.1, 1],
@@ -1304,14 +1278,14 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-accent/20 rounded-full blur-[150px]" 
           />
           
-          <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
-            <h2 className="font-serif text-4xl md:text-7xl text-white mb-8">
+          <div className="container relative z-10 mx-auto max-w-4xl px-5 text-center sm:px-6">
+            <h2 className="mb-6 font-serif text-[2.15rem] leading-tight text-white min-[380px]:text-4xl md:mb-8 md:text-7xl">
               Bereit, Erfolg nicht länger <br /> <span className="italic font-light">zu erzwingen?</span>
             </h2>
-            <p className="text-white/60 text-xl mb-12 leading-relaxed">
+            <p className="mb-9 text-base leading-relaxed text-white/60 md:mb-12 md:text-xl">
               Wenn du spürst, dass dein nächstes Wachstum nicht mehr über Druck entstehen soll, ist der Clarity Call dein nächster Schritt.
             </p>
-            <a href="#kontakt" className="mx-auto flex w-fit items-center gap-3 rounded-full bg-brand-secondary px-10 py-5 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:px-12 md:py-6 md:text-lg group">
+            <a href="#kontakt" className="group mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-brand-secondary px-8 py-4 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:w-fit md:px-12 md:py-6 md:text-lg">
               Clarity Call anfragen
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
             </a>
@@ -1320,14 +1294,16 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-brand-secondary py-20 border-t border-brand-primary/5">
-        <div className="container mx-auto px-6">
+      <footer className="border-t border-brand-primary/5 bg-brand-secondary py-14 md:py-20">
+        <div className="container mx-auto px-5 sm:px-6">
           <div className="grid md:grid-cols-4 gap-16 md:gap-8 mb-20 text-center md:text-left">
             <div className="md:col-span-1">
               <div className="mb-6 flex items-center justify-center gap-3 md:justify-start">
                 <img
                   alt=""
                   className="h-11 w-11 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
+                  width={44}
+                  height={44}
                   src="/media/images/msyh-logo.webp"
                 />
                 <span className="font-display font-bold tracking-tight text-sm uppercase">Make Success Your Habit</span>
