@@ -225,7 +225,6 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             muted
             playsInline
             preload="metadata"
-            poster="/media/images/hero-image.webp"
             className="absolute inset-0 h-full w-full object-cover object-[72%_50%] sm:object-[68%_50%]"
           />
 
