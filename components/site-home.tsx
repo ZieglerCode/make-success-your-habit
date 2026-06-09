@@ -220,6 +220,8 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
           <video
             ref={videoRef}
             src="/media/videos/hero-image-new.mp4"
+            autoPlay
+            loop
             muted
             playsInline
             preload="metadata"
