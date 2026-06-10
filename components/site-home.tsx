@@ -1261,7 +1261,11 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   Erhalten
                 </button>
               </form>
-              <p className="mt-6 text-xs text-brand-muted font-display tracking-wide uppercase">Kostenfreies PDF & Video-Impuls</p>
+              <p className="mt-6 text-xs text-brand-muted font-display tracking-wide uppercase">
+                {lang === "de"
+                  ? "Klare Entscheidungen treffen, schneller handeln: Kostenloses Training."
+                  : "Overthinking Solutions, Mind Calming, and Decision-Making Success Training. Free course."}
+              </p>
             </div>
           </div>
         </section>
