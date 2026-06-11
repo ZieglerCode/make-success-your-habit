@@ -57,7 +57,7 @@ export function MarketingOfferPage({
   title,
   intro,
   primaryCta = "Clarity Call anfragen",
-  primaryHref = "/#kontakt",
+  primaryHref = "https://cal.com/heikeziegler/book-your-first-instant-success-formula-session",
   secondaryCta = "Zurück zur Homepage",
   backHref = "/",
   audienceTitle,
@@ -117,12 +117,14 @@ export function MarketingOfferPage({
             ))}
           </nav>
 
-          <Link
+          <a
             className="w-fit rounded-full border border-brand-primary bg-brand-primary px-5 py-2.5 text-sm font-medium text-brand-secondary transition-colors hover:border-brand-accent hover:bg-brand-shadow"
-            href="/#kontakt"
+            href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Clarity Call
-          </Link>
+          </a>
         </div>
       </header>
 

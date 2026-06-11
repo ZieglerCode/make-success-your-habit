@@ -175,7 +175,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               </a>
             ))}
             <LanguageToggle lang={lang} onChange={selectLang} />
-            <a href="#kontakt" className="rounded-full border border-brand-primary bg-brand-primary px-6 py-2.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-500 hover:-translate-y-px hover:bg-brand-shadow hover:border-brand-accent active:translate-y-0">
+            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="rounded-full border border-brand-primary bg-brand-primary px-6 py-2.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-500 hover:-translate-y-px hover:bg-brand-shadow hover:border-brand-accent active:translate-y-0">
               Clarity Call
             </a>
           </nav>
@@ -206,7 +206,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               </a>
             ))}
             <LanguageToggle lang={lang} onChange={selectLang} className="mt-8 self-start" />
-            <a href="#kontakt" onClick={() => setIsMenuOpen(false)} className="mt-12 rounded-full bg-brand-primary py-4 text-center font-medium text-brand-secondary transition-colors duration-500 hover:bg-brand-shadow">
+            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)} className="mt-12 rounded-full bg-brand-primary py-4 text-center font-medium text-brand-secondary transition-colors duration-500 hover:bg-brand-shadow">
               Clarity Call anfragen
             </a>
           </motion.div>
@@ -295,7 +295,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
               className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start"
             >
               {/* Primary — Button-in-Button architecture */}
-              <a href="#kontakt" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
+              <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                 <span className="pr-4 tracking-wide">Clarity Call anfragen</span>
                 <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -1104,7 +1104,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-start sm:gap-5"
                 >
-                  <a href="#kontakt" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
+                  <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                     <span className="pr-4 tracking-wide">Clarity Call buchen</span>
                     <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 group-hover:bg-brand-accent group-hover:translate-x-0.5">
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -1254,6 +1254,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
                   type="email" 
                   autoComplete="email"
                   spellCheck={false}
+                  suppressHydrationWarning
                   placeholder="z. B. heike@example.com…"
                   className="min-w-0 flex-grow rounded-full border border-brand-muted/20 bg-brand-secondary px-6 py-4 text-base text-brand-primary outline-none transition focus:border-brand-accent focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)] md:px-7"
                 />
@@ -1290,7 +1291,7 @@ export default function App({blogSection}: {blogSection?: ReactNode}) {
             <p className="mb-9 text-base leading-relaxed text-white/60 md:mb-12 md:text-xl">
               Wenn du spürst, dass dein nächstes Wachstum nicht mehr über Druck entstehen soll, ist der Clarity Call dein nächster Schritt.
             </p>
-            <a href="#kontakt" className="group mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-brand-secondary px-8 py-4 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:w-fit md:px-12 md:py-6 md:text-lg">
+            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-brand-secondary px-8 py-4 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:w-fit md:px-12 md:py-6 md:text-lg">
               Clarity Call anfragen
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
             </a>
