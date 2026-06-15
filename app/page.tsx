@@ -14,28 +14,35 @@ export default async function HomePage() {
   const recentPosts = posts.slice(0, 3);
   const [featuredPost, ...secondaryPosts] = recentPosts;
 
-  return (
-    <SiteHome
-      blogSection={
+  function renderBlogSection(locale: "de" | "en") {
+    const isEn = locale === "en";
+    const tx = (de: string, en: string) => (isEn ? en : de);
+    const dateLocale = isEn ? "en-US" : "de-DE";
+
+    return (
       <section id="insights" className="scroll-mt-24 bg-[#f9f4e7] px-6 py-24 md:py-32">
         <div className="mx-auto max-w-6xl">
           {/* Section Header */}
           <div className="mb-14 grid gap-8 border-t border-[#b49474]/30 pt-14 md:grid-cols-[0.95fr_1.05fr] md:items-end">
             <div className="max-w-3xl">
               <p className="mb-3 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-                Aktuell aus dem Studio
+                {tx("Aktuell aus dem Studio", "Latest from the studio")}
               </p>
               <h2 className="font-serif text-4xl font-normal leading-tight text-[#03182e] md:text-5xl">
-                {content.ctaHeadline}
+                {isEn ? "Insights for clear decisions and conscious growth." : content.ctaHeadline}
               </h2>
             </div>
             <div className="md:justify-self-end">
-              <p className="max-w-xl text-base leading-8 text-[#4c4235]">{content.ctaText}</p>
+              <p className="max-w-xl text-base leading-8 text-[#4c4235]">
+                {isEn
+                  ? "Essays and perspectives on identity, self-leadership, and sustainable business growth."
+                  : content.ctaText}
+              </p>
               <Link
                 className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#03182e] px-6 py-3 text-sm font-medium tracking-wide text-[#f9f4e7] transition duration-300 hover:bg-[#100f0f] active:-translate-y-px"
                 href="/blog"
               >
-                Insights lesen <span className="text-[#d4af37]">→</span>
+                {tx("Insights lesen", "Read insights")} <span className="text-[#d4af37]">→</span>
               </Link>
             </div>
           </div>
@@ -68,11 +75,13 @@ export default async function HomePage() {
                   <div className="flex flex-col justify-center pt-8 md:pt-0">
                     <p className="mb-5 text-xs uppercase tracking-[0.18em] text-[#b49474]">
                       {featuredPost.publishedAt
-                        ? new Intl.DateTimeFormat("de-DE", {dateStyle: "long"}).format(
+                        ? new Intl.DateTimeFormat(dateLocale, {dateStyle: "long"}).format(
                             new Date(featuredPost.publishedAt),
                           )
                         : "Insight"}
-                      {featuredPost.readingMinutes ? ` · ${featuredPost.readingMinutes} Min. Lesezeit` : ""}
+                      {featuredPost.readingMinutes
+                        ? ` · ${featuredPost.readingMinutes} ${tx("Min. Lesezeit", "min read")}`
+                        : ""}
                     </p>
                     <h3 className="font-serif text-3xl font-normal leading-tight text-[#03182e] md:text-[2.5rem]">
                       {featuredPost.title}
@@ -83,7 +92,7 @@ export default async function HomePage() {
                       </p>
                     )}
                     <span className="mt-8 inline-flex w-fit items-center gap-2 border-b border-[#03182e]/20 pb-0.5 text-sm font-medium text-[#03182e] transition duration-300 group-hover:border-[#d4af37] group-hover:text-[#6b5f50]">
-                      Lesen
+                      {tx("Lesen", "Read")}
                       <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </span>
                   </div>
@@ -115,7 +124,7 @@ export default async function HomePage() {
                       <div className="pt-5">
                         <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[#b49474]">
                           {post.publishedAt
-                            ? new Intl.DateTimeFormat("de-DE", {dateStyle: "long"}).format(
+                            ? new Intl.DateTimeFormat(dateLocale, {dateStyle: "long"}).format(
                                 new Date(post.publishedAt),
                               )
                             : "Insight"}
@@ -130,7 +139,7 @@ export default async function HomePage() {
                           </p>
                         )}
                         <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-[#6b5f50] transition duration-300 group-hover:text-[#03182e]">
-                          Lesen{" "}
+                          {tx("Lesen", "Read")}{" "}
                           <span className="text-[#d4af37] transition-transform duration-300 group-hover:translate-x-1">→</span>
                         </span>
                       </div>
@@ -145,24 +154,34 @@ export default async function HomePage() {
                   className="inline-flex items-center gap-2 rounded-full border border-[#b49474]/30 px-5 py-3 text-sm font-medium text-[#4c4235] transition hover:border-[#03182e] hover:text-[#03182e] active:-translate-y-px"
                   href="/blog"
                 >
-                  Alle Insights lesen <span className="text-[#d4af37]">→</span>
+                  {tx("Alle Insights lesen", "Read all insights")} <span className="text-[#d4af37]">→</span>
                 </Link>
               </div>
             </>
           ) : (
             <div className="py-16 text-center">
-              <p className="text-base leading-8 text-[#4c4235]">{content.ctaText}</p>
+              <p className="text-base leading-8 text-[#4c4235]">
+                {isEn
+                  ? "Essays and perspectives on identity, self-leadership, and sustainable business growth."
+                  : content.ctaText}
+              </p>
               <Link
                 className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#03182e] bg-[#03182e] px-6 py-3 text-sm font-medium tracking-wide text-[#f9f4e7] transition duration-300 hover:border-[#d4af37] hover:bg-[#100f0f]"
                 href="/blog"
               >
-                Insights entdecken
+                {tx("Insights entdecken", "Explore insights")}
               </Link>
             </div>
           )}
         </div>
       </section>
-      }
+    );
+  }
+
+  return (
+    <SiteHome
+      blogSectionDe={renderBlogSection("de")}
+      blogSectionEn={renderBlogSection("en")}
     />
   );
 }
