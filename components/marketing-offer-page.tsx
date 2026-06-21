@@ -58,7 +58,7 @@ export function MarketingOfferPage({
   title,
   intro,
   primaryCta = "Request a Clarity Call",
-  primaryHref = "https://cal.com/heikeziegler/book-your-first-instant-success-formula-session",
+  primaryHref = "https://cal.com/heikeziegler/clarity-call",
   secondaryCta = "Back to the homepage",
   backHref = "/",
   audienceTitle,

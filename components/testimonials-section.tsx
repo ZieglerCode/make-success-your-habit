@@ -513,10 +513,7 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
   const content = testimonialContent[lang];
   const [expandedTestimonials, setExpandedTestimonials] = useState<Set<string>>(new Set());
   const [featuredExpanded, setFeaturedExpanded] = useState(false);
-  const whopUrl =
-    lang === "de"
-      ? "https://whop.com/quantum-lifedesign-lab/instant-success-formula-deutsche-ausgabe/"
-      : "https://whop.com/quantum-lifedesign-lab/instant-success-formula-framework/";
+  const appointmentUrl = "https://cal.com/heikeziegler/book-your-first-instant-success-formula-session";
 
   function toggleTestimonial(name: string) {
     setExpandedTestimonials((current) => {
@@ -607,7 +604,7 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
           <div className="flex flex-wrap justify-center gap-4">
             <a
               className="inline-block rounded-lg bg-[#b08d6e] px-8 py-3.5 text-[15px] font-semibold text-white no-underline transition-colors hover:bg-[#967456]"
-              href={whopUrl}
+              href={appointmentUrl}
               rel="noopener noreferrer"
               target="_blank"
             >

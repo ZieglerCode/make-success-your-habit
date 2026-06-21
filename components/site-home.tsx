@@ -233,7 +233,7 @@ export default function App({
               </a>
             ))}
             <LanguageToggle label={tx("Sprache wählen", "Choose language")} lang={lang} onChange={selectLang} className="mt-8 self-start" />
-            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)} className="mt-12 rounded-full bg-brand-primary py-4 text-center font-medium text-brand-secondary transition-colors duration-500 hover:bg-brand-shadow">
+            <a href="https://cal.com/heikeziegler/clarity-call" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)} className="mt-12 rounded-full bg-brand-primary py-4 text-center font-medium text-brand-secondary transition-colors duration-500 hover:bg-brand-shadow">
               {tx("Clarity Call anfragen", "Request a Clarity Call")}
             </a>
           </motion.div>
@@ -325,7 +325,7 @@ export default function App({
               className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start"
             >
               {/* Primary — Button-in-Button architecture */}
-              <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
+              <a href="https://cal.com/heikeziegler/clarity-call" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                 <span className="pr-4 tracking-wide">{tx("Clarity Call anfragen", "Request a Clarity Call")}</span>
                 <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-accent group-hover:translate-x-0.5 group-hover:-translate-y-px">
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -1120,8 +1120,8 @@ export default function App({
                   title: 'ISA Alliance',
                   subtitle: 'Community & Growth',
                   desc: tx('Ein ruhiger, klarer Raum für Wachstum, Austausch und neue strategische Verbindung.', 'A calm, focused space for growth, exchange, and new strategic connections.'),
-                  href: `${localizedPage('/isa-alliance')}?from=angebote`,
-                  cta: tx('Community ansehen', 'Explore the community')
+                  href: 'https://whop.com/quantum-lifedesign-lab/isa-instant-success-alliance-17/',
+                  cta: tx('Zugang vormerken', 'Get access')
                 },
                 {
                   title: 'Quantum Lifedesign Lab',
