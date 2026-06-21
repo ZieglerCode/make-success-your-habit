@@ -3,7 +3,7 @@ import {MarketingOfferPage, resolveBackHref} from "@/components/marketing-offer-
 
 export const metadata: Metadata = {
   title: "About Heike | Make Success Your Habit",
-  description: "Heike Ziegler verbindet Identitätsarbeit mit klarer Business-Führung.",
+  description: "Heike Ziegler combines identity work with clear business leadership.",
 };
 
 export default async function AboutHeikePage({
@@ -16,25 +16,25 @@ export default async function AboutHeikePage({
   return (
     <MarketingOfferPage
       eyebrow="About Heike"
-      title="Identitätsarbeit und klare Business-Führung."
-      intro="Heike Ziegler schafft Räume, in denen Veränderung nicht forciert wird, sondern präzise geführt entsteht."
+      title="Identity work and clear business leadership."
+      intro="Heike Ziegler creates spaces where change is not forced, but guided with precision."
       backHref={backHref}
       sections={[
         {
-          title: "Ruhige Autorität",
-          body: "Ihre Arbeit richtet sich an ambitionierte Frauen, die Erfolg aus innerer Klarheit, emotionaler Selbstführung und bewusster Ausrichtung aufbauen möchten.",
+          title: "Calm authority",
+          body: "Her work is for ambitious women who want to build success from inner clarity, emotional self-leadership, and conscious alignment.",
         },
         {
-          title: "Strategische Tiefe",
-          body: "Heike verbindet emotionale Präzision, transformative Prozessarbeit und Business-Klarheit zu einer Form von Wachstum, die getragen statt erzwungen wirkt.",
+          title: "Strategic depth",
+          body: "Heike combines emotional precision, transformative process work, and business clarity into a form of growth that feels supported rather than forced.",
         },
         {
-          title: "Markenrolle",
-          body: "Auf der Website ist Heike der persönliche Autoritätsanker: sichtbar, präsent und vertrauensbildend, ohne laute Coach-Inszenierung.",
+          title: "Brand role",
+          body: "On the website, Heike is the personal anchor of authority: visible, present, and trust-building, without loud coaching theatrics.",
         },
         {
-          title: "Nächster Ausbau",
-          body: "Diese Seite wird später um Story, Haltung, Methode, Medien und weiterführende Vertrauenselemente ergänzt.",
+          title: "Next expansion",
+          body: "Later, this page can be expanded with story, perspective, method, media, and further trust elements.",
         },
       ]}
     />

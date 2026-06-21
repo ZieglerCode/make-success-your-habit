@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type {ReactNode} from "react";
+import {LanguageSwitcher} from "@/components/language-switcher";
 
 const legalLinks = [
-  {href: "/legal/impressum", label: "Impressum"},
-  {href: "/legal/datenschutz", label: "Datenschutz"},
-  {href: "/legal/agb", label: "AGB"},
-  {href: "/legal/nutzungsbedingungen", label: "Nutzungsbedingungen"},
+  {href: "/legal/impressum", label: "Legal notice"},
+  {href: "/legal/datenschutz", label: "Privacy"},
+  {href: "/legal/agb", label: "Terms"},
+  {href: "/legal/nutzungsbedingungen", label: "Terms of use"},
   {href: "/legal/eula", label: "EULA"},
-  {href: "/legal/widerruf", label: "Widerruf"},
+  {href: "/legal/widerruf", label: "Refund policy"},
 ];
 
 export default function LegalLayout({children}: {children: ReactNode}) {
@@ -21,7 +22,7 @@ export default function LegalLayout({children}: {children: ReactNode}) {
             href="/"
           >
             <span className="text-[#d4af37]">←</span>
-            Zur Website
+            Back to the website
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {legalLinks.map((link) => (
@@ -33,7 +34,9 @@ export default function LegalLayout({children}: {children: ReactNode}) {
                 {link.label}
               </Link>
             ))}
+            <LanguageSwitcher className="ml-2" tone="legal" />
           </nav>
+          <LanguageSwitcher className="md:hidden" tone="legal" />
         </div>
       </header>
 

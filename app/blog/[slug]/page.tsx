@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import Link from "next/link";
 import {notFound} from "next/navigation";
 import {BlogContentRenderer} from "@/components/blog-content-renderer";
+import {LanguageSwitcher} from "@/components/language-switcher";
 import {getPostBySlug} from "@/lib/content-store";
 
 type PageProps = {
@@ -38,13 +39,16 @@ export default async function BlogPostPage({params}: PageProps) {
     <main className="min-h-[100dvh] bg-[#f9f4e7] text-[#03182e]">
       <article className="mx-auto max-w-3xl px-6 pb-24 pt-24 md:pt-32">
         {/* Back Navigation */}
-        <Link
-          className="inline-flex items-center gap-3 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e]"
-          href="/blog"
-        >
-          <img alt="" className="h-10 w-10 rounded-full object-contain" src="/media/images/msyh-logo.webp" />
-          <span>Zurück zu den Insights</span>
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Link
+            className="inline-flex items-center gap-3 text-sm font-medium text-[#6b5f50] transition hover:text-[#03182e]"
+            href="/blog"
+          >
+            <img alt="" className="h-10 w-10 rounded-full object-contain" src="/media/images/msyh-logo.webp" />
+            <span>Back to insights</span>
+          </Link>
+          <LanguageSwitcher tone="legal" />
+        </div>
 
         {/* Post Header */}
         <header className="mt-12 border-b border-[#b49474]/25 pb-10">
@@ -56,9 +60,9 @@ export default async function BlogPostPage({params}: PageProps) {
             )}
             <p className="text-xs uppercase tracking-[0.2em] text-[#b49474]">
               {post.publishedAt
-                ? new Intl.DateTimeFormat("de-DE", {dateStyle: "long"}).format(new Date(post.publishedAt))
+                ? new Intl.DateTimeFormat("en-US", {dateStyle: "long"}).format(new Date(post.publishedAt))
                 : "Insight"}
-              {post.readingMinutes ? ` · ${post.readingMinutes} Min. Lesezeit` : ""}
+              {post.readingMinutes ? ` · ${post.readingMinutes} min read` : ""}
             </p>
           </div>
           <h1 className="font-serif text-5xl leading-[0.98] md:text-7xl">{post.title}</h1>
@@ -108,23 +112,23 @@ export default async function BlogPostPage({params}: PageProps) {
       {/* Footer CTA */}
       <section className="border-t border-[#b49474]/20 bg-[#fcf3e3] px-6 py-16 text-center">
         <p className="mb-3 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-          Weitere Impulse
+          More impulses
         </p>
         <h2 className="font-serif text-3xl font-normal text-[#03182e] md:text-4xl">
-          Mehr ruhige Gedanken entdecken.
+          Discover more quiet thoughts.
         </h2>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Link
             className="rounded-full border border-[#03182e] bg-[#03182e] px-6 py-3 text-sm font-medium text-[#f9f4e7] transition duration-300 hover:border-[#d4af37] hover:bg-[#100f0f] active:-translate-y-px"
             href="/blog"
           >
-            Alle Insights
+            All insights
           </Link>
           <Link
             className="rounded-full border border-[#03182e]/20 px-6 py-3 text-sm font-medium text-[#03182e] transition duration-300 hover:border-[#d4af37] active:-translate-y-px"
             href="/"
           >
-            Zur Website
+            Back to the website
           </Link>
         </div>
       </section>

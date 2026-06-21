@@ -3,7 +3,7 @@ import {MarketingOfferPage, resolveBackHref} from "@/components/marketing-offer-
 
 export const metadata: Metadata = {
   title: "Community | Make Success Your Habit",
-  description: "Community-Hub für ISA Alliance und die zukünftige Academy-Struktur.",
+  description: "Community hub for ISA Alliance and the future academy structure.",
 };
 
 export default async function CommunityPage({
@@ -16,27 +16,27 @@ export default async function CommunityPage({
   return (
     <MarketingOfferPage
       eyebrow="Community"
-      title="Verbindung, Wachstum und Zukunft."
-      intro="Der Community-Hub bündelt ISA Alliance und die langfristige Vision des Quantum Lifedesign Lab."
+      title="Connection, growth, and the future."
+      intro="The community hub brings together ISA Alliance and the long-term vision of the Quantum Lifedesign Lab."
       backHref={backHref}
-      primaryCta="ISA Alliance ansehen"
+      primaryCta="Explore ISA Alliance"
       primaryHref="/isa-alliance?from=community"
       sections={[
         {
           title: "ISA Alliance",
-          body: "Der konkrete Community-Einstieg für Austausch, Impulse und strategische Verbindung.",
+          body: "The concrete community entry point for exchange, impulses, and strategic connection.",
         },
         {
           title: "Quantum Lifedesign Lab",
-          body: "Die Future Academy bleibt zunächst als Vision geführt: Lernpfade, Community, AI-Tools und zukunftsorientierte Entwicklung.",
+          body: "The future academy remains a vision for now: learning paths, community, AI tools, and future-oriented development.",
         },
         {
-          title: "Ruhig statt laut",
-          body: "Community wird nicht als Hype-Raum erzählt, sondern als hochwertiger Ort für Selbstführung, Klarheit und Verbindung.",
+          title: "Calm instead of loud",
+          body: "Community is not presented as a hype space, but as a high-quality place for self-leadership, clarity, and connection.",
         },
         {
-          title: "Nächster Schritt",
-          body: "Für den Start kann diese Seite auf ISA Alliance führen. Später kann sie als eigener Hub ausgebaut werden.",
+          title: "Next step",
+          body: "At launch, this page can lead into ISA Alliance. Later, it can be developed into its own hub.",
         },
       ]}
     />

@@ -13,6 +13,32 @@ type Testimonial = {
   afterBullets?: string[];
 };
 
+const testimonialImageSrcByName: Record<string, string> = {
+  "Karin Schäfer":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-1b-Karin%20Schaefer.webp",
+  "Tatjana Gürth":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-2b-Tatjana%20Guerth.webp",
+  "Jörg Praetorius":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-3b-Joerg%20Praetorius.webp",
+  "Oliver Künstler":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-4b-Oliver%20Kuenstler.webp",
+  "Rosalinde Skowanek":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-5b-Rosalinde%20Skowanek.webp",
+  "Ina Hantl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-6b-Ina%20Hantl.webp",
+  "Esther Bischop":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-7b-Esther%20Bischop.webp",
+  "Alexandra Brunner":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-8b-Alexandra%20Brunner.webp",
+  "Alice Büchi":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-9b-Alice%20Buechi.webp",
+  "Andrea Massmann":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-10b-Andrea%20Massmann.webp",
+  "Eugenia Grabandt":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-11b-Eugenia%20Graband.webp",
+  "Bärbel Müller-Reinhardt":
+    "/media/images/msyh-testimonial-profile-pictures/webp/HZ%20MSYH-12b-Baerbel%20Mueller-Reinhardt.webp",
+};
+
 const testimonialContent: Record<
   SiteLang,
   {
@@ -416,6 +442,53 @@ function initials(name: string) {
     .slice(0, 2);
 }
 
+function TestimonialPortrait({
+  name,
+  lang,
+  featured = false,
+}: {
+  name: string;
+  lang: SiteLang;
+  featured?: boolean;
+}) {
+  const imageSrc = testimonialImageSrcByName[name];
+  const label = `${lang === "de" ? "Porträt von" : "Portrait of"} ${name}`;
+
+  if (!imageSrc) {
+    return (
+      <span
+        aria-label={label}
+        className={
+          featured
+            ? "grid aspect-square w-[clamp(120px,20vw,200px)] shrink-0 place-items-center rounded-xl bg-[#f2e2ce]"
+            : "grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full bg-[#f2e2ce] font-serif text-sm font-semibold text-[#b08d6e]"
+        }
+        role="img"
+      >
+        <span className={featured ? "font-serif text-5xl font-semibold text-[#b08d6e]" : ""}>
+          {initials(name)}
+        </span>
+      </span>
+    );
+  }
+
+  return (
+    <img
+      alt={label}
+      className={
+        featured
+          ? "aspect-square w-[clamp(120px,20vw,200px)] shrink-0 rounded-xl object-cover"
+          : "h-[52px] w-[52px] shrink-0 rounded-full object-cover"
+      }
+      decoding="async"
+      height={480}
+      loading="lazy"
+      src={imageSrc}
+      width={480}
+    />
+  );
+}
+
 function TestimonialBody({
   testimonial,
   expanded,
@@ -471,13 +544,7 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
         </header>
 
         <article className="mb-10 flex flex-wrap items-center gap-10 rounded-2xl bg-white p-7 shadow-[0_2px_20px_rgba(0,0,0,0.05)] sm:p-10">
-          <div
-            aria-label={`${lang === "de" ? "Porträt von" : "Portrait of"} ${content.featured.name}`}
-            className="grid aspect-square w-[clamp(120px,20vw,200px)] shrink-0 place-items-center rounded-xl bg-[#f2e2ce]"
-            role="img"
-          >
-            <span className="font-serif text-5xl font-semibold text-[#b08d6e]">{initials(content.featured.name)}</span>
-          </div>
+          <TestimonialPortrait featured lang={lang} name={content.featured.name} />
           <div className="min-w-[min(260px,100%)] flex-1">
             {(featuredExpanded ? content.featured.paragraphs : content.featured.paragraphs.slice(0, 2)).map((paragraph) => (
               <p className="mb-3.5 text-[17px] leading-[1.75] text-[#333] last:mb-5" key={paragraph}>
@@ -510,13 +577,7 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
                 key={testimonial.name}
               >
                 <div className="flex items-center gap-3.5">
-                  <span
-                    aria-label={`${lang === "de" ? "Porträt von" : "Portrait of"} ${testimonial.name}`}
-                    className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full bg-[#f2e2ce] font-serif text-sm font-semibold text-[#b08d6e]"
-                    role="img"
-                  >
-                    {initials(testimonial.name)}
-                  </span>
+                  <TestimonialPortrait lang={lang} name={testimonial.name} />
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-[#1a1a1a]">{testimonial.name}</p>
                     {testimonial.role ? (

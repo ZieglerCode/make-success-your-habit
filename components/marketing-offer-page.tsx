@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {ArrowRight, ChevronLeft} from "lucide-react";
+import {LanguageSwitcher} from "@/components/language-switcher";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>> | undefined;
 
@@ -56,9 +57,9 @@ export function MarketingOfferPage({
   eyebrow,
   title,
   intro,
-  primaryCta = "Clarity Call anfragen",
+  primaryCta = "Request a Clarity Call",
   primaryHref = "https://cal.com/heikeziegler/book-your-first-instant-success-formula-session",
-  secondaryCta = "Zurück zur Homepage",
+  secondaryCta = "Back to the homepage",
   backHref = "/",
   audienceTitle,
   audienceItems,
@@ -66,11 +67,11 @@ export function MarketingOfferPage({
   outcomes,
   sections,
   processEyebrow = "Signature Process",
-  processTitle = "Ein klarer Prozess. Ruhig geführt.",
+  processTitle = "A clear process. Calmly guided.",
   steps,
   faq,
-  finalTitle = "Wenn du spürst, dass dein nächster Schritt klarer werden soll.",
-  finalText = "Der Clarity Call ist ein strategischer Raum für Orientierung. Wir schauen gemeinsam, wo du stehst, was gerade wesentlich ist und welcher Weg wirklich Sinn ergibt.",
+  finalTitle = "When you can feel that your next step needs more clarity.",
+  finalText = "The Clarity Call is a strategic space for orientation. We look at where you are, what matters now, and which path actually makes sense.",
 }: OfferPageProps) {
   const navItems = [
     {label: "Start", href: "/#start"},
@@ -86,7 +87,7 @@ export function MarketingOfferPage({
       <header className="border-b border-brand-brass/20 bg-brand-secondary/92 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-5">
-            <Link className="flex items-center gap-3" href="/#start" aria-label="Make Success Your Habit Startseite">
+            <Link className="flex items-center gap-3" href="/#start" aria-label="Make Success Your Habit home">
               <img
                 alt="Make Success Your Habit"
                 className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
@@ -101,11 +102,11 @@ export function MarketingOfferPage({
               href={backHref}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              Zurück
+              Back
             </Link>
           </div>
 
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Hauptnavigation">
+          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Main navigation">
             {navItems.map((item) => (
               <Link
                 className="text-sm font-medium text-brand-muted transition-colors hover:text-brand-primary"
@@ -115,6 +116,7 @@ export function MarketingOfferPage({
                 {item.label}
               </Link>
             ))}
+            <LanguageSwitcher />
           </nav>
 
           <a
@@ -165,10 +167,10 @@ export function MarketingOfferPage({
             {audienceItems && (
               <div>
                 <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-accent">
-                  Für wen
+                  Who it is for
                 </p>
                 <h2 className="font-serif text-3xl leading-tight md:text-[2.6rem]">
-                  {audienceTitle ?? "Für Frauen mit Erfahrung, Vision und innerem Übergang."}
+                  {audienceTitle ?? "For women with experience, vision, and an inner transition."}
                 </h2>
                 <ul className="mt-8 space-y-4 border-t border-brand-primary/10 pt-6">
                   {audienceItems.map((item) => (
@@ -184,10 +186,10 @@ export function MarketingOfferPage({
             {outcomes && (
               <div className="rounded-[1.75rem] bg-brand-primary p-8 text-brand-secondary shadow-[0_32px_80px_rgba(3,24,46,0.18)] md:p-10">
                 <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-accent">
-                  Was entsteht
+                  What changes
                 </p>
                 <h2 className="font-serif text-3xl leading-tight md:text-[2.6rem]">
-                  {outcomesTitle ?? "Klarheit, die sich im Alltag zeigt."}
+                  {outcomesTitle ?? "Clarity that shows up in everyday decisions."}
                 </h2>
                 <ul className="mt-8 space-y-4">
                   {outcomes.map((item) => (
@@ -251,7 +253,7 @@ export function MarketingOfferPage({
                 FAQ
               </p>
               <h2 className="font-serif text-4xl leading-tight md:text-5xl">
-                Klare Antworten. Ohne Druck.
+                Clear answers. No pressure.
               </h2>
             </div>
             <div className="space-y-4">
@@ -302,12 +304,12 @@ export function MarketingOfferPage({
                 </span>
               </div>
               <p className="mx-auto max-w-xs text-sm leading-relaxed text-brand-muted md:mx-0">
-                Premium-Transformationsraum für Identität, Business und Zukunft.
+                A premium transformation space for identity, business, and the future.
               </p>
             </div>
 
             <div>
-              <h2 className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.22em]">Markenwelt</h2>
+              <h2 className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.22em]">Brand world</h2>
               <ul className="flex flex-col gap-4 text-sm text-brand-muted">
                 <li><Link className="transition-colors hover:text-brand-primary" href="/instant-success-formula?from=footer">Instant Success Formula</Link></li>
                 <li><Link className="transition-colors hover:text-brand-primary" href="/isobl?from=footer">Business Launch</Link></li>
@@ -337,15 +339,15 @@ export function MarketingOfferPage({
 
           <div className="flex flex-col items-center justify-between gap-6 border-t border-brand-primary/5 pt-10 md:flex-row">
             <p className="text-xs text-brand-muted">
-              © 2026 Heike Ziegler – Make Success Your Habit. Alle Rechte vorbehalten.
+              © 2026 Heike Ziegler – Make Success Your Habit. All rights reserved.
             </p>
-            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-brand-muted" aria-label="Rechtliches">
-              <Link className="transition-colors hover:text-brand-primary" href="/legal/impressum">Impressum</Link>
-              <Link className="transition-colors hover:text-brand-primary" href="/legal/datenschutz">Datenschutz</Link>
-              <Link className="transition-colors hover:text-brand-primary" href="/legal/agb">AGB</Link>
-              <Link className="transition-colors hover:text-brand-primary" href="/legal/nutzungsbedingungen">Nutzungsbedingungen</Link>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-brand-muted" aria-label="Legal">
+              <Link className="transition-colors hover:text-brand-primary" href="/legal/impressum">Legal notice</Link>
+              <Link className="transition-colors hover:text-brand-primary" href="/legal/datenschutz">Privacy</Link>
+              <Link className="transition-colors hover:text-brand-primary" href="/legal/agb">Terms</Link>
+              <Link className="transition-colors hover:text-brand-primary" href="/legal/nutzungsbedingungen">Terms of use</Link>
               <Link className="transition-colors hover:text-brand-primary" href="/legal/eula">EULA</Link>
-              <Link className="transition-colors hover:text-brand-primary" href="/legal/widerruf">Widerruf</Link>
+              <Link className="transition-colors hover:text-brand-primary" href="/legal/widerruf">Refund policy</Link>
             </nav>
           </div>
         </div>

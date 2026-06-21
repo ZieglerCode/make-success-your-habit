@@ -4,7 +4,7 @@ import {MarketingOfferPage, resolveBackHref} from "@/components/marketing-offer-
 export const metadata: Metadata = {
   title: "ISOBL | Make Success Your Habit",
   description:
-    "Instant Success Online Business Launch: ein digitales Zusatzgeschäft, das zu deinem bestehenden Business passt.",
+    "Instant Success Online Business Launch: a digital add-on business that fits your existing business.",
 };
 
 export default async function IsoblPage({
@@ -17,81 +17,81 @@ export default async function IsoblPage({
   return (
     <MarketingOfferPage
       eyebrow="Instant Success Online Business Launch"
-      title="Ein digitales Zusatzgeschäft, das zu deinem Business passt."
-      intro="ISOBL hilft Unternehmerinnen und Unternehmern, ihr bestehendes Business modern zu erweitern: mit passendem Online-Shop, Produkten, automatisierten Prozessen und klarer Begleitung."
+      title="A digital add-on business that fits your business."
+      intro="ISOBL helps business owners expand an existing business in a modern way: with a suitable online shop, products, automated processes, and clear guidance."
       backHref={backHref}
-      audienceTitle="Für bestehende Businesses, die digital wachsen wollen, ohne alles neu zu erfinden."
+      audienceTitle="For established businesses that want to grow digitally without reinventing everything."
       audienceItems={[
-        "Du arbeitest in Health, Beauty, Fitness, Coaching, Wellness, Healing, Dienstleistung oder Beratung.",
-        "Du möchtest dein bestehendes Business digital erweitern, ohne eigene Produkte, Lager oder Versandstress aufzubauen.",
-        "Du willst Kundinnen und Kunden langfristiger begleiten und ein zusätzliches System neben deiner Hauptleistung etablieren.",
-        "Du brauchst eine klare Einschätzung, ob das Modell zu deiner Zielgruppe, Energie und Positionierung passt.",
+        "You work in health, beauty, fitness, coaching, wellness, healing, services, or consulting.",
+        "You want to expand your existing business digitally without creating your own products, warehouse, or shipping stress.",
+        "You want to support clients for longer and establish an additional system alongside your core service.",
+        "You need a clear assessment of whether the model fits your audience, energy, and positioning.",
       ]}
-      outcomesTitle="Ein moderner Zusatzweg für Kundenbindung und digitale Erweiterung."
+      outcomesTitle="A modern additional path for client retention and digital expansion."
       outcomes={[
-        "Ein Online-Shop, der zu deiner Positionierung und Zielgruppe passt.",
-        "Produkte, Prozesse und Logistik, die nicht bei dir hängen bleiben müssen.",
-        "Eine klare Einladung an deine bestehende Community oder Kundschaft.",
-        "Ein skalierbarer Einstieg, der nicht wie ein lauter Sofortkauf-Funnel wirkt.",
+        "An online shop that fits your positioning and audience.",
+        "Products, processes, and logistics that do not have to stay on your plate.",
+        "A clear invitation for your existing community or client base.",
+        "A scalable entry point that does not feel like a loud instant-buy funnel.",
       ]}
       sections={[
         {
           title: "Problem",
-          body: "Mehr Arbeit bringt nicht automatisch mehr Freiheit. Wenn dein Business nur über deine direkte Zeit wächst, bleibt Wachstum oft an deiner Energie hängen.",
+          body: "More work does not automatically create more freedom. When your business only grows through your direct time, growth often stays tied to your energy.",
         },
         {
           title: "Reframe",
-          body: "Ein digitales Zusatzgeschäft muss nicht bedeuten, dass du alles selbst entwickeln, lagern oder technisch betreiben musst. Es kann an dein bestehendes Business anschließen.",
+          body: "A digital add-on business does not have to mean developing, storing, or technically running everything yourself. It can connect to the business you already have.",
         },
         {
-          title: "Angebotslogik",
-          body: "Ein Starter oder Playbook kann ein günstiger Einstieg sein. Die vollständige Implementierung mit Shop, System und Begleitung sollte über Bewerbung oder Clarity Call geführt werden.",
+          title: "Offer logic",
+          body: "A starter or playbook can be a low-threshold entry point. The full implementation with shop, system, and guidance should be led through an application or Clarity Call.",
         },
         {
-          title: "Clarity Call als Gate",
-          body: "Der Call prüft, ob das Modell zum bestehenden Business, zur Zielgruppe und zur gewünschten Begleitung passt. So bleibt das Angebot hochwertig und seriös geführt.",
+          title: "Clarity Call as the gate",
+          body: "The call checks whether the model fits the existing business, audience, and desired level of guidance. This keeps the offer high-quality and responsibly led.",
         },
       ]}
       processEyebrow="Analyze → Strategize → Implement → Invite → Ignite"
-      processTitle="Vom bestehenden Business zur digitalen Erweiterung."
+      processTitle="From existing business to digital expansion."
       steps={[
         {
           label: "Analyze",
-          text: "Wir prüfen bestehendes Business, Zielgruppe, Energie und digitale Anschlussmöglichkeiten.",
+          text: "We assess the existing business, audience, energy, and digital points of connection.",
         },
         {
           label: "Strategize",
-          text: "Aus der Analyse entsteht eine klare Zusatzgeschäft-Strategie, die zu deiner Positionierung passt.",
+          text: "The analysis becomes a clear add-on business strategy that fits your positioning.",
         },
         {
           label: "Implement",
-          text: "Shop, System und Prozesse werden so aufgebaut, dass sie deine bestehende Arbeit sinnvoll erweitern.",
+          text: "Shop, system, and processes are built to expand your existing work in a meaningful way.",
         },
         {
           label: "Invite",
-          text: "Deine Community und Kundschaft werden klar, ruhig und passend in das neue Angebot geführt.",
+          text: "Your community and client base are guided into the new offer clearly, calmly, and appropriately.",
         },
         {
           label: "Ignite",
-          text: "Das System wird aktiviert, beobachtet und weiter verfeinert.",
+          text: "The system is activated, observed, and refined further.",
         },
       ]}
       faq={[
         {
-          question: "Ist ISOBL ein kompletter Business-Neustart?",
-          answer: "Nein. ISOBL ist als digitale Erweiterung gedacht. Es knüpft an dein bestehendes Business, deine Zielgruppe und deine Persönlichkeit an.",
+          question: "Is ISOBL a complete business restart?",
+          answer: "No. ISOBL is designed as a digital expansion. It connects to your existing business, your audience, and your personality.",
         },
         {
-          question: "Muss ich eigene Produkte entwickeln?",
-          answer: "Nicht zwingend. Der Ansatz nutzt ein bestehendes System und verbindet es mit deiner Positionierung. Dadurch entstehen weniger Technik-, Produkt- und Logistiklasten.",
+          question: "Do I have to develop my own products?",
+          answer: "Not necessarily. The approach uses an existing system and connects it with your positioning. That reduces the technical, product, and logistics load.",
         },
         {
-          question: "Was ist der Unterschied zwischen Starter und Implementation?",
-          answer: "Ein Starterprodukt kann Orientierung geben. Die vollständige Umsetzung mit System, Shop und Begleitung ist eine größere Entscheidung und sollte im Clarity Call geprüft werden.",
+          question: "What is the difference between starter and implementation?",
+          answer: "A starter product can provide orientation. The full implementation with system, shop, and guidance is a larger decision and should be reviewed in the Clarity Call.",
         },
       ]}
-      finalTitle="Wenn dein Business digital wachsen soll, ohne lauter zu werden."
-      finalText="Dann ist der nächste Schritt nicht mehr Information, sondern eine klare Prüfung: Passt ISOBL zu deinem Business, deiner Zielgruppe und deinem gewünschten Wachstum?"
+      finalTitle="When your business should grow digitally without becoming louder."
+      finalText="Then the next step is no longer more information, but a clear check: does ISOBL fit your business, your audience, and the growth you want?"
     />
   );
 }

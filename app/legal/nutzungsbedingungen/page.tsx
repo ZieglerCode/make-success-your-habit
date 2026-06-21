@@ -1,20 +1,20 @@
 import type {Metadata} from "next";
 
 export const metadata: Metadata = {
-  title: "Nutzungsbedingungen | Make Success Your Habit",
-  description: "Nutzungsbedingungen / Terms of Use – Heike Ziegler, Make Success Your Habit.",
+  title: "Terms of Use | Make Success Your Habit",
+  description: "Terms of Use – Heike Ziegler, Make Success Your Habit.",
 };
 
 export default function NutzungsbedingungenPage() {
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 md:py-24">
       <p className="mb-4 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-        Rechtliches
+        Legal
       </p>
       <h1 className="font-serif text-4xl font-normal leading-tight text-[#03182e] md:text-5xl">
-        Nutzungsbedingungen
+        Terms of Use
       </h1>
-      <p className="mt-1 font-sans text-sm text-[#6b5f50]">Terms of Use</p>
+      <p className="mt-1 font-sans text-sm text-[#6b5f50]">Nutzungsbedingungen</p>
       <div className="mt-3 h-px w-16 bg-[#d4af37]" />
 
       <div className="mt-4">
@@ -23,7 +23,7 @@ export default function NutzungsbedingungenPage() {
           download
           href="/legal/HZ-MSYH-Terms of Use-Nutzungsbedingungen.pdf"
         >
-          PDF herunterladen ↓
+          Download PDF ↓
         </a>
       </div>
 

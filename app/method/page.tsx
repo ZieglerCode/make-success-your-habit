@@ -3,7 +3,7 @@ import {MarketingOfferPage, resolveBackHref} from "@/components/marketing-offer-
 
 export const metadata: Metadata = {
   title: "Method | Make Success Your Habit",
-  description: "Die Methode SEE, CLEAR, BECOME von Heike Ziegler.",
+  description: "Heike Ziegler's SEE, CLEAR, BECOME method.",
 };
 
 export default async function MethodPage({
@@ -17,32 +17,32 @@ export default async function MethodPage({
     <MarketingOfferPage
       eyebrow="The Method"
       title="SEE. CLEAR. BECOME."
-      intro="Die Methode beschreibt die innere Bewegung der Marke: erkennen, klären und eine neue Erfolgsidentität verkörpern."
+      intro="The method describes the inner movement of the brand: seeing clearly, clearing what holds you back, and embodying a new identity for success."
       backHref={backHref}
-      primaryCta="Instant Success Formula ansehen"
+      primaryCta="Explore the Instant Success Formula"
       primaryHref="/instant-success-formula?from=methode"
       sections={[
         {
-          title: "Brand-Methode",
-          body: "SEE, CLEAR und BECOME ist die Dachmethode der Marke. Sie gehört auf die Homepage und auf die Method-Seite, weil sie ISF, Community und Zukunftsplattform verbindet.",
+          title: "Brand method",
+          body: "SEE, CLEAR, and BECOME is the umbrella method of the brand. It belongs on the homepage and on the Method page because it connects ISF, community, and the future platform.",
         },
         {
-          title: "Nicht ISOBL",
-          body: "Der ISOBL-Kreis bleibt auf der ISOBL-Seite. So wird die Homepage nicht mit Angebotslogik überladen.",
+          title: "Not ISOBL",
+          body: "The ISOBL process stays on the ISOBL page. This keeps the homepage from being overloaded with offer logic.",
         },
         {
-          title: "Sprache",
-          body: "Die Methode wird ruhig und präzise erklärt. Keine Hype-Claims, keine Garantien, keine überladene Transformationssprache.",
+          title: "Language",
+          body: "The method is explained calmly and precisely. No hype claims, no guarantees, no overloaded transformation language.",
         },
         {
-          title: "Nächster Ausbau",
-          body: "Diese Seite wird später zur zentralen Brand-Method-Seite mit Philosophie, Prozess, Beispielen und weiterführenden Angeboten.",
+          title: "Next expansion",
+          body: "Later, this page can become the central brand-method page with philosophy, process, examples, and related offers.",
         },
       ]}
       steps={[
-        {label: "SEE", text: "Erkenne die Muster, die dein nächstes Level zurückhalten."},
-        {label: "CLEAR", text: "Löse emotionale Widerstände und innere Anspannung."},
-        {label: "BECOME", text: "Verkörpere eine neue Erfolgsidentität durch klare Entscheidungen."},
+        {label: "SEE", text: "Recognize the patterns that are holding back your next level."},
+        {label: "CLEAR", text: "Release emotional resistance and inner tension."},
+        {label: "BECOME", text: "Embody a new identity for success through clear decisions."},
       ]}
     />
   );

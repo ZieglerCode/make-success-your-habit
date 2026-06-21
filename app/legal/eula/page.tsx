@@ -9,12 +9,12 @@ export default function EulaPage() {
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 md:py-24">
       <p className="mb-4 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-        Rechtliches
+        Legal
       </p>
       <h1 className="font-serif text-4xl font-normal leading-tight text-[#03182e] md:text-5xl">
         EULA
       </h1>
-      <p className="mt-1 font-sans text-sm text-[#6b5f50]">End User License Agreement · Endnutzer-Lizenzvertrag</p>
+      <p className="mt-1 font-sans text-sm text-[#6b5f50]">End User License Agreement</p>
       <div className="mt-3 h-px w-16 bg-[#d4af37]" />
 
       <div className="mt-4">
@@ -23,7 +23,7 @@ export default function EulaPage() {
           download
           href="/legal/HZ-MSYH-EULA-DE-EN.pdf"
         >
-          PDF herunterladen ↓
+          Download PDF ↓
         </a>
       </div>
 

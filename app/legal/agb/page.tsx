@@ -1,20 +1,20 @@
 import type {Metadata} from "next";
 
 export const metadata: Metadata = {
-  title: "AGB | Make Success Your Habit",
-  description: "Allgemeine Geschäftsbedingungen / Terms and Conditions – Heike Ziegler, Make Success Your Habit.",
+  title: "Terms and Conditions | Make Success Your Habit",
+  description: "Terms and Conditions – Heike Ziegler, Make Success Your Habit.",
 };
 
 export default function AGBPage() {
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 md:py-24">
       <p className="mb-4 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#b49474]">
-        Rechtliches
+        Legal
       </p>
       <h1 className="font-serif text-4xl font-normal leading-tight text-[#03182e] md:text-5xl">
-        Allgemeine Geschäftsbedingungen
+        Terms and Conditions
       </h1>
-      <p className="mt-1 font-sans text-sm text-[#6b5f50]">Terms and Conditions (T&C)</p>
+      <p className="mt-1 font-sans text-sm text-[#6b5f50]">Allgemeine Geschäftsbedingungen (AGB)</p>
       <div className="mt-3 h-px w-16 bg-[#d4af37]" />
 
       <div className="mt-4">
@@ -23,7 +23,7 @@ export default function AGBPage() {
           download
           href="/legal/HZ-MSYH-AGB-T&C.pdf"
         >
-          PDF herunterladen ↓
+          Download PDF ↓
         </a>
       </div>
 
