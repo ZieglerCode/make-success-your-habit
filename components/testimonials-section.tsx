@@ -46,7 +46,7 @@ const testimonialContent: Record<
     eyebrow: string;
     title: string;
     intro: string;
-    featured: {name: string; paragraphs: string[]};
+    featured: {name: string; preview: string; paragraphs: string[]};
     items: Testimonial[];
     cta: string;
     primaryCta: string;
@@ -62,6 +62,8 @@ const testimonialContent: Record<
       "Was Menschen nach der Arbeit mit Heike Ziegler berichten: mehr innere Ruhe, mehr Fokus, mehr Vertrauen in den eigenen Weg.",
     featured: {
       name: "Jörg Praetorius",
+      preview:
+        "Projekte, die monatelang feststeckten, gehen jetzt Schritt für Schritt voran. Die IC-Methode von Heike hat mir das innere Betriebssystem gegeben, das ich gebraucht habe – klarer, stabiler, endlich im Handeln.",
       paragraphs: [
         "Projekte, die monatelang feststeckten, gehen jetzt Schritt für Schritt voran.",
         "Hallo, mein Name ist Jörg Praetorius. Ich arbeite als Unternehmens- und Innovationsberater für die „Daniel Düsentriebs“ dieser Welt. Ich begleite Menschen, die viele Ideen haben, aber an der Umsetzung scheitern.",
@@ -272,6 +274,8 @@ const testimonialContent: Record<
       "What people report after working with Heike Ziegler: more inner calm, more focus and more trust in their own path.",
     featured: {
       name: "Jörg Praetorius",
+      preview:
+        "Projects that were stuck for months are now moving forward step by step. Heike's IC Method gave me the inner operating system I had been missing – clearer, more stable, and finally taking action.",
       paragraphs: [
         "Projects that were stuck for months are now moving forward step by step.",
         "Hello, my name is Jörg Praetorius. I work as a business and innovation consultant for the “Daniel Düsentrieb” of this world. I support people who have lots of ideas but struggle to bring them to life.",
@@ -586,11 +590,14 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
         <article className="mb-10 flex flex-wrap items-center gap-10 rounded-2xl bg-white p-7 shadow-[0_2px_20px_rgba(0,0,0,0.05)] sm:p-10">
           <TestimonialPortrait featured lang={lang} name={content.featured.name} />
           <div className="min-w-[min(260px,100%)] flex-1">
-            {(featuredExpanded ? content.featured.paragraphs : content.featured.paragraphs.slice(0, 2)).map((paragraph) => (
-              <p className="mb-3.5 text-[17px] leading-[1.75] text-[#333] last:mb-5" key={paragraph}>
-                {paragraph}
-              </p>
-            ))}
+            {featuredExpanded
+              ? content.featured.paragraphs.map((paragraph) => (
+                  <p className="mb-3.5 text-[17px] leading-[1.75] text-[#333] last:mb-5" key={paragraph}>
+                    {paragraph}
+                  </p>
+                ))
+              : <p className="mb-5 text-[17px] leading-[1.75] text-[#333]">{content.featured.preview}</p>
+            }
             <p className="m-0 text-[15px] font-semibold text-[#1a1a1a]">{content.featured.name}</p>
             <button
               aria-expanded={featuredExpanded}
