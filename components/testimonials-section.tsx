@@ -8,6 +8,7 @@ type SiteLang = "de" | "en";
 type Testimonial = {
   name: string;
   role?: string;
+  preview: string;
   paragraphs: string[];
   bullets?: string[];
   afterBullets?: string[];
@@ -77,6 +78,8 @@ const testimonialContent: Record<
     items: [
       {
         name: "Tatjana Gürth",
+        preview:
+          "Ich hatte beruflich den Fokus verloren – innere Klarheit, Gelassenheit, Selbstvertrauen: alles war weg. Drei Sitzungen mit Heike haben das von Grund auf verändert.",
         paragraphs: [
           "Ich hatte beruflich den Fokus verloren. Die innere Klarheit, die Gelassenheit, das Selbstvertrauen. Alles fühlte sich diffus an.",
           "Schon nach der ersten Anwendung konnte ich richtig durchatmen. Spürbare Erleichterung, sofort.",
@@ -88,6 +91,8 @@ const testimonialContent: Record<
       },
       {
         name: "Karin Schäfer",
+        preview:
+          "Bluthochdruck, Schlafstörungen, Tinnitus – ich war ständig angespannt und energielos. Keine der Methoden, die ich zuvor probiert hatte, hat so schnell und so direkt gewirkt wie die Arbeit mit Heike.",
         paragraphs: [
           "Vor meiner ersten IC-Anwendung bei Heike Ziegler litt ich unter Bluthochdruck, Schlafstörungen und Tinnitus. Ich war ständig angespannt, gestresst und energielos.",
           "Schon nach der ersten IC-Anwendung: besserer Blutdruck, besserer Schlaf, mehr Gelassenheit.",
@@ -101,6 +106,8 @@ const testimonialContent: Record<
       {
         name: "Oliver Künstler",
         role: "Coach & Buchautor, Raum Heilbronn",
+        preview:
+          "Hartnäckige körperliche Beschwerden, Produktivität im Keller, nichts kam voran – dann gab mir Heike Ziegler eine IC-Anwendung. Was danach passierte, hätte ich nicht für möglich gehalten.",
         paragraphs: [
           "Ich hatte gleich mehrere körperliche Baustellen: ein hartnäckiges Hautproblem an den Oberschenkeln, eine Dauererkältung seit Wochen und ein Knie, das sich nach einer Meniskus-OP wieder gemeldet hat. Dazu kam, dass meine Produktivität im Keller lag. Ich habe Dinge verschleppt, vor mir hergeschoben, nicht ins Handeln gefunden.",
           "Dann hat mir Heike Ziegler eine IC-Anwendung gegeben.",
@@ -121,6 +128,8 @@ const testimonialContent: Record<
       },
       {
         name: "Rosalinde Skowanek",
+        preview:
+          "Monatelang hatte ich Schmerzen in der rechten Hand bis hoch in die Schulter – Schreiben, Haushalt, alles war mühsam. Drei IC-Anwendungen bei Heike haben das schrittweise aufgelöst.",
         paragraphs: [
           "Monatelang hatte ich Schmerzen in meiner rechten Hand – bis hoch in die Schulter. Dann kam ich zu Heike Ziegler und ihrer IC-Anwendung.",
           "Schon nach der ersten Sitzung spürte ich eine Leichtigkeit im Körper. Die Schmerzen begannen sich zu lösen.",
@@ -133,6 +142,8 @@ const testimonialContent: Record<
       },
       {
         name: "Ina Hantl",
+        preview:
+          "Schwierige Gespräche, unpassende Kontakte, Ahnenthemen, die ich mit mir trug – nach drei IC-Sitzungen mit Heike fühle ich mich in allen drei Bereichen tiefgreifend verändert.",
         paragraphs: [
           "Ich bin in Situationen mit richtig schwierigen Gesprächspartnern jetzt viel gelassener. Wir begegnen uns auf Augenhöhe und mit Vertrauen, und das wollen wir beide.",
           "Heike hat mir im Juni 2024 drei IC-Sitzungen gegeben. Meine Themen: Ahnenlinien, Kommunikation mit anderen Menschen, und die richtigen Partner finden: geschäftlich wie privat.",
@@ -151,6 +162,8 @@ const testimonialContent: Record<
       },
       {
         name: "Esther Bischop",
+        preview:
+          "Zwei Monate zuvor hatte ich meine langjährige Freundin an Krebs verloren. Ich suchte Mut für einen Neubeginn – und Heike hat Dinge in mir aufgedeckt, die ich allein nie gesehen hätte.",
         paragraphs: [
           "Mein Name ist Esther Bischop. Ich habe bei Heike Ziegeler eine IC-Anwendung gebucht.",
           "Mein Thema: Im Hier und Jetzt leben. Mut für einen Neubeginn finden. Und wieder voll auf meine Selbstheilung vertrauen.",
@@ -163,6 +176,8 @@ const testimonialContent: Record<
       },
       {
         name: "Alexandra Brunner",
+        preview:
+          "Mein Business steckte fest, und familiäre Themen bremsten mich zusätzlich. Drei Sitzungen mit Heike haben mir gezeigt, was wirklich in mir steckt – und heute bin ich motivierter denn je.",
         paragraphs: [
           "Drei Sitzungen mit Heike und ich bin heute motivierter als je zuvor.",
           "Ich bin Alexandra. Ich kam zu Heike, weil ich mit meinem Business feststeckte. Dazu kamen familiäre Themen, die mich bremsten.",
@@ -175,6 +190,8 @@ const testimonialContent: Record<
       },
       {
         name: "Alice Büchi",
+        preview:
+          "Ich spürte: Etwas muss sich ändern – ich brauchte Klarheit. Zwei Wochen nach meiner letzten Anwendung mit Heike kann ich sagen: Neue Türen haben sich geöffnet.",
         paragraphs: [
           "Mehr Klarheit, mehr Stabilität, mehr Vertrauen in mich selbst: Das hat sich nach nur drei Anwendungen mit Heike Ziegler verändert.",
           "Ich war an einem Punkt, an dem ich spürte: Etwas muss sich ändern. Ich brauchte Klarheit. Nach langem Suchen bin ich auf ICM und Heike gestoßen.",
@@ -194,6 +211,8 @@ const testimonialContent: Record<
       },
       {
         name: "Andrea Massmann",
+        preview:
+          "Finanzielle Angst hatte mich regelrecht handlungsunfähig gemacht – Fülle und Reichtum kamen in meinem Fühlen schlicht nicht vor. Drei Anwendungen mit Heike haben mein inneres Bild von Grund auf verändert.",
         paragraphs: [
           "Ich konnte vor finanzieller Angst kaum atmen. Nach drei Anwendungen fühlte ich mich königlich.",
           "Ich steckte in einem finanziellen Engpass, der mir fast die Luft nahm. Die Brust war zu. Die Atmung funktionierte nicht. Alte Gedanken und Gefühle haben mich regelrecht handlungsunfähig gemacht.",
@@ -209,6 +228,8 @@ const testimonialContent: Record<
       },
       {
         name: "Eugenia Grabandt",
+        preview:
+          "Nach dem Urlaub war meine Motivation komplett verschwunden – aufstehen fühlte sich unmöglich an. Seit drei IC-Behandlungen bei Heike stehe ich täglich um halb fünf auf: ausgeschlafen, lächelnd, voller Energie.",
         paragraphs: [
           "Ich stehe seit zwei Wochen morgens um halb fünf auf: ausgeschlafen, mit einem Lächeln im Gesicht, voller Energie und Freude. Vorher? Keine Chance. Nach dem Urlaub war die Motivation komplett weg.",
           "Dann bekam ich drei IC-Behandlungen von Heike Ziegler.",
@@ -224,6 +245,8 @@ const testimonialContent: Record<
       },
       {
         name: "Bärbel Müller-Reinhardt",
+        preview:
+          "Geld kam rein, Geld ging raus – ein Muster, das sich durch Generationen zog und mich immer wieder einholte. Drei Anwendungen mit Heike haben es aufgelöst: für mich, meine Vergangenheit und meine Kinder.",
         paragraphs: [
           "„Geld kam zu mir, blieb aber nie. Nach drei Anwendungen mit Heike hat sich das aufgelöst.“",
           "Ich hatte ein Muster: Geld kam rein, Geld ging raus. Es wurde immer wieder knapp. Ich wollte das ändern.",
@@ -265,6 +288,8 @@ const testimonialContent: Record<
     items: [
       {
         name: "Tatjana Gürth",
+        preview:
+          "I had lost my professional focus – my clarity, serenity, and self-confidence had all slipped away. Three sessions with Heike changed that from the ground up.",
         paragraphs: [
           "I had lost my professional focus. My inner clarity, my serenity, my self-confidence. Everything felt vague.",
           "Even after the first session, I could finally breathe deeply. I felt immediate relief.",
@@ -276,6 +301,8 @@ const testimonialContent: Record<
       },
       {
         name: "Karin Schäfer",
+        preview:
+          "High blood pressure, sleep disorders, tinnitus – I was constantly tense and drained. None of the methods I had tried before worked as quickly or as directly as working with Heike.",
         paragraphs: [
           "Before my first IC treatment with Heike Ziegler, I suffered from high blood pressure, sleep disorders, and tinnitus. I was constantly tense, stressed, and lacking energy.",
           "Already after the first IC session: better blood pressure, better sleep, more serenity.",
@@ -289,6 +316,8 @@ const testimonialContent: Record<
       {
         name: "Oliver Künstler",
         role: "Coach & Author, Heilbronn Area",
+        preview:
+          "Persistent physical complaints, productivity at rock bottom, everything on hold – then Heike Ziegler gave me an IC treatment. What happened next I would not have thought possible.",
         paragraphs: [
           "I had several physical issues at once: a persistent skin problem on my thighs, a cold that had been lingering for weeks, and a knee that had flared up again after meniscus surgery. On top of that, my productivity was at rock bottom. I was procrastinating, putting things off, and unable to act.",
           "Then Heike Ziegler gave me an IC treatment.",
@@ -309,6 +338,8 @@ const testimonialContent: Record<
       },
       {
         name: "Rosalinde Skowanek",
+        preview:
+          "For months I had pain in my right hand all the way up to my shoulder – writing and daily tasks had become a struggle. Three IC sessions with Heike resolved it step by step.",
         paragraphs: [
           "For months, I had pain in my right hand—all the way up to my shoulder. Then I came to Heike Ziegler and her IC treatment.",
           "After just the first session, I felt a lightness in my body. The pain began to subside.",
@@ -321,6 +352,8 @@ const testimonialContent: Record<
       },
       {
         name: "Ina Hantl",
+        preview:
+          "Difficult conversations, the wrong contacts, ancestral themes I carried with me – after three IC sessions with Heike I feel profoundly changed in all three areas.",
         paragraphs: [
           "I’m much more relaxed now when dealing with difficult people. We meet on equal footing and with trust, and that’s what we both want.",
           "Heike gave me three IC sessions in June 2024. My topics: ancestral lines, communication with others, and finding the right partners—both in business and in my personal life.",
@@ -339,6 +372,8 @@ const testimonialContent: Record<
       },
       {
         name: "Esther Bischop",
+        preview:
+          "Two months earlier I had lost my longtime friend to cancer. I was looking for the courage to start fresh – and Heike uncovered blind spots I would never have found on my own.",
         paragraphs: [
           "My name is Esther Bischop. I booked an IC session with Heike Ziegeler.",
           "My focus: Living in the here and now. Finding the courage for a fresh start. And trusting fully in my self-healing abilities once again.",
@@ -351,6 +386,8 @@ const testimonialContent: Record<
       },
       {
         name: "Alexandra Brunner",
+        preview:
+          "My business was stuck and family issues were weighing me down on top of it. Three sessions with Heike showed me what is truly inside me – and today I am more motivated than ever.",
         paragraphs: [
           "Three sessions with Heike and I’m more motivated today than ever before.",
           "I’m Alexandra. I came to Heike because I was stuck with my business. On top of that, there were family issues holding me back.",
@@ -363,6 +400,8 @@ const testimonialContent: Record<
       },
       {
         name: "Alice Büchi",
+        preview:
+          "I had reached a point where I felt something had to change – I needed clarity. Two weeks after my final session with Heike I can say: new doors have opened.",
         paragraphs: [
           "More clarity, more stability, more self-confidence: That’s what changed after just three sessions with Heike Ziegler.",
           "I had reached a point where I felt that something had to change. I needed clarity. After a long search, I came across ICM and Heike.",
@@ -382,6 +421,8 @@ const testimonialContent: Record<
       },
       {
         name: "Andrea Massmann",
+        preview:
+          "Financial anxiety had left me completely paralyzed – abundance and wealth simply did not exist in my emotional world. Three sessions with Heike changed my inner landscape from the ground up.",
         paragraphs: [
           "I could barely breathe because of financial anxiety. After three sessions, I felt like royalty.",
           "I was stuck in a financial crisis that was suffocating me. My chest felt tight. I couldn’t breathe. Old thoughts and feelings had completely paralyzed me.",
@@ -397,6 +438,8 @@ const testimonialContent: Record<
       },
       {
         name: "Eugenia Grabandt",
+        preview:
+          "After my vacation, my motivation had completely vanished – getting up felt impossible. Since three IC treatments with Heike I wake up at 4:30 a.m. every day: rested, smiling, and full of energy.",
         paragraphs: [
           "For the past two weeks, I’ve been getting up at 4:30 a.m.: well-rested, with a smile on my face, full of energy and joy. Before? No way. After my vacation, my motivation was completely gone.",
           "Then I received three IC treatments from Heike Ziegler.",
@@ -412,6 +455,8 @@ const testimonialContent: Record<
       },
       {
         name: "Bärbel Müller-Reinhardt",
+        preview:
+          "Money came in, money went out – a pattern that ran through generations and kept catching up with me. Three sessions with Heike dissolved it: for me, my past, and my children.",
         paragraphs: [
           "“Money came to me, but it never stayed. After three sessions with Heike, that changed.”",
           "I had a pattern: money came in, money went out. I was always running low. I wanted to change that.",
@@ -494,11 +539,11 @@ function TestimonialBody({
   testimonial: Testimonial;
   expanded: boolean;
 }) {
-  const paragraphs = expanded ? testimonial.paragraphs : testimonial.paragraphs.slice(0, 1);
-
   return (
     <div className="space-y-3 text-[15px] leading-[1.7] text-[#444]">
-      {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      {expanded
+        ? testimonial.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)
+        : <p>{testimonial.preview}</p>}
       {expanded && testimonial.bullets?.length ? (
         <ul className="list-disc space-y-2 pl-5 marker:text-[#b08d6e]">
           {testimonial.bullets.map((item) => <li key={item}>{item}</li>)}
