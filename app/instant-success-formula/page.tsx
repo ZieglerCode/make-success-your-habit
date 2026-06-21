@@ -19,6 +19,8 @@ export default async function InstantSuccessFormulaPage({
       eyebrow="Instant Success Formula"
       title="Success becomes stable when it comes from identity."
       intro="The Instant Success Formula is Heike Ziegler's signature method for women who want to build success from emotional clarity, conscious leadership, and a new inner foundation."
+      primaryCta="Request an appointment"
+      primaryHref="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session"
       backHref={backHref}
       audienceTitle="For women who do not want to replace strategy, but want to carry it from within."
       audienceItems={[

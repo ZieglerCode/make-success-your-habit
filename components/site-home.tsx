@@ -112,11 +112,18 @@ export default function App({
   ];
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("site-lang");
-    if (stored === "de" || stored === "en") {
-      setLang(stored);
-      document.documentElement.lang = stored;
-      return;
+    // On /en or /de pages the URL is authoritative — ignore localStorage so
+    // links always reflect the chosen language route.
+    const isLocalizedRoute =
+      window.location.pathname.startsWith("/en") ||
+      window.location.pathname.startsWith("/de");
+    if (!isLocalizedRoute) {
+      const stored = window.localStorage.getItem("site-lang");
+      if (stored === "de" || stored === "en") {
+        setLang(stored);
+        document.documentElement.lang = stored;
+        return;
+      }
     }
     document.documentElement.lang = initialLang;
   }, []);
