@@ -11,7 +11,7 @@ export default async function MethodPage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#methode");
+  const backHref = await resolveBackHref(searchParams, "/en#methode");
 
   return (
     <MarketingOfferPage
@@ -20,7 +20,7 @@ export default async function MethodPage({
       intro="The method describes the inner movement of the brand: seeing clearly, clearing what holds you back, and embodying a new identity for success."
       backHref={backHref}
       primaryCta="Explore the Instant Success Formula"
-      primaryHref="/instant-success-formula?from=methode"
+      primaryHref="/en/instant-success-formula?from=methode"
       sections={[
         {
           title: "Brand method",

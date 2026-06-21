@@ -11,7 +11,7 @@ export default async function AboutHeikePage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#ueber-heike");
+  const backHref = await resolveBackHref(searchParams, "/en#ueber-heike");
 
   return (
     <MarketingOfferPage

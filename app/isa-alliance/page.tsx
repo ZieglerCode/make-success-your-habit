@@ -12,7 +12,7 @@ export default async function IsaAlliancePage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#community");
+  const backHref = await resolveBackHref(searchParams, "/en#community");
 
   return (
     <MarketingOfferPage
@@ -20,8 +20,8 @@ export default async function IsaAlliancePage({
       title="A calm space for growth, exchange, and new possibilities."
       intro="ISA Alliance is the community entry point into Heike's brand world: approachable, clear, and strategic. For women who do not want to grow alone."
       backHref={backHref}
-      primaryCta="Join the interest list"
-      primaryHref="/#kontakt"
+      primaryCta="Get access"
+      primaryHref="https://whop.com/quantum-lifedesign-lab/isa-instant-success-alliance-17/"
       audienceTitle="For women who do not want to hold growth alone."
       audienceItems={[
         "You are looking for a clear space for exchange, reflection, and new perspectives.",
@@ -43,7 +43,7 @@ export default async function IsaAlliancePage({
         },
         {
           title: "Entry",
-          body: "The planned offer logic: EUR 29 per month with a 7-day trial. Checkout or Whop links will be added once the final destination URL is set.",
+          body: "The planned offer logic: EUR 29 per month with a 7-day trial. Access runs through the ISA Whop page.",
         },
         {
           title: "Positioning",
@@ -65,7 +65,7 @@ export default async function IsaAlliancePage({
         },
         {
           question: "How does access start?",
-          answer: "The plan is a simple community entry with monthly membership and a trial phase. The concrete checkout link will be added once it is final.",
+          answer: "Access starts through the ISA Whop page with monthly membership and a trial phase.",
         },
       ]}
       finalTitle="For women who do not want to grow alone."

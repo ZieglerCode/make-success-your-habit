@@ -67,13 +67,13 @@ const DB_DIR =
 const DB_PATH = path.join(DB_DIR, "site.sqlite");
 
 const DEFAULT_SITE_CONTENT: SiteContent = {
-  ctaHeadline: "Ruhige Gedanken über Erfolg, Identität und innere Führung.",
+  ctaHeadline: "Quiet thoughts on success, identity, and inner leadership.",
   ctaText:
-    "Im Blog entstehen Essays und Impulse für Frauen, die ihr nächstes Wachstum nicht über Druck, sondern über Klarheit und Selbstführung gestalten möchten.",
+    "The blog shares essays and impulses for women who want to shape their next phase of growth through clarity and self-leadership, not pressure.",
   footerEmail: "hello@make-success-your-habit.com",
   seoTitle: "Make Success Your Habit | Heike Ziegler",
   seoDescription:
-    "Premium-Transformationsraum für ambitionierte Unternehmerinnen, Coaches und Expertinnen.",
+    "A premium transformation space for ambitious founders, coaches, and experts.",
 };
 
 let pg: ReturnType<typeof postgres> | null = null;
@@ -252,20 +252,20 @@ async function seed() {
   const postCount = await countRows("posts");
   if (!postCount) {
     await insertPost(buildPost({
-      title: "Erfolg beginnt dort, wo Druck nicht mehr führt",
-      slug: "erfolg-beginnt-ohne-druck",
+      title: "Success begins where pressure stops leading",
+      slug: "success-begins-where-pressure-stops-leading",
       excerpt:
-        "Ein ruhiger Impuls über Selbstführung, Identität und die Frage, warum nachhaltiges Wachstum zuerst im Inneren stabil wird.",
+        "A quiet impulse on self-leadership, identity, and why sustainable growth first becomes stable within.",
       content:
-        "Viele Unternehmerinnen versuchen, ihr nächstes Wachstum mit mehr Disziplin zu lösen. Doch manchmal ist nicht mehr Strategie nötig, sondern ein innerer Standard, der Erfolg nicht länger als Ausnahme behandelt.\n\nWenn Erfolg zur Gewohnheit werden soll, braucht er Raum, Klarheit und eine Identität, die das Neue bereits tragen kann.",
+        "Many women in business try to solve their next phase of growth with more discipline. But sometimes what is needed is not another strategy, but an inner standard that no longer treats success as the exception.\n\nWhen success is meant to become a habit, it needs space, clarity, and an identity that can already carry the new.",
       coverImage: "/media/images/heike-ziegler.webp",
-      coverAlt: "Heike Ziegler in ruhiger Portraitsituation",
+      coverAlt: "Heike Ziegler in a calm portrait setting",
       status: "published",
-      seoTitle: "Erfolg beginnt dort, wo Druck nicht mehr führt",
-      seoDescription: "Ein Impuls von Heike Ziegler über nachhaltigen Erfolg ohne Druck.",
+      seoTitle: "Success begins where pressure stops leading",
+      seoDescription: "An impulse from Heike Ziegler on sustainable success without pressure.",
       authorName: DEFAULT_AUTHOR,
-      category: "Selbstführung",
-      tags: "Erfolg, Identität, Klarheit",
+      category: "Self-leadership",
+      tags: "Success, Identity, Clarity",
     }));
   }
 }

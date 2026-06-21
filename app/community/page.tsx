@@ -11,7 +11,7 @@ export default async function CommunityPage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#community");
+  const backHref = await resolveBackHref(searchParams, "/en#community");
 
   return (
     <MarketingOfferPage
@@ -20,7 +20,7 @@ export default async function CommunityPage({
       intro="The community hub brings together ISA Alliance and the long-term vision of the Quantum Lifedesign Lab."
       backHref={backHref}
       primaryCta="Explore ISA Alliance"
-      primaryHref="/isa-alliance?from=community"
+      primaryHref="/en/isa-alliance?from=community"
       sections={[
         {
           title: "ISA Alliance",

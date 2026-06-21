@@ -12,7 +12,7 @@ export default async function IsoblPage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#angebote");
+  const backHref = await resolveBackHref(searchParams, "/en#angebote");
 
   return (
     <MarketingOfferPage
@@ -20,6 +20,8 @@ export default async function IsoblPage({
       title="A digital add-on business that fits your business."
       intro="ISOBL helps business owners expand an existing business in a modern way: with a suitable online shop, products, automated processes, and clear guidance."
       backHref={backHref}
+      primaryCta="Apply to IS Online Business Launch"
+      primaryHref="https://cal.com/heikeziegler/application-instant-success-online-business-launch"
       audienceTitle="For established businesses that want to grow digitally without reinventing everything."
       audienceItems={[
         "You work in health, beauty, fitness, coaching, wellness, healing, services, or consulting.",
@@ -45,10 +47,10 @@ export default async function IsoblPage({
         },
         {
           title: "Offer logic",
-          body: "A starter or playbook can be a low-threshold entry point. The full implementation with shop, system, and guidance should be led through an application or Clarity Call.",
+          body: "A starter or playbook can be a low-threshold entry point. The full implementation with shop, system, and guidance is led through the ISOBL application call.",
         },
         {
-          title: "Clarity Call as the gate",
+          title: "Application call as the gate",
           body: "The call checks whether the model fits the existing business, audience, and desired level of guidance. This keeps the offer high-quality and responsibly led.",
         },
       ]}
@@ -87,7 +89,7 @@ export default async function IsoblPage({
         },
         {
           question: "What is the difference between starter and implementation?",
-          answer: "A starter product can provide orientation. The full implementation with system, shop, and guidance is a larger decision and should be reviewed in the Clarity Call.",
+          answer: "A starter product can provide orientation. The full implementation with system, shop, and guidance is a larger decision and should be reviewed in the ISOBL application call.",
         },
       ]}
       finalTitle="When your business should grow digitally without becoming louder."

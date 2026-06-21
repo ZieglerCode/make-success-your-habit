@@ -5,14 +5,14 @@ import {LanguageSwitcher} from "@/components/language-switcher";
 type SearchParams = Promise<Record<string, string | string[] | undefined>> | undefined;
 
 const backTargets: Record<string, string> = {
-  start: "/#start",
-  methode: "/#methode",
-  angebote: "/#angebote",
-  "ueber-heike": "/#ueber-heike",
-  insights: "/#insights",
-  community: "/#community",
-  kontakt: "/#kontakt",
-  footer: "/#angebote",
+  start: "/en#start",
+  methode: "/en#methode",
+  angebote: "/en#angebote",
+  "ueber-heike": "/en#ueber-heike",
+  insights: "/en#insights",
+  community: "/en#community",
+  kontakt: "/en#kontakt",
+  footer: "/en#angebote",
 };
 
 export async function resolveBackHref(searchParams: SearchParams, fallback: string) {
@@ -74,12 +74,12 @@ export function MarketingOfferPage({
   finalText = "The Clarity Call is a strategic space for orientation. We look at where you are, what matters now, and which path actually makes sense.",
 }: OfferPageProps) {
   const navItems = [
-    {label: "Start", href: "/#start"},
-    {label: "Method", href: "/#methode"},
-    {label: "Services", href: "/#angebote"},
-    {label: "About Heike", href: "/#ueber-heike"},
-    {label: "Insights", href: "/#insights"},
-    {label: "Community", href: "/#community"},
+    {label: "Start", href: "/en#start"},
+    {label: "Method", href: "/en#methode"},
+    {label: "Services", href: "/en#angebote"},
+    {label: "About Heike", href: "/en#ueber-heike"},
+    {label: "Insights", href: "/blog"},
+    {label: "Community", href: "/en#community"},
   ];
 
   return (
@@ -87,7 +87,7 @@ export function MarketingOfferPage({
       <header className="border-b border-brand-brass/20 bg-brand-secondary/92 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-5">
-            <Link className="flex items-center gap-3" href="/#start" aria-label="Make Success Your Habit home">
+            <Link className="flex items-center gap-3" href="/en#start" aria-label="Make Success Your Habit home">
               <img
                 alt="Make Success Your Habit"
                 className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
@@ -121,7 +121,7 @@ export function MarketingOfferPage({
 
           <a
             className="w-fit rounded-full border border-brand-primary bg-brand-primary px-5 py-2.5 text-sm font-medium text-brand-secondary transition-colors hover:border-brand-accent hover:bg-brand-shadow"
-            href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session"
+            href="https://cal.com/heikeziegler/clarity-call"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -311,9 +311,9 @@ export function MarketingOfferPage({
             <div>
               <h2 className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.22em]">Brand world</h2>
               <ul className="flex flex-col gap-4 text-sm text-brand-muted">
-                <li><Link className="transition-colors hover:text-brand-primary" href="/instant-success-formula?from=footer">Instant Success Formula</Link></li>
-                <li><Link className="transition-colors hover:text-brand-primary" href="/isobl?from=footer">Business Launch</Link></li>
-                <li><Link className="transition-colors hover:text-brand-primary" href="/isa-alliance?from=footer">ISA Alliance</Link></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/en/instant-success-formula?from=footer">ISF Instant Success Formula</Link></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/en/isobl?from=footer">ISOBL Business Launch</Link></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/en/isa-alliance?from=footer">ISA Alliance</Link></li>
                 <li><Link className="transition-colors hover:text-brand-primary" href="/blog">Insights</Link></li>
               </ul>
             </div>
@@ -321,18 +321,21 @@ export function MarketingOfferPage({
             <div>
               <h2 className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.22em]">Heike Ziegler</h2>
               <ul className="flex flex-col gap-4 text-sm text-brand-muted">
-                <li><Link className="transition-colors hover:text-brand-primary" href="/about-heike?from=footer">About Heike</Link></li>
-                <li><Link className="transition-colors hover:text-brand-primary" href="/method?from=footer">Method</Link></li>
-                <li><Link className="transition-colors hover:text-brand-primary" href="/#kontakt">Contact</Link></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/en/about-heike?from=footer">About Heike</Link></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/en/method?from=footer">Method</Link></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://whop.com/quantum-lifedesign-lab/instant-success-formula-english-edition/" rel="noreferrer" target="_blank">ISF FREE Training</a></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" rel="noreferrer" target="_blank">Book your first ISF Session</a></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://cal.com/heikeziegler/application-instant-success-online-business-launch" rel="noreferrer" target="_blank">Apply to IS Online Business Launch</a></li>
               </ul>
             </div>
 
             <div>
               <h2 className="mb-6 font-display text-xs font-semibold uppercase tracking-[0.22em]">Connect</h2>
               <ul className="flex flex-col gap-4 text-sm text-brand-muted">
-                <li><a className="transition-colors hover:text-brand-primary" href="https://www.instagram.com/" rel="noreferrer" target="_blank">Instagram</a></li>
-                <li><a className="transition-colors hover:text-brand-primary" href="https://www.linkedin.com/" rel="noreferrer" target="_blank">LinkedIn</a></li>
-                <li><Link className="transition-colors hover:text-brand-primary" href="/#insights">Podcast</Link></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://www.linkedin.com/in/heikezieglerhzh/" rel="noreferrer" target="_blank">LinkedIn</a></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://www.instagram.com/heikeziegler_isa/" rel="noreferrer" target="_blank">Instagram</a></li>
+                <li><a className="transition-colors hover:text-brand-primary" href="https://www.youtube.com/watch?v=hKct4thY7Yc" rel="noreferrer" target="_blank">Podcast</a></li>
+                <li><Link className="transition-colors hover:text-brand-primary" href="/blog">Blog</Link></li>
               </ul>
             </div>
           </div>

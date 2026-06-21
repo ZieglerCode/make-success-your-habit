@@ -8,7 +8,7 @@ function isVideoUrl(url: string) {
   return /\.(mp4|mov|webm)(\?|#|$)/i.test(url);
 }
 
-export default async function HomePage() {
+export async function HomePageContent({initialLang = "de"}: {initialLang?: "de" | "en"} = {}) {
   const content = await getSiteContent();
   const posts = await listPosts({publishedOnly: true});
   const recentPosts = posts.slice(0, 3);
@@ -128,7 +128,9 @@ export default async function HomePage() {
                                 new Date(post.publishedAt),
                               )
                             : "Insight"}
-                          {post.readingMinutes ? ` · ${post.readingMinutes} Min.` : ""}
+                          {post.readingMinutes
+                            ? ` · ${post.readingMinutes} ${tx("Min. Lesezeit", "min read")}`
+                            : ""}
                         </p>
                         <h3 className="font-serif text-2xl font-normal leading-snug text-[#03182e] transition duration-300 group-hover:text-[#6b5f50] md:text-3xl">
                           {post.title}
@@ -182,6 +184,11 @@ export default async function HomePage() {
     <SiteHome
       blogSectionDe={renderBlogSection("de")}
       blogSectionEn={renderBlogSection("en")}
+      initialLang={initialLang}
     />
   );
+}
+
+export default async function HomePage() {
+  return <HomePageContent initialLang="de" />;
 }

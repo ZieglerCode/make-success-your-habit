@@ -87,17 +87,21 @@ function LanguageToggle({
 export default function App({
   blogSectionDe,
   blogSectionEn,
+  initialLang = "de",
 }: {
   blogSectionDe?: ReactNode;
   blogSectionEn?: ReactNode;
+  initialLang?: SiteLang;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [lang, setLang] = useState<SiteLang>("de");
+  const [lang, setLang] = useState<SiteLang>(initialLang);
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const isEn = lang === "en";
   const tx = (de: string, en: string) => (isEn ? en : de);
+  const localeRoot = isEn ? "/en" : "/de";
+  const localizedPage = (path: string) => `${localeRoot}${path}`;
   const navItems = [
     {label: tx("Start", "Home"), href: "#start"},
     {label: tx("Methode", "Method"), href: "#methode"},
@@ -112,13 +116,19 @@ export default function App({
     if (stored === "de" || stored === "en") {
       setLang(stored);
       document.documentElement.lang = stored;
+      return;
     }
+    document.documentElement.lang = initialLang;
   }, []);
 
   function selectLang(next: SiteLang) {
     setLang(next);
     window.localStorage.setItem("site-lang", next);
     document.documentElement.lang = next;
+    const target = next === "en" ? "/en" : "/de";
+    if (window.location.pathname === "/" || window.location.pathname === "/en" || window.location.pathname === "/de") {
+      window.history.replaceState(null, "", `${target}${window.location.hash}`);
+    }
   }
 
   useEffect(() => {
@@ -187,7 +197,7 @@ export default function App({
               </a>
             ))}
             <LanguageToggle label={tx("Sprache wählen", "Choose language")} lang={lang} onChange={selectLang} />
-            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="rounded-full border border-brand-primary bg-brand-primary px-6 py-2.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-500 hover:-translate-y-px hover:bg-brand-shadow hover:border-brand-accent active:translate-y-0">
+            <a href="https://cal.com/heikeziegler/clarity-call" target="_blank" rel="noopener noreferrer" className="rounded-full border border-brand-primary bg-brand-primary px-6 py-2.5 text-sm font-medium text-brand-secondary shadow-[0_12px_28px_rgba(3,24,46,0.16)] transition-[background-color,border-color,transform] duration-500 hover:-translate-y-px hover:bg-brand-shadow hover:border-brand-accent active:translate-y-0">
               Clarity Call
             </a>
           </nav>
@@ -323,7 +333,7 @@ export default function App({
               </a>
 
               {/* Secondary */}
-              <a href="/instant-success-formula?from=start" className="group flex items-center justify-center gap-2 rounded-full border border-brand-primary/18 bg-brand-secondary/70 px-6 py-[0.82rem] text-sm font-medium text-brand-primary backdrop-blur-sm transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-brand-accent/60 hover:bg-brand-ivory active:scale-[0.98] sm:justify-start">
+              <a href={`${localizedPage("/instant-success-formula")}?from=start`} className="group flex items-center justify-center gap-2 rounded-full border border-brand-primary/18 bg-brand-secondary/70 px-6 py-[0.82rem] text-sm font-medium text-brand-primary backdrop-blur-sm transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-brand-accent/60 hover:bg-brand-ivory active:scale-[0.98] sm:justify-start">
                 {tx("Instant Success Formula ansehen", "Explore the Instant Success Formula")}
                 <ChevronRight className="w-3.5 h-3.5 opacity-40 transition-transform duration-500 group-hover:translate-x-0.5" />
               </a>
@@ -1021,13 +1031,13 @@ export default function App({
                   transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-start sm:gap-5"
                 >
-                  <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
+                  <a href="https://cal.com/heikeziegler/clarity-call" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-full border border-brand-primary bg-brand-primary py-1.5 pl-6 pr-1.5 text-sm font-medium text-brand-secondary shadow-lg shadow-brand-primary/20 transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px hover:border-brand-accent hover:bg-brand-shadow active:translate-y-0 sm:justify-start">
                     <span className="pr-4 tracking-wide">{tx("Clarity Call buchen", "Book a Clarity Call")}</span>
                     <span className="w-8 h-8 rounded-full bg-white/12 flex items-center justify-center transition-[background-color,transform] duration-500 group-hover:bg-brand-accent group-hover:translate-x-0.5">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </a>
-                  <a href="/about-heike?from=ueber-heike" className="text-brand-primary text-sm font-medium py-3 flex items-center gap-1.5 border-b border-brand-primary/20 transition-[border-color,color] duration-300 hover:border-brand-accent hover:text-brand-accent group">
+                  <a href={`${localizedPage("/about-heike")}?from=ueber-heike`} className="text-brand-primary text-sm font-medium py-3 flex items-center gap-1.5 border-b border-brand-primary/20 transition-[border-color,color] duration-300 hover:border-brand-accent hover:text-brand-accent group">
                     {tx("Mehr über Heike", "More about Heike")}
                     <ChevronRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
@@ -1072,7 +1082,7 @@ export default function App({
 
             <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-2">
               <motion.a
-                href="/instant-success-formula?from=angebote"
+                href={`${localizedPage("/instant-success-formula")}?from=angebote`}
                 whileHover={{ y: -8 }}
                 className="group relative overflow-hidden rounded-2xl bg-brand-primary p-7 text-brand-secondary shadow-[0_32px_80px_rgba(3,24,46,0.22)] ring-1 ring-brand-accent/20 transition-shadow duration-500 hover:shadow-[0_40px_90px_rgba(3,24,46,0.3)] sm:p-9 md:rounded-[2rem] md:p-12 lg:col-span-2"
               >
@@ -1103,28 +1113,28 @@ export default function App({
                   title: 'ISOBL',
                   subtitle: 'Business Launch',
                   desc: tx('Ein digitales Zusatzgeschäft, das sich sinnvoll in dein bestehendes Business integriert.', 'A digital additional business that integrates meaningfully into your existing company.'),
-                  href: '/isobl?from=angebote',
+                  href: `${localizedPage('/isobl')}?from=angebote`,
                   cta: tx('ISOBL ansehen', 'Explore ISOBL')
                 },
                 {
                   title: 'ISA Alliance',
                   subtitle: 'Community & Growth',
                   desc: tx('Ein ruhiger, klarer Raum für Wachstum, Austausch und neue strategische Verbindung.', 'A calm, focused space for growth, exchange, and new strategic connections.'),
-                  href: '/isa-alliance?from=angebote',
+                  href: `${localizedPage('/isa-alliance')}?from=angebote`,
                   cta: tx('Community ansehen', 'Explore the community')
                 },
                 {
                   title: 'Quantum Lifedesign Lab',
                   subtitle: 'Future Academy',
                   desc: tx('Die langfristige Plattform für Lernpfade, Community, AI-Tools und zukunftsorientierte Entwicklung.', 'The long-term platform for learning paths, community, AI tools, and future-focused development.'),
-                  href: '/community?from=angebote',
+                  href: 'https://whop.com/quantum-lifedesign-lab',
                   cta: tx('Future Vision ansehen', 'Explore the future vision')
                 },
                 {
                   title: 'Future Vision',
                   subtitle: 'AI-ready Intelligence',
                   desc: tx('Hormonelle Intelligenz, personalisierte Systeme und eine Academy-Struktur als behutsame Zukunftsebene.', 'Hormonal intelligence, personalized systems, and an academy structure as a carefully developed future layer.'),
-                  href: '/method?from=angebote',
+                  href: `${localizedPage('/method')}?from=angebote`,
                   cta: tx('Methode verstehen', 'Understand the method')
                 }
               ].map((item) => (
@@ -1174,7 +1184,7 @@ export default function App({
                 )}
               </p>
               
-              <form className="mx-auto flex max-w-md flex-col gap-3 md:flex-row md:gap-4">
+              <form action={isEn ? "https://whop.com/quantum-lifedesign-lab/instant-success-formula-english-edition/" : "https://whop.com/quantum-lifedesign-lab/instant-success-formula-deutsche-ausgabe/"} className="mx-auto flex max-w-md flex-col gap-3 md:flex-row md:gap-4">
                 <label className="sr-only" htmlFor="lead-email">
                   {tx("E-Mail-Adresse", "Email address")}
                 </label>
@@ -1225,7 +1235,7 @@ export default function App({
                 "If you sense that your next chapter of growth should no longer come through pressure, the Clarity Call is your next step.",
               )}
             </p>
-            <a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noopener noreferrer" className="group mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-brand-secondary px-8 py-4 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:w-fit md:px-12 md:py-6 md:text-lg">
+            <a href="https://cal.com/heikeziegler/clarity-call" target="_blank" rel="noopener noreferrer" className="group mx-auto flex w-full max-w-sm items-center justify-center gap-3 rounded-full bg-brand-secondary px-8 py-4 text-base font-medium text-brand-primary shadow-2xl shadow-white/10 transition-[background-color,box-shadow,transform] duration-500 hover:-translate-y-px hover:bg-brand-ivory hover:shadow-white/20 active:translate-y-0 md:w-fit md:px-12 md:py-6 md:text-lg">
               {tx("Clarity Call anfragen", "Request a Clarity Call")}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-500" />
             </a>
@@ -1258,9 +1268,9 @@ export default function App({
             <div>
               <h5 className="font-display font-bold text-xs uppercase tracking-widest mb-6">{tx("Markenwelt", "Brand world")}</h5>
               <ul className="space-y-4 text-sm text-brand-muted">
-                <li><a href="#angebote" className="hover:text-brand-primary transition-colors">Instant Success Formula</a></li>
-                <li><a href="#angebote" className="hover:text-brand-primary transition-colors">Business Launch</a></li>
-                <li><a href="#community" className="hover:text-brand-primary transition-colors">ISA Alliance</a></li>
+                <li><a href={`${localizedPage("/instant-success-formula")}?from=footer`} className="hover:text-brand-primary transition-colors">ISF Instant Success Formula</a></li>
+                <li><a href={`${localizedPage("/isobl")}?from=footer`} className="hover:text-brand-primary transition-colors">ISOBL Business Launch</a></li>
+                <li><a href={`${localizedPage("/isa-alliance")}?from=footer`} className="hover:text-brand-primary transition-colors">ISA Alliance</a></li>
                 <li><a href="/blog" className="hover:text-brand-primary transition-colors">Insights</a></li>
               </ul>
             </div>
@@ -1270,16 +1280,19 @@ export default function App({
               <ul className="space-y-4 text-sm text-brand-muted">
                 <li><a href="#ueber-heike" className="hover:text-brand-primary transition-colors">{tx("Über mich", "About me")}</a></li>
                 <li><a href="#methode" className="hover:text-brand-primary transition-colors">{tx("Methode", "Method")}</a></li>
-                <li><a href="#kontakt" className="hover:text-brand-primary transition-colors">{tx("Kontakt", "Contact")}</a></li>
+                <li><a href={isEn ? "https://whop.com/quantum-lifedesign-lab/instant-success-formula-english-edition/" : "https://whop.com/quantum-lifedesign-lab/instant-success-formula-deutsche-ausgabe/"} target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">ISF FREE Training</a></li>
+                <li><a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Erste ISF Session buchen", "Book your first ISF Session")}</a></li>
+                <li><a href="https://cal.com/heikeziegler/application-instant-success-online-business-launch" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Für ISOBL bewerben", "Apply to IS Online Business Launch")}</a></li>
               </ul>
             </div>
 
             <div>
               <h5 className="font-display font-bold text-xs uppercase tracking-widest mb-6">Connect</h5>
               <ul className="space-y-4 text-sm text-brand-muted">
-                <li><a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">Instagram</a></li>
-                <li><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">LinkedIn</a></li>
-                <li><a href="#insights" className="hover:text-brand-primary transition-colors">Podcast</a></li>
+                <li><a href="https://www.linkedin.com/in/heikezieglerhzh/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">LinkedIn</a></li>
+                <li><a href="https://www.instagram.com/heikeziegler_isa/" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">Instagram</a></li>
+                <li><a href="https://www.youtube.com/watch?v=hKct4thY7Yc" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">Podcast</a></li>
+                <li><a href="/blog" className="hover:text-brand-primary transition-colors">Blog</a></li>
               </ul>
             </div>
           </div>

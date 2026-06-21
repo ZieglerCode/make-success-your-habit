@@ -12,7 +12,7 @@ export default async function InstantSuccessFormulaPage({
 }: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const backHref = await resolveBackHref(searchParams, "/#angebote");
+  const backHref = await resolveBackHref(searchParams, "/en#angebote");
 
   return (
     <MarketingOfferPage
