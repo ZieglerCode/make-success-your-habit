@@ -7,16 +7,6 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{type: "host", value: "www.heike-ziegler.com"}],
-        destination: "https://heike-ziegler.com/:path*",
-        permanent: true,
-      },
-    ];
-  },
   async rewrites() {
     return [
       {
