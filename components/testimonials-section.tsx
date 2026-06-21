@@ -53,6 +53,7 @@ const testimonialContent: Record<
     secondaryCta: string;
     showMore: string;
     showLess: string;
+    disclaimer: string;
   }
 > = {
   de: {
@@ -266,6 +267,8 @@ const testimonialContent: Record<
     secondaryCta: "So funktioniert die Zusammenarbeit",
     showMore: "Ganzes Testimonial lesen",
     showLess: "Weniger anzeigen",
+    disclaimer:
+      "Meine Angebote ersetzen keine medizinische oder therapeutische Behandlung durch Ärzte oder Heilpraktiker. Die verwendeten Begriffe stellen kein Heilversprechen dar.",
   },
   en: {
     eyebrow: "Experiences",
@@ -478,6 +481,8 @@ const testimonialContent: Record<
     secondaryCta: "How working together works",
     showMore: "Read full testimonial",
     showLess: "Show less",
+    disclaimer:
+      "My services are not a substitute for medical or therapeutic treatment from doctors or alternative practitioners. The terms used do not constitute a promise of healing.",
   },
 };
 
@@ -670,6 +675,10 @@ export function TestimonialsSection({lang}: {lang: SiteLang}) {
             </a>
           </div>
         </div>
+
+        <p className="mx-auto mt-6 max-w-[620px] text-center text-[12px] leading-[1.6] text-[#999]">
+          {content.disclaimer}
+        </p>
       </div>
     </section>
   );
