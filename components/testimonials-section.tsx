@@ -163,7 +163,7 @@ const testimonialContent: Record<
       {
         name: "Esther Bischop",
         preview:
-          "Zwei Monate zuvor hatte ich meine langjährige Freundin an Krebs verloren. Ich suchte Mut für einen Neubeginn – und Heike hat Dinge in mir aufgedeckt, die ich allein nie gesehen hätte.",
+          "Ich suchte Mut für einen Neubeginn und wollte wieder voll auf meine Selbstheilung vertrauen. Heike hat Dinge in mir aufgedeckt, die ich allein nie gesehen hätte – und bis heute fühle ich mich glücklich.",
         paragraphs: [
           "Mein Name ist Esther Bischop. Ich habe bei Heike Ziegeler eine IC-Anwendung gebucht.",
           "Mein Thema: Im Hier und Jetzt leben. Mut für einen Neubeginn finden. Und wieder voll auf meine Selbstheilung vertrauen.",
@@ -373,7 +373,7 @@ const testimonialContent: Record<
       {
         name: "Esther Bischop",
         preview:
-          "Two months earlier I had lost my longtime friend to cancer. I was looking for the courage to start fresh – and Heike uncovered blind spots I would never have found on my own.",
+          "I was searching for the courage to start fresh and trust in my own self-healing again. Heike uncovered blind spots I would never have found on my own – and to this day I feel happy.",
         paragraphs: [
           "My name is Esther Bischop. I booked an IC session with Heike Ziegeler.",
           "My focus: Living in the here and now. Finding the courage for a fresh start. And trusting fully in my self-healing abilities once again.",
