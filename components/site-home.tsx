@@ -1118,7 +1118,7 @@ export default function App({
               {[
                 {
                   title: 'ISOBL',
-                  subtitle: 'Business Launch',
+                  subtitle: tx('Business Launch', 'Instant Success Online Business Launch'),
                   desc: tx('Ein digitales Zusatzgeschäft, das sich sinnvoll in dein bestehendes Business integriert.', 'A digital additional business that integrates meaningfully into your existing company.'),
                   href: `${localizedPage('/isobl')}?from=angebote`,
                   cta: tx('ISOBL ansehen', 'Explore ISOBL')
@@ -1127,8 +1127,8 @@ export default function App({
                   title: 'ISA Alliance',
                   subtitle: 'Community & Growth',
                   desc: tx('Ein ruhiger, klarer Raum für Wachstum, Austausch und neue strategische Verbindung.', 'A calm, focused space for growth, exchange, and new strategic connections.'),
-                  href: 'https://whop.com/quantum-lifedesign-lab/isa-instant-success-alliance-17/',
-                  cta: tx('Zugang vormerken', 'Get access')
+                  href: isEn ? `${localizedPage('/isa-alliance')}?from=angebote` : 'https://whop.com/quantum-lifedesign-lab/isa-instant-success-alliance-17/',
+                  cta: tx('Zugang vormerken', 'Explore the Community')
                 },
                 {
                   title: 'Quantum Lifedesign Lab',
@@ -1288,8 +1288,8 @@ export default function App({
                 <li><a href="#ueber-heike" className="hover:text-brand-primary transition-colors">{tx("Über mich", "About me")}</a></li>
                 <li><a href="#methode" className="hover:text-brand-primary transition-colors">{tx("Methode", "Method")}</a></li>
                 <li><a href={isEn ? "https://whop.com/quantum-lifedesign-lab/instant-success-formula-english-edition/" : "https://whop.com/quantum-lifedesign-lab/instant-success-formula-deutsche-ausgabe/"} target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">ISF FREE Training</a></li>
-                <li><a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Erste ISF Session buchen", "Book your first ISF Session")}</a></li>
-                <li><a href="https://cal.com/heikeziegler/application-instant-success-online-business-launch" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Für ISOBL bewerben", "Apply to IS Online Business Launch")}</a></li>
+                <li><a href="https://cal.com/heikeziegler/book-your-first-instant-success-formula-session" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Erste ISF Session buchen", "BOOK your first ISF Session")}</a></li>
+                <li><a href="https://cal.com/heikeziegler/application-instant-success-online-business-launch" target="_blank" rel="noreferrer" className="hover:text-brand-primary transition-colors">{tx("Für ISOBL bewerben", "APPLY to IS Online Business Launch")}</a></li>
               </ul>
             </div>
 
