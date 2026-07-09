@@ -9,10 +9,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Make Success Your Habit | Heike Ziegler",
     description:
-      "Für ambitionierte Unternehmerinnen, Coaches und Expertinnen, die Erfolg als neue innere Normalität verkörpern möchten.",
+      "Premium Transformation Ecosystem for ambitious female entrepreneurs and experts focused on identity, clarity, and success as a natural habit.",
     images: ["/media/images/msyh-logo-512.png"],
-    locale: "de_DE",
+    locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Make Success Your Habit | Heike Ziegler",
+    description:
+      "Premium Transformation Ecosystem for ambitious female entrepreneurs and experts focused on identity, clarity, and success as a natural habit.",
+    images: ["/media/images/msyh-logo-512.png"],
   },
   icons: {
     icon: [

@@ -1058,7 +1058,7 @@ export default function App({
                   transition={{ duration: 0.7, delay: 0.75 }}
                   className="mt-8 text-[0.78rem] text-brand-muted/50 font-display tracking-[0.18em] uppercase"
                 >
-                  {tx("Für Frauen, die Erfolg neu führen wollen.", "For women who want to lead success differently.")}
+                  {tx("Für Frauen, die Erfolg neu definieren wollen.", "For women who want to redefine success.")}
                 </motion.p>
 
               </div>
