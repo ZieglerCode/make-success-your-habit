@@ -51,6 +51,19 @@ type OfferPageProps = {
   }>;
   finalTitle?: string;
   finalText?: string;
+  storiesTitle?: string;
+  storiesSub?: string;
+  stories?: Array<{
+    title: string;
+    body: string;
+  }>;
+  interviewsTitle?: string;
+  interviewsSub?: string;
+  interviews?: Array<{
+    name: string;
+    quote: string;
+    paragraphs: string[];
+  }>;
 };
 
 export function MarketingOfferPage({
@@ -72,6 +85,12 @@ export function MarketingOfferPage({
   faq,
   finalTitle = "When you can feel that your next step needs more clarity.",
   finalText = "The Clarity Call is a strategic space for orientation. We look at where you are, what matters now, and which path actually makes sense.",
+  storiesTitle,
+  storiesSub,
+  stories,
+  interviewsTitle,
+  interviewsSub,
+  interviews,
 }: OfferPageProps) {
   const navItems = [
     {label: "Start", href: "/en#start"},
@@ -244,6 +263,86 @@ export function MarketingOfferPage({
           ))}
         </div>
       </section>
+
+      {stories && (
+        <section className="bg-brand-ivory/30 px-6 py-24 md:py-32 border-t border-brand-brass/10">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-16 text-center max-w-3xl mx-auto">
+              <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-accent">
+                {storiesSub ?? "Praxis-Erfolgsgeschichten"}
+              </p>
+              <h2 className="font-serif text-4xl leading-tight md:text-6xl text-brand-primary">
+                {storiesTitle ?? "Wie sie es mit ISOBL geschafft haben"}
+              </h2>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              {stories.map((story, index) => (
+                <article
+                  className="rounded-[2rem] border border-brand-brass/15 bg-white/50 p-8 md:p-10 shadow-[0_16px_40px_rgba(16,15,15,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow duration-300"
+                  key={story.title}
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="font-display text-xs font-bold text-brand-accent px-3 py-1 rounded-full bg-brand-accent/8 border border-brand-accent/15">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div className="h-px bg-brand-brass/20 flex-grow" />
+                    </div>
+                    <h3 className="font-serif text-2xl text-brand-primary leading-snug mb-5">
+                      {story.title}
+                    </h3>
+                    <p className="text-base leading-[1.8] text-brand-muted font-light whitespace-pre-wrap">
+                      {story.body}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {interviews && (
+        <section className="bg-brand-secondary px-6 py-24 md:py-32 border-t border-brand-primary/5">
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-20 text-center">
+              <p className="mb-5 font-display text-[10px] font-semibold uppercase tracking-[0.3em] text-brand-accent">
+                {interviewsSub ?? "Kunden-Interviews"}
+              </p>
+              <h2 className="font-serif text-4xl leading-tight md:text-6xl text-brand-primary">
+                {interviewsTitle ?? "Ausführliche Erfolgsberichte"}
+              </h2>
+            </div>
+            <div className="space-y-16">
+              {interviews.map((interview, index) => (
+                <article
+                  className="rounded-[2.5rem] border border-brand-primary/8 bg-brand-ivory/20 p-8 md:p-14 shadow-[0_24px_60px_rgba(3,24,46,0.02)]"
+                  key={interview.name}
+                >
+                  <div className="flex items-center justify-between border-b border-brand-primary/10 pb-6 mb-8 gap-4 flex-wrap">
+                    <h3 className="font-serif text-2xl md:text-3xl text-brand-primary">
+                      {interview.name}
+                    </h3>
+                    <span className="font-display text-[10px] uppercase tracking-widest text-brand-accent font-semibold px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/10">
+                      Partner Story {index + 1}
+                    </span>
+                  </div>
+                  {interview.quote && (
+                    <blockquote className="mb-10 text-xl md:text-2xl font-serif italic text-brand-accent leading-relaxed relative pl-6 border-l-2 border-brand-accent/35">
+                      {interview.quote}
+                    </blockquote>
+                  )}
+                  <div className="space-y-6 text-base leading-[1.85] text-brand-muted font-light">
+                    {interview.paragraphs.map((p, pIdx) => (
+                      <p key={pIdx} className="whitespace-pre-wrap">{p}</p>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {faq && (
         <section className="bg-brand-ivory/55 px-6 py-24 md:py-32">
