@@ -15,18 +15,26 @@ COPY . .
 RUN npm run build
 
 FROM base AS runner
+RUN apk add --no-cache su-exec
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+ENV UPLOAD_DIR=/app/data/uploads
+ENV PAYLOAD_MEDIA_DIR=/app/data/payload-media
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
-USER nextjs
+RUN mkdir -p /app/data/uploads /app/data/payload-media \
+  && chown -R nextjs:nodejs /app/data \
+  && chmod +x /usr/local/bin/docker-entrypoint
+
 EXPOSE 3000
 
+ENTRYPOINT ["docker-entrypoint"]
 CMD ["node", "server.js"]

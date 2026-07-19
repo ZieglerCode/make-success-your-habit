@@ -4,6 +4,7 @@ import {put} from "@vercel/blob";
 import {NextResponse} from "next/server";
 import {currentAdmin} from "@/lib/auth";
 import {createMediaAsset, listMediaAssets} from "@/lib/content-store";
+import {uploadDirectory} from "@/lib/upload-paths";
 
 const MAX_IMAGE_SIZE = 8 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 80 * 1024 * 1024;
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
     });
     url = blob.url;
   } else {
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    const uploadDir = uploadDirectory();
     const diskPath = path.join(uploadDir, filename);
 
     await mkdir(uploadDir, {recursive: true});

@@ -86,6 +86,8 @@ In Vercel müssen mindestens diese Environment Variables gesetzt werden:
 
 Die Tabellen werden beim ersten Request automatisch angelegt und mit Startinhalten gefüllt, falls sie leer sind.
 
-Uploads schreiben lokal nach `public/uploads`. Wenn `BLOB_READ_WRITE_TOKEN` gesetzt ist, werden Uploads über Vercel Blob gespeichert und die öffentliche Blob-URL in der Datenbank abgelegt.
+Uploads schreiben lokal nach `public/uploads`. In Coolify werden sie über `UPLOAD_DIR=/app/data/uploads`
+in einem persistenten Volume unter `/app/data` gespeichert. Wenn `BLOB_READ_WRITE_TOKEN` gesetzt ist,
+werden Blog-Uploads alternativ über Vercel Blob gespeichert und die öffentliche Blob-URL in der Datenbank abgelegt.
 Der Blog-Editor und die Medienverwaltung akzeptieren Bilder (`JPG`, `PNG`, `WebP`) und Videos
 (`MP4`, `MOV`, `WebM`).

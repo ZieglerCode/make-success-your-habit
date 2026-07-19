@@ -1,9 +1,9 @@
 import {unlink} from "node:fs/promises";
-import path from "node:path";
 import {del} from "@vercel/blob";
 import {NextResponse} from "next/server";
 import {currentAdmin} from "@/lib/auth";
 import {deleteMediaAsset, getMediaAssetById, updateMediaAsset} from "@/lib/content-store";
+import {localUploadPath} from "@/lib/upload-paths";
 
 type RouteContext = {
   params: Promise<{id: string}>;
@@ -40,7 +40,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
 async function removeStoredFile(url: string) {
   try {
     if (url.startsWith("/uploads/")) {
-      await unlink(path.join(process.cwd(), "public", url));
+      const filePath = localUploadPath(url);
+      if (filePath) await unlink(filePath);
       return;
     }
 
