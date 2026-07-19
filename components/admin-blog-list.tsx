@@ -65,6 +65,18 @@ export function AdminBlogList({
       ),
     [posts],
   );
+  const counterpartById = useMemo(() => {
+    const groups = new Map<string, BlogPost[]>();
+    for (const post of posts) {
+      groups.set(post.translationGroupId, [...(groups.get(post.translationGroupId) || []), post]);
+    }
+    return new Map(
+      posts.map((post) => [
+        post.id,
+        groups.get(post.translationGroupId)?.find((candidate) => candidate.id !== post.id),
+      ]),
+    );
+  }, [posts]);
 
   function syncUrl(next: {query?: string; sort?: SortKey; status?: PostStatus | "all"}) {
     const nextQuery = next.query ?? query;
@@ -139,16 +151,22 @@ export function AdminBlogList({
         <div className="overflow-hidden rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/26">
           {filtered.map((post) => {
             const issues = seoIssues(post);
+            const counterpart = counterpartById.get(post.id);
             return (
-              <Link
+              <div
                 className="grid gap-4 border-b border-[#b49474]/16 px-4 py-4 transition last:border-b-0 hover:bg-[#fffaf0] md:grid-cols-[116px_minmax(0,1fr)_210px] md:items-center"
-                href={`/admin/blog/${post.id}`}
                 key={post.id}
               >
                 <MediaThumb post={post} />
                 <div className="min-w-0">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <StatusBadge status={post.status} />
+                    <span className="rounded-full border border-[#0f4c81]/20 bg-[#0f4c81]/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f4c81]">
+                      {post.locale}
+                    </span>
+                    <span className="rounded-full border border-[#b49474]/25 bg-[#fffaf0] px-2.5 py-1 text-xs font-medium text-[#4c4235]">
+                      {translationLabel(post.translationStatus)}
+                    </span>
                     {post.category ? (
                       <span className="rounded-full bg-[#f2e2ce] px-2.5 py-1 text-xs font-medium text-[#4c4235]">
                         {post.category}
@@ -161,11 +179,13 @@ export function AdminBlogList({
                       </span>
                     ) : null}
                   </div>
-                  <p className="truncate text-base font-semibold tracking-tight text-[#03182e]">{post.title}</p>
+                  <Link className="block truncate text-base font-semibold tracking-tight text-[#03182e] hover:underline" href={`/admin/blog/${post.id}`}>
+                    {post.title}
+                  </Link>
                   <p className="mt-1.5 line-clamp-2 max-w-3xl text-sm leading-6 text-[#6b5f50]">
                     {post.excerpt || "Kein Auszug gepflegt."}
                   </p>
-                  <p className="mt-1.5 truncate text-xs font-medium text-[#8b6f4e]">/blog/{post.slug}</p>
+                  <p className="mt-1.5 truncate text-xs font-medium text-[#8b6f4e]">/{post.locale}/blog/{post.slug}</p>
                 </div>
                 <div className="grid gap-2 text-sm text-[#4c4235] md:justify-items-end md:text-right">
                   <span className="inline-flex items-center gap-2">
@@ -174,8 +194,13 @@ export function AdminBlogList({
                   </span>
                   <span className="text-[#6b5f50]">{wordCount(post.content)} Wörter</span>
                   <span className="text-[#6b5f50]">{post.readingMinutes} Min. Lesezeit</span>
+                  {counterpart ? (
+                    <Link className="font-semibold text-[#0f4c81] hover:underline" href={`/admin/blog/${counterpart.id}`}>
+                      {counterpart.locale === "de" ? "DE" : "EN"}-Gegenstück öffnen
+                    </Link>
+                  ) : null}
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -190,6 +215,15 @@ export function AdminBlogList({
       )}
     </section>
   );
+}
+
+function translationLabel(status: BlogPost["translationStatus"]) {
+  return {
+    none: "ohne Übersetzung",
+    translating: "übersetzt gerade",
+    ready: "Übersetzung bereit",
+    failed: "Übersetzung fehlgeschlagen",
+  }[status];
 }
 
 function MediaThumb({post}: {post: BlogPost}) {

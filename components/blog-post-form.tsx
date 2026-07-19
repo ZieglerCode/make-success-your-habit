@@ -20,6 +20,9 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {BlogContentRenderer} from "@/components/blog-content-renderer";
+import {MediaUploadField} from "@/components/media-upload-field";
+import {PostRevisionPanel} from "@/components/post-revision-panel";
+import {applyUploadedCover, type UploadedMedia} from "@/lib/blog-upload";
 import type {BlogPost, MediaAsset, PostStatus} from "@/lib/content-store";
 import {
   formatDate,
@@ -31,6 +34,7 @@ import {
   wordCount,
 } from "@/lib/editor-insights";
 import {slugify} from "@/lib/slug";
+import type {BlogLocale} from "@/lib/blog-localization";
 
 type Draft = Pick<
   BlogPost,
@@ -47,7 +51,7 @@ type Draft = Pick<
   | "category"
   | "tags"
   | "scheduledAt"
->;
+> & {locale: BlogLocale | ""};
 
 const emptyDraft: Draft = {
   authorName: "Heike Ziegler",
@@ -56,6 +60,7 @@ const emptyDraft: Draft = {
   coverAlt: "",
   coverImage: "/media/images/heike-ziegler.webp",
   excerpt: "",
+  locale: "",
   scheduledAt: null,
   seoDescription: "",
   seoTitle: "",
@@ -66,18 +71,21 @@ const emptyDraft: Draft = {
 };
 
 export function BlogPostForm({
+  counterpart,
   initialCover,
   initialCoverAlt,
   mediaAssets = [],
   post,
+  translationCreated = false,
 }: {
+  counterpart?: BlogPost;
   initialCover?: string;
   initialCoverAlt?: string;
   mediaAssets?: MediaAsset[];
   post?: BlogPost;
+  translationCreated?: boolean;
 }) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
   const initialDraft = post ? postToDraft(post) : {...emptyDraft, coverAlt: initialCoverAlt || "", coverImage: initialCover || emptyDraft.coverImage};
   const [draft, setDraft] = useState<Draft>(initialDraft);
@@ -85,9 +93,9 @@ export function BlogPostForm({
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
-  const [lastUpload, setLastUpload] = useState<{url: string; mimeType: string; alt: string} | null>(null);
+  const [lastUpload, setLastUpload] = useState<UploadedMedia | null>(null);
   const [mode, setMode] = useState<"write" | "preview">("write");
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const [mediaQuery, setMediaQuery] = useState("");
@@ -106,6 +114,7 @@ export function BlogPostForm({
   const isDirty = JSON.stringify(draft) !== savedSnapshot;
   const isCoverVideo = isVideoUrl(draft.coverImage);
   const canOpenPublic = post && draft.status === "published" && draft.slug;
+  const targetLocale: BlogLocale = post?.locale === "de" ? "en" : "de";
   const recoveryKey = `content-studio:draft:${post?.id || "new"}`;
   const filteredMedia = useMemo(() => {
     const query = mediaQuery.trim().toLowerCase();
@@ -205,43 +214,14 @@ export function BlogPostForm({
     appendToContent(asset.mimeType.startsWith("video/") ? `[video](${asset.url})` : `![${alt}](${asset.url})`);
   }
 
-  async function uploadSelectedFile(file: File | null) {
-    if (!file) return;
-
-    setError(null);
-    setUploadMessage(null);
-    setIsUploading(true);
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("alt", draft.coverAlt || draft.title || file.name.replace(/\.[^.]+$/, ""));
-
-    const response = await fetch("/api/media", {
-      body: formData,
-      method: "POST",
-    });
-    const data = await response.json().catch(() => null);
-
-    setIsUploading(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-
-    if (!response.ok) {
-      setError(data?.error || "Die Datei konnte nicht hochgeladen werden.");
-      return;
-    }
-
-    const uploaded = {
-      alt: data.alt || "",
-      mimeType: data.mimeType || file.type,
-      url: data.url,
-    };
-    setLastUpload(uploaded);
-    setUploadMessage("Upload abgeschlossen. Verwende die Datei als Cover oder füge sie in den Inhalt ein.");
-  }
-
   async function save() {
     setError(null);
     setMessage(null);
+
+    if (!draft.locale) {
+      setError("Bitte zuerst Deutsch oder English als Sprache wählen.");
+      return;
+    }
 
     if ((draft.status === "published" || draft.status === "scheduled") && blockingIssues.length) {
       setError(`Vor dem Veröffentlichen bitte beheben: ${blockingIssues.join(", ")}.`);
@@ -274,6 +254,40 @@ export function BlogPostForm({
     if (!post) {
       router.replace(`/admin/blog/${data.id}`);
     }
+    router.refresh();
+  }
+
+  async function generateTranslation(confirmOverwrite = false) {
+    if (!post) return;
+    if (isDirty) {
+      setError("Bitte den Ausgangsbeitrag vor der Übersetzung speichern.");
+      return;
+    }
+
+    setError(null);
+    setMessage(null);
+    setIsTranslating(true);
+    const response = await fetch(`/api/posts/${post.id}/translate`, {
+      method: "POST",
+      headers: {"content-type": "application/json"},
+      body: JSON.stringify({targetLocale, confirmOverwrite}),
+    });
+    const data = await response.json().catch(() => null);
+    setIsTranslating(false);
+
+    if (response.status === 409 && data?.code === "overwrite_required" && !confirmOverwrite) {
+      const confirmed = window.confirm(
+        "Die vorhandene Übersetzung enthält bereits Text. Soll sie wirklich durch eine neue automatische Übersetzung ersetzt werden?",
+      );
+      if (confirmed) await generateTranslation(true);
+      return;
+    }
+    if (!response.ok) {
+      setError(data?.error || "Die Übersetzung konnte nicht erstellt werden.");
+      return;
+    }
+
+    router.push(`/admin/blog/${data.target.id}?translation=draft`);
     router.refresh();
   }
 
@@ -384,7 +398,7 @@ export function BlogPostForm({
                   placeholder="Titel des Insights"
                 />
               </Field>
-              <Field label="Slug" helper={`URL: /blog/${draft.slug || "neuer-insight"}`} error={!draft.slug.trim() ? "Pflichtfeld" : undefined}>
+              <Field label="Slug" helper={`URL: /${draft.locale || "de|en"}/blog/${draft.slug || "neuer-insight"}`} error={!draft.slug.trim() ? "Pflichtfeld" : undefined}>
                 <input
                   className="admin-input"
                   value={draft.slug}
@@ -423,6 +437,12 @@ export function BlogPostForm({
                   onList={() => insertMarkup("- Text")}
                   onMediaLibrary={() => setShowMediaLibrary((current) => !current)}
                   onQuote={() => insertMarkup("> Text")}
+                  onVideo={() => {
+                    const url = window.prompt("Medien-URL (z.B. YouTube, Vimeo, Spotify, SoundCloud oder MP4) eingeben:");
+                    if (url?.trim()) {
+                      insertMarkup(`[video](${url.trim()})`);
+                    }
+                  }}
                 />
               </div>
               {showMediaLibrary ? (
@@ -448,6 +468,9 @@ export function BlogPostForm({
       </div>
 
       <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
+        {translationCreated ? (
+          <Notice tone="success">Übersetzung als Entwurf gespeichert. Bitte vollständig prüfen und separat veröffentlichen.</Notice>
+        ) : null}
         <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
@@ -458,6 +481,19 @@ export function BlogPostForm({
               {statusLabels[draft.status]}
             </span>
           </div>
+          <SelectField
+            disabled={Boolean(post && counterpart)}
+            helper={post && counterpart ? "Die Sprache ist fest, weil ein verknüpftes Gegenstück existiert." : "Sprache dieses einzelnen Beitrags."}
+            label="Sprache"
+            value={draft.locale}
+            onChange={(value) => update("locale", value as BlogLocale)}
+            options={[
+              ...(!draft.locale ? [{label: "Bitte wählen", value: ""}] : []),
+              {label: "Deutsch", value: "de"},
+              {label: "English", value: "en"},
+            ]}
+          />
+          <div className="mt-4" />
           <SelectField
             label="Status"
             value={draft.status}
@@ -471,7 +507,7 @@ export function BlogPostForm({
             ]}
           />
           {draft.status === "scheduled" ? (
-            <Field label="Geplant für" helper="Speichert den geplanten Zeitpunkt redaktionell. Automatische Veröffentlichung ist nicht aktiv.">
+            <Field label="Geplant für" helper="Wird durch den Coolify-Scheduler automatisch veröffentlicht.">
               <input
                 className="admin-input"
                 type="datetime-local"
@@ -483,7 +519,7 @@ export function BlogPostForm({
           {canOpenPublic ? (
             <Link
               className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-4 py-3 text-sm font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
-              href={`/blog/${draft.slug}`}
+              href={`/${draft.locale}/blog/${draft.slug}`}
               target="_blank"
             >
               <ArrowSquareOut className="size-4" />
@@ -492,43 +528,71 @@ export function BlogPostForm({
           ) : null}
         </section>
 
+        {post ? (
+          <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
+            <p className="text-sm font-semibold text-[#03182e]">DE/EN-Übersetzung</p>
+            <p className="mt-1 text-xs leading-5 text-[#6b5f50]">
+              Status: {translationStatusLabel(post.translationStatus)}. Automatische Übersetzungen werden immer nur als Entwurf gespeichert.
+            </p>
+            {post.translationError ? (
+              <p className="mt-3 rounded-xl bg-[#7f1d1d]/10 px-3 py-2 text-xs leading-5 text-[#7f1d1d]">
+                Letzter Versuch fehlgeschlagen. Du kannst ihn erneut starten.
+              </p>
+            ) : null}
+            {counterpart ? (
+              <Link
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-[#b49474]/30 px-4 py-3 text-sm font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce]"
+                href={`/admin/blog/${counterpart.id}`}
+              >
+                {counterpart.locale === "de" ? "Deutschen" : "Englischen"} Beitrag öffnen
+              </Link>
+            ) : null}
+            {post.sourcePostId ? (
+              <p className="mt-3 rounded-xl bg-[#0f4c81]/10 px-3 py-2 text-xs leading-5 text-[#0f4c81]">
+                Dieser Beitrag wurde automatisch als Entwurf erzeugt. Bitte hier prüfen, bearbeiten und separat veröffentlichen.
+              </p>
+            ) : (
+              <>
+                <button
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#03182e] px-4 py-3 text-sm font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f] disabled:opacity-50"
+                  disabled={isTranslating || isSaving || isDirty}
+                  onClick={() => generateTranslation(false)}
+                  type="button"
+                >
+                  {isTranslating ? <SpinnerGap className="size-4 animate-spin" /> : null}
+                  {counterpart ? "Übersetzung neu erzeugen" : `${targetLocale === "de" ? "Deutsche" : "Englische"} Übersetzung erzeugen`}
+                </button>
+                {isDirty ? <p className="mt-2 text-xs text-[#6b5f50]">Vorher Änderungen speichern.</p> : null}
+              </>
+            )}
+          </section>
+        ) : null}
+
         <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-[#03182e]">Medien</p>
               <p className="mt-1 text-xs text-[#6b5f50]">JPG, PNG, WebP, MP4, MOV, WebM</p>
             </div>
-            {isUploading ? <SpinnerGap className="size-5 animate-spin text-[#8b6f4e]" /> : <Upload className="size-5 text-[#8b6f4e]" />}
+            <Upload className="size-5 text-[#8b6f4e]" />
           </div>
-          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#b49474]/40 bg-[#fffaf0] px-4 py-6 text-center transition hover:border-[#8b6f4e] hover:bg-[#fcf3e3]">
-            <input
-              ref={fileInputRef}
-              className="sr-only"
-              type="file"
-              accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime,video/webm"
-              onChange={(event) => uploadSelectedFile(event.target.files?.[0] || null)}
-            />
-            <Upload className="mb-3 size-6 text-[#8b6f4e]" />
-            <span className="text-sm font-semibold text-[#03182e]">Datei auswählen</span>
-            <span className="mt-1 text-xs text-[#6b5f50]">Bilder bis 8 MB, Videos bis 80 MB</span>
-          </label>
+          <MediaUploadField alt={draft.coverAlt || draft.title} onUploaded={(asset) => {
+            const uploaded: UploadedMedia = {alt: asset.alt, mimeType: asset.mimeType, url: asset.url};
+            setLastUpload(uploaded);
+            setDraft((current) => applyUploadedCover(current, uploaded));
+            setMessage(null);
+            setUploadMessage("Upload abgeschlossen und als Cover gesetzt. Beitrag noch speichern.");
+          }} />
           {uploadMessage ? <Notice tone="success">{uploadMessage}</Notice> : null}
           {lastUpload ? (
             <div className="mt-4 space-y-3">
               <MediaPreview asset={lastUpload} />
               <p className="break-all text-xs text-[#6b5f50]">{lastUpload.url}</p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-3 py-2 text-xs font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
-                  onClick={() => {
-                    update("coverImage", lastUpload.url);
-                    update("coverAlt", lastUpload.alt || draft.coverAlt || draft.title);
-                  }}
-                  type="button"
-                >
-                  {lastUpload.mimeType.startsWith("video/") ? <VideoCamera className="size-4" /> : <ImageSquare className="size-4" />}
-                  Als Cover
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f5132]">
+                  <CheckCircle className="size-4" />
+                  Als Cover gesetzt
+                </span>
                 <button
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[#03182e] px-3 py-2 text-xs font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f] active:-translate-y-px"
                   onClick={() => insertUploadedMedia(lastUpload)}
@@ -559,11 +623,14 @@ export function BlogPostForm({
             />
           </Field>
           <div className="mt-4 overflow-hidden rounded-[18px] border border-[#b49474]/20 bg-[#fffaf0]">
-            {isCoverVideo ? (
-              <video className="aspect-[16/10] w-full object-cover" controls muted src={draft.coverImage} />
-            ) : (
-              <img alt={draft.coverAlt || ""} className="aspect-[16/10] w-full object-cover" src={draft.coverImage} />
-            )}
+            <MediaPreview
+              asset={{
+                alt: draft.coverAlt,
+                mimeType: isCoverVideo ? "video/mp4" : "image/*",
+                url: draft.coverImage,
+              }}
+              className="aspect-[16/10] w-full object-cover"
+            />
           </div>
         </section>
 
@@ -589,6 +656,13 @@ export function BlogPostForm({
           <SeoPreview draft={draft} />
           <IssueList issues={issues} />
         </section>
+
+        {post ? <PostRevisionPanel postId={post.id} current={{...draft, locale: draft.locale || undefined}} onRestored={(restored) => {
+          const next = postToDraft(restored);
+          setDraft(next); setSavedSnapshot(JSON.stringify(next));
+          window.localStorage.removeItem(recoveryKey);
+          setRecoveryAvailable(false); setMessage("Version wiederhergestellt."); router.refresh();
+        }} /> : null}
 
         <div className="flex flex-col gap-3">
           {post ? (
@@ -618,6 +692,7 @@ function postToDraft(post: BlogPost): Draft {
     coverAlt: post.coverAlt,
     coverImage: post.coverImage,
     excerpt: post.excerpt,
+    locale: post.locale,
     scheduledAt: post.scheduledAt,
     seoDescription: post.seoDescription,
     seoTitle: post.seoTitle,
@@ -660,6 +735,7 @@ function EditorToolbar({
   onMediaLibrary,
   onQuote,
   onSubheading,
+  onVideo,
 }: {
   canInsertUpload: boolean;
   hasMediaLibrary: boolean;
@@ -672,6 +748,7 @@ function EditorToolbar({
   onMediaLibrary: () => void;
   onQuote: () => void;
   onSubheading: () => void;
+  onVideo: () => void;
 }) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -682,6 +759,7 @@ function EditorToolbar({
       <ToolButton icon={<ListBullets className="size-4" />} label="Liste" onClick={onList} />
       <ToolButton icon={<Minus className="size-4" />} label="Linie" onClick={onDivider} />
       <ToolButton icon={<LinkIcon className="size-4" />} label="Link" onClick={onLink} />
+      <ToolButton icon={<VideoCamera className="size-4" />} label="Video/Medien" onClick={onVideo} />
       <ToolButton
         disabled={!hasMediaLibrary}
         icon={<MagnifyingGlass className="size-4" />}
@@ -758,7 +836,7 @@ function SeoPreview({draft}: {draft: Draft}) {
       <div>
         <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8b6f4e]">Google Preview</p>
         <div className="rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] p-3">
-          <p className="truncate text-xs text-[#0f5132]">make-success-your-habit.com/blog/{slug}</p>
+          <p className="truncate text-xs text-[#0f5132]">make-success-your-habit.com/{draft.locale || "de|en"}/blog/{slug}</p>
           <p className="mt-1 line-clamp-2 text-sm font-semibold text-[#1a0dab]">{title}</p>
           <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#4c4235]">{description}</p>
         </div>
@@ -879,11 +957,15 @@ function Field({
 }
 
 function SelectField({
+  disabled,
+  helper,
   label,
   onChange,
   options,
   value,
 }: {
+  disabled?: boolean;
+  helper?: string;
   label: string;
   onChange: (value: string) => void;
   options: Array<{label: string; value: string}>;
@@ -895,6 +977,7 @@ function SelectField({
       <span className="relative block">
         <select
           className="admin-input admin-input-compact appearance-none pr-10"
+          disabled={disabled}
           value={value}
           onChange={(event) => onChange(event.target.value)}
         >
@@ -906,18 +989,51 @@ function SelectField({
         </select>
         <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8b6f4e]">▼</span>
       </span>
+      {helper ? <span className="mt-2 block text-xs leading-5 text-[#6b5f50]">{helper}</span> : null}
     </label>
   );
+}
+
+function translationStatusLabel(status: BlogPost["translationStatus"]) {
+  return {
+    none: "noch nicht erzeugt",
+    translating: "Übersetzung läuft",
+    ready: "Entwurf bereit",
+    failed: "fehlgeschlagen",
+  }[status];
 }
 
 function isVideoUrl(url: string) {
   return /\.(mp4|mov|webm)(\?|#|$)/i.test(url);
 }
 
-function MediaPreview({asset}: {asset: {url: string; mimeType: string; alt: string}}) {
-  if (asset.mimeType.startsWith("video/")) {
-    return <video className="aspect-video w-full rounded-2xl object-cover" controls muted src={asset.url} />;
+function MediaPreview({
+  asset,
+  className = "aspect-video w-full rounded-2xl object-cover",
+}: {
+  asset: UploadedMedia;
+  className?: string;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [asset.url]);
+
+  if (hasError) {
+    return (
+      <div
+        className={`flex items-center justify-center border border-[#7f1d1d]/25 bg-[#7f1d1d]/10 px-4 text-center text-sm text-[#7f1d1d] ${className}`}
+        role="alert"
+      >
+        Die Vorschau konnte nicht geladen werden. Bitte Upload oder Speicher-Konfiguration prüfen.
+      </div>
+    );
   }
 
-  return <img alt={asset.alt} className="aspect-video w-full rounded-2xl object-cover" src={asset.url} />;
+  if (asset.mimeType.startsWith("video/")) {
+    return <video className={className} controls muted onError={() => setHasError(true)} src={asset.url} />;
+  }
+
+  return <img alt={asset.alt} className={className} onError={() => setHasError(true)} src={asset.url} />;
 }

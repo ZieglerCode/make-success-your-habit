@@ -1,10 +1,12 @@
 "use client";
 
-import {Copy, FloppyDisk, ImageSquare, MagnifyingGlass, SpinnerGap, Trash, Upload, VideoCamera, WarningCircle} from "@phosphor-icons/react";
+import {Copy, FloppyDisk, ImageSquare, MagnifyingGlass, SpinnerGap, Trash, VideoCamera, WarningCircle} from "@phosphor-icons/react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useMemo, useState} from "react";
+import {MediaUploadField} from "@/components/media-upload-field";
 import type {MediaAssetWithUsage} from "@/lib/editor-insights";
+import {mediaImageProps} from "@/lib/responsive-media";
 
 type Filter = "all" | "image" | "video" | "missing-alt" | "unused";
 
@@ -12,10 +14,9 @@ export function MediaManager({assets}: {assets: MediaAssetWithUsage[]}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadAlt, setUploadAlt] = useState("");
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -34,29 +35,6 @@ export function MediaManager({assets}: {assets: MediaAssetWithUsage[]}) {
     });
   }, [assets, filter, query]);
 
-  async function upload(formData: FormData) {
-    setError(null);
-    setMessage(null);
-    setIsUploading(true);
-
-    const response = await fetch("/api/media", {
-      body: formData,
-      method: "POST",
-    });
-    const data = await response.json().catch(() => null);
-
-    setIsUploading(false);
-    setSelectedFile(null);
-
-    if (!response.ok) {
-      setError(data?.error || "Die Datei konnte nicht hochgeladen werden.");
-      return;
-    }
-
-    setMessage("Upload abgeschlossen.");
-    router.refresh();
-  }
-
   async function copyUrl(url: string) {
     await navigator.clipboard.writeText(url);
     setMessage("URL kopiert.");
@@ -64,40 +42,17 @@ export function MediaManager({assets}: {assets: MediaAssetWithUsage[]}) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
-      <form action={upload} className="h-fit rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/70 p-5">
+      <div className="h-fit rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/70 p-5">
         <p className="text-sm font-semibold text-[#03182e]">Neues Medium</p>
         <p className="mt-1 text-xs leading-5 text-[#6b5f50]">Alt-Text direkt beim Upload pflegen, damit die Datei später nutzbar bleibt.</p>
-        <label className="mt-5 block">
-          <span className="mb-2 block text-sm font-semibold">Bild- oder Videodatei</span>
-          <input
-            className="admin-input"
-            name="file"
-            type="file"
-            accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime,video/webm"
-            onChange={(event) => setSelectedFile(event.target.files?.[0] || null)}
-          />
-        </label>
-        {selectedFile ? (
-          <div className="mt-3 rounded-2xl border border-[#b49474]/20 bg-[#fffaf0] px-3 py-3 text-sm text-[#4c4235]">
-            <p className="font-semibold">{selectedFile.name}</p>
-            <p className="mt-1 text-xs text-[#6b5f50]">{formatBytes(selectedFile.size)} · {selectedFile.type || "Dateityp unbekannt"}</p>
-          </div>
-        ) : null}
         <label className="mt-4 block">
           <span className="mb-2 block text-sm font-semibold">Alt-Text / Beschreibung</span>
-          <input className="admin-input" name="alt" placeholder="Ruhiges Portrait im warmen Licht" />
+          <input className="admin-input" value={uploadAlt} onChange={(event) => setUploadAlt(event.target.value)} placeholder="Ruhiges Portrait im warmen Licht" />
         </label>
+        <div className="mt-4"><MediaUploadField alt={uploadAlt} onUploaded={() => {setMessage("Upload abgeschlossen."); setError(null); setUploadAlt(""); router.refresh();}} /></div>
         {error ? <p className="mt-4 rounded-xl bg-[#7f1d1d]/10 px-4 py-3 text-sm text-[#7f1d1d]">{error}</p> : null}
         {message ? <p className="mt-4 rounded-xl bg-[#0f5132]/10 px-4 py-3 text-sm text-[#0f5132]">{message}</p> : null}
-        <button
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#03182e] px-5 py-3 text-sm font-semibold text-[#f9f4e7] transition hover:bg-[#100f0f] active:-translate-y-px disabled:opacity-50"
-          disabled={isUploading}
-          type="submit"
-        >
-          <Upload className="size-4" />
-          {isUploading ? "Upload..." : "Datei hochladen"}
-        </button>
-      </form>
+      </div>
 
       <section className="space-y-5">
         <div className="grid gap-3 rounded-[24px] border border-[#b49474]/20 bg-[#fcf3e3]/72 p-3 md:grid-cols-[1fr_auto]">
@@ -153,16 +108,18 @@ function AssetCard({
   onRefresh: () => void;
 }) {
   const [alt, setAlt] = useState(asset.alt);
+  const [focalX, setFocalX] = useState(asset.focalX);
+  const [focalY, setFocalY] = useState(asset.focalY);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const dirty = alt !== asset.alt;
+  const dirty = alt !== asset.alt || focalX !== asset.focalX || focalY !== asset.focalY;
 
   async function saveAlt() {
     setIsSaving(true);
     onMessage(null);
 
     const response = await fetch(`/api/media/${asset.id}`, {
-      body: JSON.stringify({alt}),
+      body: JSON.stringify({alt, focalX, focalY}),
       headers: {"content-type": "application/json"},
       method: "PATCH",
     });
@@ -204,7 +161,14 @@ function AssetCard({
       {asset.mimeType.startsWith("video/") ? (
         <video className="aspect-[4/3] w-full rounded-2xl object-cover" controls muted src={asset.url} />
       ) : (
-        <img alt={asset.alt} className="aspect-[4/3] w-full rounded-2xl object-cover" src={asset.url} />
+        <button className="relative block w-full cursor-crosshair overflow-hidden rounded-2xl" type="button" title="Bildfokus festlegen" onClick={(event) => {
+          const bounds = event.currentTarget.getBoundingClientRect();
+          setFocalX((event.clientX - bounds.left) / bounds.width);
+          setFocalY((event.clientY - bounds.top) / bounds.height);
+        }}>
+          <img alt={asset.alt} className="aspect-[4/3] w-full object-cover" {...mediaImageProps({...asset, focalX, focalY})} sizes="(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw" />
+          <span className="pointer-events-none absolute size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#03182e] shadow" style={{left: `${focalX * 100}%`, top: `${focalY * 100}%`}} />
+        </button>
       )}
       <div className="mt-3 flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -227,6 +191,7 @@ function AssetCard({
           placeholder="Beschreibe sichtbar und konkret, was das Medium zeigt."
         />
       </label>
+      {!asset.mimeType.startsWith("video/") ? <p className="mt-2 text-xs text-[#6b5f50]">Klicke ins Bild, um den Fokus für Zuschnitte festzulegen.</p> : null}
 
       <div className="mt-3 flex flex-wrap gap-2">
         {!alt.trim() ? (

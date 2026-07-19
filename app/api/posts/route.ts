@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import {currentAdmin} from "@/lib/auth";
 import {createPost, listPosts, type PostStatus} from "@/lib/content-store";
+import {parseBlogLocale} from "@/lib/blog-localization";
 
 const postStatuses = new Set(["draft", "review", "scheduled", "published", "archived"]);
 
@@ -34,7 +35,11 @@ export async function POST(request: Request) {
   if (!admin) return NextResponse.json({error: "Unauthorized."}, {status: 401});
 
   try {
-    const post = await createPost(await request.json());
+    const input = await request.json();
+    if (!parseBlogLocale(input?.locale)) {
+      return NextResponse.json({error: "Bitte Deutsch oder English als Sprache wählen."}, {status: 400});
+    }
+    const post = await createPost(input);
     return NextResponse.json(post, {status: 201});
   } catch (error) {
     const message =

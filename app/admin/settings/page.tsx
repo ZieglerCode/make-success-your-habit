@@ -1,7 +1,11 @@
 import {AdminPageHeader} from "@/components/admin-shell";
 import {AdminScreen} from "@/components/admin-screen";
+import {AdminOperationsStatus} from "@/components/admin-operations-status";
+import {latestBackup} from "@/lib/backup-utils";
+import {contentStorageProvider, maintenanceStatus} from "@/lib/content-store";
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  const [runs, backup] = await Promise.all([maintenanceStatus(), latestBackup()]);
   return (
     <AdminScreen>
       <AdminPageHeader eyebrow="Settings" title="Admin-Zugang" />
@@ -19,6 +23,7 @@ export default function AdminSettingsPage() {
           </p>
         </div>
       </div>
+      <AdminOperationsStatus runs={runs} backup={backup} provider={contentStorageProvider()} />
     </AdminScreen>
   );
 }

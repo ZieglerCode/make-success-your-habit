@@ -11,6 +11,7 @@ const basePost: BlogPost = {
   createdAt: "2026-05-18T10:00:00.000Z",
   excerpt: "Ein kurzer, konkreter Auszug für den Test.",
   id: "post-1",
+  locale: "de",
   publishedAt: null,
   readingMinutes: 1,
   scheduledAt: null,
@@ -21,6 +22,11 @@ const basePost: BlogPost = {
   status: "draft",
   tags: "Klarheit, Erfolg",
   title: "Ein tragfähiger SEO Titel für den Blog",
+  translationError: null,
+  translationGroupId: "post-1",
+  translationStatus: "none",
+  translationUpdatedAt: null,
+  sourcePostId: null,
   updatedAt: "2026-05-18T10:00:00.000Z",
 };
 
@@ -33,6 +39,8 @@ const assets: MediaAsset[] = [
     mimeType: "image/webp",
     size: 1200,
     url: "/uploads/portrait.webp",
+    originalUrl: "/uploads/portrait.webp",
+    variants: {}, width: null, height: null, focalX: 0.5, focalY: 0.5,
   },
   {
     alt: "",
@@ -42,6 +50,8 @@ const assets: MediaAsset[] = [
     mimeType: "image/webp",
     size: 900,
     url: "/uploads/unused.webp",
+    originalUrl: "/uploads/unused.webp",
+    variants: {}, width: null, height: null, focalX: 0.5, focalY: 0.5,
   },
 ];
 

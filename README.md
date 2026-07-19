@@ -1,8 +1,9 @@
 # Make Success Your Habit
 
-Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler. Homepage,
-Blog, Medienverwaltung und Admin-Dashboard liegen gemeinsam in dieser Codebase und werden
-zusammen auf Vercel deployed.
+Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler. Die aktuelle
+öffentliche Website, das Blog-CMS, die Medienverwaltung und das Admin-Dashboard liegen in
+dieser Codebase. Im Zielsystem bleibt diese App als selbst gehostetes Redaktions-CMS bestehen;
+Webstudio liefert nach gemeinsamer Abnahme die visuell bearbeitbare öffentliche Website aus.
 
 ## Lokale Entwicklung
 
@@ -29,7 +30,7 @@ Empfohlene Production-Konfiguration:
 
 ```bash
 ADMIN_NAME="Heike Ziegler"
-ADMIN_EMAIL="heike@make-success-your-habit.com"
+ADMIN_EMAIL="heike.ziegler.sales@gmail.com"
 ADMIN_PASSWORD_HASH="<bcrypt-hash>"
 AUTH_SECRET="<lange-zufaellige-session-secret>"
 ```
@@ -46,13 +47,13 @@ In Development ist als Fallback `ADMIN_PASSWORD=change-me-heike` möglich. In Pr
 
 Die App wählt den Content-Speicher automatisch:
 
-1. Turso, wenn `TURSO_DATABASE_URL` gesetzt ist.
-2. Postgres, wenn `DATABASE_URL`, `POSTGRES_URL` oder `POSTGRES_PRISMA_URL` gesetzt ist.
+1. Postgres, wenn `DATABASE_URL`, `POSTGRES_URL` oder `POSTGRES_PRISMA_URL` gesetzt ist.
+2. Turso, wenn `TURSO_DATABASE_URL` gesetzt ist.
 3. Lokale SQLite-Datei als Development-Fallback.
 
-### Vercel Postgres / Neon / Supabase
+### PostgreSQL
 
-Setze in Vercel:
+Setze in Coolify:
 
 ```bash
 DATABASE_URL="postgres://..."
@@ -62,30 +63,38 @@ Alternativ werden Vercel-übliche `POSTGRES_URL` und `POSTGRES_PRISMA_URL` ebenf
 
 ### Turso
 
-Setze in Vercel:
+Setze in Coolify:
 
 ```bash
 TURSO_DATABASE_URL="libsql://..."
 TURSO_AUTH_TOKEN="..."
 ```
 
-Wenn Turso gesetzt ist, hat Turso Vorrang vor Postgres.
+Wenn eine PostgreSQL-URL gesetzt ist, hat PostgreSQL Vorrang vor Turso.
 
-## Vercel Deploy
+## Self-hosted deployment
 
-Das Projekt enthält `vercel.json` und baut mit `npm run build`.
+Das Projekt baut mit `npm run build` und läuft als separate Coolify-Anwendung unter
+`cms.heike-ziegler.com`. Die öffentliche Domain `www.heike-ziegler.com` bleibt bis zur
+gemeinsamen Abnahme auf der bestehenden Website.
 
-In Vercel müssen mindestens diese Environment Variables gesetzt werden:
+In Coolify müssen mindestens diese Environment Variables gesetzt werden:
 
 - `AUTH_SECRET`
 - `ADMIN_NAME`
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD_HASH`
 - `DATABASE_URL` oder `TURSO_DATABASE_URL` plus `TURSO_AUTH_TOKEN`
+- `GEMINI_API_KEY` und `GEMINI_TRANSLATION_MODEL=gemini-3.1-flash-lite`
 - optional, aber für produktive Uploads empfohlen: `BLOB_READ_WRITE_TOKEN`
 
 Die Tabellen werden beim ersten Request automatisch angelegt und mit Startinhalten gefüllt, falls sie leer sind.
 
-Uploads schreiben lokal nach `public/uploads`. Wenn `BLOB_READ_WRITE_TOKEN` gesetzt ist, werden Uploads über Vercel Blob gespeichert und die öffentliche Blob-URL in der Datenbank abgelegt.
+Uploads schreiben lokal nach `public/uploads`; in Coolify ist `/app/public/uploads` als
+persistentes Volume einzubinden. Wenn `BLOB_READ_WRITE_TOKEN` gesetzt ist, kann alternativ
+Vercel Blob verwendet werden.
 Der Blog-Editor und die Medienverwaltung akzeptieren Bilder (`JPG`, `PNG`, `WebP`) und Videos
 (`MP4`, `MOV`, `WebM`).
+# Operations
+
+Production uses Coolify scheduled tasks for due blog posts and daily content backups. Configure persistent volumes at `/app/public/uploads` and `/app/backups`; see [COOLIFY.md](./COOLIFY.md) for the exact jobs and restore procedure.

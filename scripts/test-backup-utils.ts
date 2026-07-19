@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import {mkdir, mkdtemp, readdir} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import {backupDirectoryName, pruneBackupDirectories, sha256, validateBackupManifest} from "../lib/backup-utils.ts";
+assert.equal(backupDirectoryName(new Date("2026-07-15T12:34:56.789Z")), "2026-07-15T12-34-56-789Z");
+assert.equal(sha256(new TextEncoder().encode("abc")), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+assert.equal(validateBackupManifest({schemaVersion:1,createdAt:"x",provider:"postgres",files:{database:{name:"d",sha256:"x"},uploads:{name:"u",sha256:"y"}}}), true);
+const root=await mkdtemp(path.join(os.tmpdir(),"backups-")); for(let i=0;i<16;i++) await mkdir(path.join(root,String(i).padStart(2,"0")));
+await pruneBackupDirectories(root,14); assert.equal((await readdir(root)).length,14);
+console.log("backup utils: ok");

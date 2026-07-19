@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import {mkdtemp} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+process.env.CONTENT_DB_DIR = await mkdtemp(path.join(os.tmpdir(),"maintenance-"));
+const {failMaintenanceRun, finishMaintenanceRun, maintenanceStatus, startMaintenanceRun}=await import("../lib/content-store.ts");
+const run=await startMaintenanceRun("test"); assert.ok(run); assert.equal(await startMaintenanceRun("test"),null);
+await finishMaintenanceRun(run!.id,{count:2}); assert.equal((await maintenanceStatus()).find(item=>item.type==="test")?.details.count,2);
+const failed=await startMaintenanceRun("failure"); await failMaintenanceRun(failed!.id,new Error(`postgres${"://user:secret@db/private"}`));
+assert.equal((await maintenanceStatus()).find(item=>item.type==="failure")?.error?.includes("secret"),false);
+console.log("maintenance store: ok");

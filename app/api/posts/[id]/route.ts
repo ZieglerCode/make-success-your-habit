@@ -25,7 +25,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   const {id} = await context.params;
 
   try {
-    const post = await updatePost(id, await request.json());
+    const post = await updatePost(id, await request.json(), admin.email);
     if (!post) return NextResponse.json({error: "Not found."}, {status: 404});
 
     return NextResponse.json(post);

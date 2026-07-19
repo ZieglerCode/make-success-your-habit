@@ -1,0 +1,31 @@
+import assert from "node:assert/strict";
+import {mkdtemp} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import {hasPostChanged, revisionSnapshot} from "../lib/post-revisions.ts";
+import type {BlogPost} from "../lib/content-store.ts";
+
+const post: BlogPost = {id:"1", title:"A", slug:"a", excerpt:"E", content:"C", coverImage:"/x", coverAlt:"X", status:"draft", publishedAt:null, scheduledAt:null, createdAt:"old", updatedAt:"old", seoTitle:"A", seoDescription:"E", authorName:"Heike", category:"", tags:"", readingMinutes:1, locale:"en", translationGroupId:"1", sourcePostId:null, translationStatus:"none", translationError:null, translationUpdatedAt:null};
+assert.equal(hasPostChanged(post, {updatedAt: "new"}), false);
+assert.equal(hasPostChanged(post, {title: "A"}), false);
+assert.equal(hasPostChanged(post, {title: "B"}), true);
+assert.equal(hasPostChanged(post, {status: "published"}), true);
+assert.equal(hasPostChanged(post, {locale: "de"}), true);
+const snapshot = revisionSnapshot(post);
+snapshot.title = "changed";
+assert.equal(post.title, "A");
+assert.equal("translationError" in revisionSnapshot({...post, translationError:"private model failure"}), false);
+
+process.env.CONTENT_DB_DIR = await mkdtemp(path.join(os.tmpdir(), "revisions-"));
+const {createPost, listPostRevisions, restorePostRevision, updatePost} = await import("../lib/content-store.ts");
+const stored = await createPost({...post, id:undefined, slug:`revision-${Date.now()}`});
+await updatePost(stored.id, {title:"B"}, "admin@example.com");
+assert.equal((await listPostRevisions(stored.id)).length, 1);
+await updatePost(stored.id, {title:"B"}, "admin@example.com");
+assert.equal((await listPostRevisions(stored.id)).length, 1);
+const [revision] = await listPostRevisions(stored.id);
+await updatePost(stored.id, {translationGroupId:"replacement-group"}, "admin@example.com");
+assert.equal((await restorePostRevision(stored.id, revision.id, "admin@example.com"))?.title, "A");
+assert.equal((await restorePostRevision(stored.id, revision.id, "admin@example.com"))?.translationGroupId, "replacement-group");
+assert.equal((await listPostRevisions(stored.id)).length, 3);
+console.log("post revisions: ok");

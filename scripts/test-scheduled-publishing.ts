@@ -1,0 +1,13 @@
+import assert from "node:assert/strict";
+import {mkdtemp} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+process.env.CONTENT_DB_DIR = await mkdtemp(path.join(os.tmpdir(),"scheduled-"));
+const {createPost, getPostById, publishDueScheduledPosts} = await import("../lib/content-store.ts");
+const due = await createPost({title:"Due",slug:`due-${Date.now()}`,status:"scheduled",scheduledAt:"2026-01-01T00:00:00.000Z"});
+const future = await createPost({title:"Future",slug:`future-${Date.now()}`,status:"scheduled",scheduledAt:"2099-01-01T00:00:00.000Z"});
+assert.equal(await publishDueScheduledPosts(new Date("2026-07-15T00:00:00.000Z")),1);
+assert.equal((await getPostById(due.id))?.status,"published");
+assert.equal((await getPostById(future.id))?.status,"scheduled");
+assert.equal(await publishDueScheduledPosts(new Date("2026-07-15T00:00:00.000Z")),0);
+console.log("scheduled publishing: ok");
