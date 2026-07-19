@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import Link from "next/link";
+import {CroppedCoverImage} from "@/components/cropped-cover-image";
 import {LanguageSwitcher} from "@/components/language-switcher";
 import {listPosts} from "@/lib/content-store";
 
@@ -63,9 +64,11 @@ export default async function BlogIndexPage() {
                     src={posts[0].coverImage}
                   />
                 ) : (
-                  <img
+                  <CroppedCoverImage
                     alt={posts[0].coverAlt || posts[0].title}
-                    className="aspect-[16/10] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                    className="aspect-[16/10] w-full transition duration-700 group-hover:scale-[1.03]"
+                    crops={posts[0].coverCrops}
+                    preset="card"
                     src={posts[0].coverImage}
                   />
                 )}
@@ -124,9 +127,11 @@ export default async function BlogIndexPage() {
                           src={post.coverImage}
                         />
                       ) : (
-                        <img
+                        <CroppedCoverImage
                           alt={post.coverAlt || post.title}
-                          className="aspect-[16/10] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                          className="aspect-[16/10] w-full transition duration-700 group-hover:scale-[1.03]"
+                          crops={post.coverCrops}
+                          preset="card"
                           src={post.coverImage}
                         />
                       )}

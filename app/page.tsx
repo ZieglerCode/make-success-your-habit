@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {CroppedCoverImage} from "@/components/cropped-cover-image";
 import SiteHome from "@/components/site-home";
 import {getSiteContent, listPosts} from "@/lib/content-store";
 
@@ -65,9 +66,11 @@ export async function HomePageContent({initialLang = "de"}: {initialLang?: "de" 
                         src={featuredPost.coverImage}
                       />
                     ) : (
-                      <img
+                      <CroppedCoverImage
                         alt={featuredPost.coverAlt || featuredPost.title}
-                        className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                        className="aspect-[4/3] w-full transition duration-700 group-hover:scale-[1.03]"
+                        crops={featuredPost.coverCrops}
+                        preset="featured"
                         src={featuredPost.coverImage}
                       />
                     )}
@@ -114,9 +117,11 @@ export async function HomePageContent({initialLang = "de"}: {initialLang?: "de" 
                             src={post.coverImage}
                           />
                         ) : (
-                          <img
+                          <CroppedCoverImage
                             alt={post.coverAlt || post.title}
-                            className="aspect-[16/10] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                            className="aspect-[16/10] w-full transition duration-700 group-hover:scale-[1.03]"
+                            crops={post.coverCrops}
+                            preset="card"
                             src={post.coverImage}
                           />
                         )}

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Make Success Your Habit | Heike Ziegler",
   description:
     "Premium-Transformationsraum für ambitionierte Unternehmerinnen, Coaches und Expertinnen. Erfolg nicht erzwingen, sondern verkörpern.",
-  metadataBase: new URL("https://make-success-your-habit.pages.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || "https://www.heike-ziegler.com"),
   openGraph: {
     title: "Make Success Your Habit | Heike Ziegler",
     description:

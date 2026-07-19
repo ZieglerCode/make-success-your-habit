@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import Link from "next/link";
 import {notFound} from "next/navigation";
 import {BlogContentRenderer} from "@/components/blog-content-renderer";
+import {CroppedCoverImage} from "@/components/cropped-cover-image";
 import {LanguageSwitcher} from "@/components/language-switcher";
 import {getPostBySlug} from "@/lib/content-store";
 
@@ -17,14 +18,22 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
   if (!post) return {};
 
+  const socialImage = `/api/og/${post.id}?v=${encodeURIComponent(post.updatedAt)}`;
+
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
     openGraph: {
       title: post.seoTitle || post.title,
       description: post.seoDescription || post.excerpt,
-      images: [post.coverImage],
+      images: [{alt: post.coverAlt || post.title, height: 630, url: socialImage, width: 1200}],
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      description: post.seoDescription || post.excerpt,
+      images: [socialImage],
+      title: post.seoTitle || post.title,
     },
   };
 }
@@ -80,9 +89,11 @@ export default async function BlogPostPage({params}: PageProps) {
             src={post.coverImage}
           />
         ) : (
-          <img
+          <CroppedCoverImage
             alt={post.coverAlt || post.title}
-            className="mt-12 aspect-[16/9] w-full rounded-[28px] object-cover shadow-[0_32px_80px_rgba(16,15,15,0.14)]"
+            className="mt-12 aspect-[16/9] w-full rounded-[28px] shadow-[0_32px_80px_rgba(16,15,15,0.14)]"
+            crops={post.coverCrops}
+            preset="article"
             src={post.coverImage}
           />
         )}

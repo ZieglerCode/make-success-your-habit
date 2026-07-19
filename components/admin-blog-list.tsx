@@ -4,6 +4,7 @@ import {Article, CalendarBlank, CaretDown, MagnifyingGlass, WarningCircle} from 
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useMemo, useState} from "react";
+import {CroppedCoverImage} from "@/components/cropped-cover-image";
 import type {BlogPost, PostStatus} from "@/lib/content-store";
 import {formatDate, seoIssues, statusLabels, wordCount} from "@/lib/editor-insights";
 
@@ -197,7 +198,15 @@ function MediaThumb({post}: {post: BlogPost}) {
     return <video className="aspect-[4/3] w-full rounded-[18px] object-cover" muted preload="metadata" src={post.coverImage} />;
   }
 
-  return <img alt={post.coverAlt || post.title} className="aspect-[4/3] w-full rounded-[18px] object-cover" src={post.coverImage} />;
+  return (
+    <CroppedCoverImage
+      alt={post.coverAlt || post.title}
+      className="aspect-[4/3] w-full rounded-[18px]"
+      crops={post.coverCrops}
+      preset="featured"
+      src={post.coverImage}
+    />
+  );
 }
 
 export function StatusBadge({status}: {status: PostStatus}) {

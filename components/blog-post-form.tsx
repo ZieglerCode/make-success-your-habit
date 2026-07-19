@@ -3,6 +3,7 @@
 import {
   ArrowSquareOut,
   CheckCircle,
+  Crop,
   FloppyDisk,
   ImageSquare,
   Link as LinkIcon,
@@ -20,6 +21,9 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {BlogContentRenderer} from "@/components/blog-content-renderer";
+import {CoverCropEditor} from "@/components/cover-crop-editor";
+import {CroppedCoverImage} from "@/components/cropped-cover-image";
+import {DEFAULT_COVER_CROPS, normalizeCoverCrops, type CoverCrops} from "@/lib/cover-crop";
 import type {BlogPost, MediaAsset, PostStatus} from "@/lib/content-store";
 import {
   formatDate,
@@ -40,6 +44,7 @@ type Draft = Pick<
   | "content"
   | "coverImage"
   | "coverAlt"
+  | "coverCrops"
   | "status"
   | "seoTitle"
   | "seoDescription"
@@ -54,6 +59,7 @@ const emptyDraft: Draft = {
   category: "",
   content: "",
   coverAlt: "",
+  coverCrops: DEFAULT_COVER_CROPS,
   coverImage: "/media/images/heike-ziegler.webp",
   excerpt: "",
   scheduledAt: null,
@@ -92,6 +98,7 @@ export function BlogPostForm({
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const [mediaQuery, setMediaQuery] = useState("");
   const [recoveryAvailable, setRecoveryAvailable] = useState(false);
+  const [showCoverCropEditor, setShowCoverCropEditor] = useState(false);
 
   const currentWordCount = useMemo(() => wordCount(draft.content), [draft.content]);
   const currentReadingMinutes = useMemo(() => readingMinutes(draft.content), [draft.content]);
@@ -176,6 +183,17 @@ export function BlogPostForm({
       content: `${current.content.trimEnd()}${current.content.trim() ? "\n\n" : ""}${markup}\n\n`,
     }));
     setMessage(null);
+  }
+
+  function useAsCover(url: string, alt: string) {
+    setDraft((current) => ({
+      ...current,
+      coverAlt: alt || current.coverAlt || current.title,
+      coverCrops: normalizeCoverCrops(DEFAULT_COVER_CROPS),
+      coverImage: url,
+    }));
+    setMessage(null);
+    setShowCoverCropEditor(true);
   }
 
   function insertMarkup(markup: string) {
@@ -282,7 +300,8 @@ export function BlogPostForm({
     if (!stored) return;
 
     try {
-      setDraft(JSON.parse(stored) as Draft);
+      const recovered = JSON.parse(stored) as Draft;
+      setDraft({...recovered, coverCrops: normalizeCoverCrops(recovered.coverCrops)});
       setRecoveryAvailable(false);
       setMessage("Lokale Sicherung wiederhergestellt.");
     } catch {
@@ -521,8 +540,12 @@ export function BlogPostForm({
                 <button
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-3 py-2 text-xs font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
                   onClick={() => {
-                    update("coverImage", lastUpload.url);
-                    update("coverAlt", lastUpload.alt || draft.coverAlt || draft.title);
+                    if (lastUpload.mimeType.startsWith("video/")) {
+                      update("coverImage", lastUpload.url);
+                      update("coverAlt", lastUpload.alt || draft.coverAlt || draft.title);
+                    } else {
+                      useAsCover(lastUpload.url, lastUpload.alt);
+                    }
                   }}
                   type="button"
                 >
@@ -562,9 +585,25 @@ export function BlogPostForm({
             {isCoverVideo ? (
               <video className="aspect-[16/10] w-full object-cover" controls muted src={draft.coverImage} />
             ) : (
-              <img alt={draft.coverAlt || ""} className="aspect-[16/10] w-full object-cover" src={draft.coverImage} />
+              <CroppedCoverImage
+                alt={draft.coverAlt || ""}
+                className="aspect-[16/10] w-full"
+                crops={draft.coverCrops}
+                preset="card"
+                src={draft.coverImage}
+              />
             )}
           </div>
+          {!isCoverVideo ? (
+            <button
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#b49474]/30 px-4 py-3 text-sm font-semibold text-[#4c4235] transition hover:bg-[#f2e2ce] active:-translate-y-px"
+              onClick={() => setShowCoverCropEditor(true)}
+              type="button"
+            >
+              <Crop className="size-4" />
+              Bildausschnitte bearbeiten
+            </button>
+          ) : null}
         </section>
 
         <section className="rounded-[22px] border border-[#b49474]/20 bg-[#fcf3e3]/62 p-4">
@@ -606,6 +645,18 @@ export function BlogPostForm({
           ) : null}
         </div>
       </aside>
+      {showCoverCropEditor && !isCoverVideo ? (
+        <CoverCropEditor
+          alt={draft.coverAlt || draft.title || "Cover"}
+          crops={draft.coverCrops}
+          imageUrl={draft.coverImage}
+          onApply={(coverCrops: CoverCrops) => {
+            update("coverCrops", coverCrops);
+            setShowCoverCropEditor(false);
+          }}
+          onCancel={() => setShowCoverCropEditor(false)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -616,6 +667,7 @@ function postToDraft(post: BlogPost): Draft {
     category: post.category,
     content: post.content,
     coverAlt: post.coverAlt,
+    coverCrops: normalizeCoverCrops(post.coverCrops),
     coverImage: post.coverImage,
     excerpt: post.excerpt,
     scheduledAt: post.scheduledAt,
@@ -641,7 +693,13 @@ function PreviewPane({draft}: {draft: Draft}) {
       {isVideoUrl(draft.coverImage) ? (
         <video className="mt-8 aspect-[16/9] w-full rounded-[24px] object-cover" controls playsInline src={draft.coverImage} />
       ) : (
-        <img alt={draft.coverAlt || ""} className="mt-8 aspect-[16/9] w-full rounded-[24px] object-cover" src={draft.coverImage} />
+        <CroppedCoverImage
+          alt={draft.coverAlt || ""}
+          className="mt-8 aspect-[16/9] w-full rounded-[24px]"
+          crops={draft.coverCrops}
+          preset="article"
+          src={draft.coverImage}
+        />
       )}
       <BlogContentRenderer className="prose-brand mt-10" content={draft.content} />
     </article>
@@ -769,7 +827,13 @@ function SeoPreview({draft}: {draft: Draft}) {
           {isVideoUrl(draft.coverImage) ? (
             <video className="aspect-[1.91/1] w-full object-cover" muted preload="metadata" src={draft.coverImage} />
           ) : (
-            <img alt={draft.coverAlt || ""} className="aspect-[1.91/1] w-full object-cover" src={draft.coverImage} />
+            <CroppedCoverImage
+              alt={draft.coverAlt || ""}
+              className="aspect-[1.91/1] w-full"
+              crops={draft.coverCrops}
+              preset="social"
+              src={draft.coverImage}
+            />
           )}
           <div className="p-3">
             <p className="text-xs uppercase tracking-[0.14em] text-[#6b5f50]">make-success-your-habit.com</p>

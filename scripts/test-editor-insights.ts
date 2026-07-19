@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {mediaUsage, readingMinutes, seoIssues, wordCount} from "../lib/editor-insights";
+import {DEFAULT_COVER_CROPS} from "../lib/cover-crop";
 import type {BlogPost, MediaAsset} from "../lib/content-store";
 
 const basePost: BlogPost = {
@@ -7,6 +8,7 @@ const basePost: BlogPost = {
   category: "Selbstführung",
   content: "Ein klarer Absatz mit genügend Orientierung für den Test.",
   coverAlt: "Portrait im warmen Licht",
+  coverCrops: DEFAULT_COVER_CROPS,
   coverImage: "/uploads/portrait.webp",
   createdAt: "2026-05-18T10:00:00.000Z",
   excerpt: "Ein kurzer, konkreter Auszug für den Test.",

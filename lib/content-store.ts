@@ -3,6 +3,7 @@ import {mkdirSync} from "node:fs";
 import path from "node:path";
 import {createClient, type Client} from "@libsql/client";
 import postgres from "postgres";
+import {DEFAULT_COVER_CROPS, normalizeCoverCrops, type CoverCrops} from "@/lib/cover-crop";
 import {slugify} from "@/lib/slug";
 
 export type PostStatus = "draft" | "review" | "scheduled" | "published" | "archived";
@@ -15,6 +16,7 @@ export type BlogPost = {
   content: string;
   coverImage: string;
   coverAlt: string;
+  coverCrops: CoverCrops;
   status: PostStatus;
   publishedAt: string | null;
   scheduledAt: string | null;
@@ -137,6 +139,7 @@ async function initialize() {
         content TEXT NOT NULL,
         "coverImage" TEXT NOT NULL,
         "coverAlt" TEXT NOT NULL DEFAULT '',
+        "coverCrops" TEXT NOT NULL DEFAULT '{}',
         status TEXT NOT NULL,
         "publishedAt" TEXT,
         "scheduledAt" TEXT,
@@ -179,6 +182,7 @@ async function initialize() {
         content TEXT NOT NULL,
         coverImage TEXT NOT NULL,
         coverAlt TEXT NOT NULL DEFAULT '',
+        coverCrops TEXT NOT NULL DEFAULT '{}',
         status TEXT NOT NULL,
         publishedAt TEXT,
         scheduledAt TEXT,
@@ -214,6 +218,7 @@ async function initialize() {
 async function ensurePostEditorialColumns() {
   const columns = [
     {name: "coverAlt", definition: "TEXT NOT NULL DEFAULT ''"},
+    {name: "coverCrops", definition: "TEXT NOT NULL DEFAULT '{}'"},
     {name: "scheduledAt", definition: "TEXT"},
     {name: "authorName", definition: `TEXT NOT NULL DEFAULT '${DEFAULT_AUTHOR}'`},
     {name: "category", definition: "TEXT NOT NULL DEFAULT ''"},
@@ -290,6 +295,7 @@ function normalizePost(row: Record<string, unknown>): BlogPost {
     content: String(row.content),
     coverImage: String(row.coverImage),
     coverAlt: row.coverAlt ? String(row.coverAlt) : "",
+    coverCrops: normalizeCoverCrops(row.coverCrops),
     status: String(row.status) as PostStatus,
     publishedAt: row.publishedAt ? String(row.publishedAt) : null,
     scheduledAt: row.scheduledAt ? String(row.scheduledAt) : null,
@@ -442,6 +448,7 @@ function buildPost(input: Partial<BlogPost>) {
     content,
     coverImage: input.coverImage?.trim() || "/media/images/heike-ziegler.webp",
     coverAlt: input.coverAlt?.trim() || title,
+    coverCrops: normalizeCoverCrops(input.coverCrops || DEFAULT_COVER_CROPS),
     status,
     publishedAt,
     scheduledAt: status === "scheduled" ? input.scheduledAt || now : null,
@@ -461,15 +468,15 @@ async function insertPost(post: BlogPost) {
   if (provider() === "postgres") {
     await pgClient()`
       INSERT INTO posts
-        (id, title, slug, excerpt, content, "coverImage", "coverAlt", status, "publishedAt", "scheduledAt", "createdAt", "updatedAt", "seoTitle", "seoDescription", "authorName", category, tags, "readingMinutes")
+        (id, title, slug, excerpt, content, "coverImage", "coverAlt", "coverCrops", status, "publishedAt", "scheduledAt", "createdAt", "updatedAt", "seoTitle", "seoDescription", "authorName", category, tags, "readingMinutes")
       VALUES
-        (${post.id}, ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content}, ${post.coverImage}, ${post.coverAlt}, ${post.status}, ${post.publishedAt}, ${post.scheduledAt}, ${post.createdAt}, ${post.updatedAt}, ${post.seoTitle}, ${post.seoDescription}, ${post.authorName}, ${post.category}, ${post.tags}, ${post.readingMinutes})
+        (${post.id}, ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content}, ${post.coverImage}, ${post.coverAlt}, ${JSON.stringify(post.coverCrops)}, ${post.status}, ${post.publishedAt}, ${post.scheduledAt}, ${post.createdAt}, ${post.updatedAt}, ${post.seoTitle}, ${post.seoDescription}, ${post.authorName}, ${post.category}, ${post.tags}, ${post.readingMinutes})
     `;
   } else {
     await libsqlClient().execute({
       sql: `INSERT INTO posts
-        (id, title, slug, excerpt, content, coverImage, coverAlt, status, publishedAt, scheduledAt, createdAt, updatedAt, seoTitle, seoDescription, authorName, category, tags, readingMinutes)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, title, slug, excerpt, content, coverImage, coverAlt, coverCrops, status, publishedAt, scheduledAt, createdAt, updatedAt, seoTitle, seoDescription, authorName, category, tags, readingMinutes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         post.id,
         post.title,
@@ -478,6 +485,7 @@ async function insertPost(post: BlogPost) {
         post.content,
         post.coverImage,
         post.coverAlt,
+        JSON.stringify(post.coverCrops),
         post.status,
         post.publishedAt,
         post.scheduledAt,
@@ -520,6 +528,7 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
     content,
     coverImage: input.coverImage?.trim() || existing.coverImage,
     coverAlt: input.coverAlt?.trim() ?? existing.coverAlt,
+    coverCrops: input.coverCrops ? normalizeCoverCrops(input.coverCrops) : existing.coverCrops,
     status,
     publishedAt,
     scheduledAt: status === "scheduled" ? input.scheduledAt || existing.scheduledAt || now : input.scheduledAt ?? null,
@@ -541,6 +550,7 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
         content = ${updated.content},
         "coverImage" = ${updated.coverImage},
         "coverAlt" = ${updated.coverAlt},
+        "coverCrops" = ${JSON.stringify(updated.coverCrops)},
         status = ${updated.status},
         "publishedAt" = ${updated.publishedAt},
         "scheduledAt" = ${updated.scheduledAt},
@@ -555,7 +565,7 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
     `;
   } else {
     await libsqlClient().execute({
-      sql: `UPDATE posts SET title = ?, slug = ?, excerpt = ?, content = ?, coverImage = ?, coverAlt = ?, status = ?,
+      sql: `UPDATE posts SET title = ?, slug = ?, excerpt = ?, content = ?, coverImage = ?, coverAlt = ?, coverCrops = ?, status = ?,
         publishedAt = ?, scheduledAt = ?, updatedAt = ?, seoTitle = ?, seoDescription = ?, authorName = ?,
         category = ?, tags = ?, readingMinutes = ? WHERE id = ?`,
       args: [
@@ -565,6 +575,7 @@ export async function updatePost(id: string, input: Partial<BlogPost>) {
         updated.content,
         updated.coverImage,
         updated.coverAlt,
+        JSON.stringify(updated.coverCrops),
         updated.status,
         updated.publishedAt,
         updated.scheduledAt,
