@@ -14,7 +14,8 @@
     "lint": "tsc --noEmit",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "test:content": "tsx scripts/test-editor-insights.ts",
-    "hash:admin-password": "node scripts/hash-admin-password.mjs"
+    "hash:admin-password": "node scripts/hash-admin-password.mjs",
+    "migration:inventory": "tsx scripts/migration/crawl-current-site.mjs && tsx scripts/migration/inventory-assets.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -44,6 +45,7 @@
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
     "autoprefixer": "^10.4.21",
+    "cheerio": "^1.0.0",
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",

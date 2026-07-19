@@ -1,0 +1,138 @@
+[
+  {
+    "finalUrl": "https://www.heike-ziegler.com/",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/",
+    "route": "/",
+    "status": 200,
+    "title": "Make Success Your Habit | Heike Ziegler"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/de",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/de",
+    "route": "/de",
+    "status": 200,
+    "title": "Make Success Your Habit | Heike Ziegler"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/en",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/en",
+    "route": "/en",
+    "status": 200,
+    "title": "Make Success Your Habit | Heike Ziegler"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/method",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/method",
+    "route": "/method",
+    "status": 200,
+    "title": "Method | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/about-heike",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/about-heike",
+    "route": "/about-heike",
+    "status": 200,
+    "title": "About Heike | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/community",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/community",
+    "route": "/community",
+    "status": 200,
+    "title": "Community | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/instant-success-formula",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/instant-success-formula",
+    "route": "/instant-success-formula",
+    "status": 200,
+    "title": "Instant Success Formula | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/isobl",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/isobl",
+    "route": "/isobl",
+    "status": 200,
+    "title": "ISOBL | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/isa-alliance",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/isa-alliance",
+    "route": "/isa-alliance",
+    "status": 200,
+    "title": "ISA Alliance | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/blog",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/blog",
+    "route": "/blog",
+    "status": 200,
+    "title": "Insights | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/blog/erfolg-beginnt-ohne-druck",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/blog/erfolg-beginnt-ohne-druck",
+    "route": "/blog/erfolg-beginnt-ohne-druck",
+    "status": 200,
+    "title": "Erfolg beginnt dort, wo Druck nicht mehr führt"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/agb",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/agb",
+    "route": "/legal/agb",
+    "status": 200,
+    "title": "Terms and Conditions | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/datenschutz",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/datenschutz",
+    "route": "/legal/datenschutz",
+    "status": 200,
+    "title": "Privacy Policy | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/eula",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/eula",
+    "route": "/legal/eula",
+    "status": 200,
+    "title": "EULA | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/impressum",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/impressum",
+    "route": "/legal/impressum",
+    "status": 200,
+    "title": "Legal notice | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/nutzungsbedingungen",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/nutzungsbedingungen",
+    "route": "/legal/nutzungsbedingungen",
+    "status": 200,
+    "title": "Terms of Use | Make Success Your Habit"
+  },
+  {
+    "finalUrl": "https://www.heike-ziegler.com/legal/widerruf",
+    "lang": "de",
+    "requestedUrl": "https://www.heike-ziegler.com/legal/widerruf",
+    "route": "/legal/widerruf",
+    "status": 200,
+    "title": "Refund Policy & Right of Withdrawal | Make Success Your Habit"
+  }
+]

@@ -1,0 +1,274 @@
+{
+  "capturedAt": "2026-07-19T13:19:49.103Z",
+  "files": [
+    {
+      "bytes": 80343,
+      "path": "1024x768/about-heike.png",
+      "sha256": "cc255baf1a6a45bbad05d4dc94091e15f4cba4b14f460ff0060758d2e5a67b52"
+    },
+    {
+      "bytes": 34579,
+      "path": "1024x768/blog--erfolg-beginnt-ohne-druck.png",
+      "sha256": "335a2f3919bd7768259364fbf9cd6bee426096de3e5e3223a3f2c9a02627b721"
+    },
+    {
+      "bytes": 39948,
+      "path": "1024x768/blog.png",
+      "sha256": "d1d72438010d8c2b60ad9f5bc961de99dd2b15ad2473a1d33f3be4fd54c4cc83"
+    },
+    {
+      "bytes": 79573,
+      "path": "1024x768/community.png",
+      "sha256": "e1811c9c427b36a1462fb7140f7e0ee96f927a6900f8ff93e0c141ece7215f63"
+    },
+    {
+      "bytes": 846557,
+      "path": "1024x768/de.png",
+      "sha256": "5ed89a4b4f2e2a5944799e21b6bcbb6319ec7d471003c6e7b02d96a0208bb661"
+    },
+    {
+      "bytes": 866198,
+      "path": "1024x768/en.png",
+      "sha256": "8de9373ef4dcee32625cde5d6810150f7be1e4de9c9c52b7bbfced0edcc06ad3"
+    },
+    {
+      "bytes": 176323,
+      "path": "1024x768/instant-success-formula.png",
+      "sha256": "967dc928d767c0f0cac9874f3a9c0e0c028ea82cb8fef18a324f2a8e08c60303"
+    },
+    {
+      "bytes": 165481,
+      "path": "1024x768/isa-alliance.png",
+      "sha256": "3d402158977f430a5b9f6d4c80a668ccd2b299a8b5b5a0273d9c43c017064f89"
+    },
+    {
+      "bytes": 700694,
+      "path": "1024x768/isobl.png",
+      "sha256": "c737c123ed478cd43d34aa558954951346c512454d6f9a82da487e932bb7db40"
+    },
+    {
+      "bytes": 132699,
+      "path": "1024x768/legal--agb.png",
+      "sha256": "28e4631e02a7ba26e6ac4c2ee50a29e60f86df5cddcc30e3bead763fa477635c"
+    },
+    {
+      "bytes": 81332,
+      "path": "1024x768/legal--datenschutz.png",
+      "sha256": "2f8b5a2ecca44270dc0830d6a864720dde7c9e5b8ff537311bf2af246defcc25"
+    },
+    {
+      "bytes": 43339,
+      "path": "1024x768/legal--eula.png",
+      "sha256": "8ddd2782020f6ffd48674a171477c3a415779a8c480bab105cb9dc400e0dd751"
+    },
+    {
+      "bytes": 34609,
+      "path": "1024x768/legal--impressum.png",
+      "sha256": "02d7b18b769188423ce73205746e93a810612062ac331680bdff46eecebc7513"
+    },
+    {
+      "bytes": 84309,
+      "path": "1024x768/legal--nutzungsbedingungen.png",
+      "sha256": "fa405563cfc5d7c82ac3fbd317c1474a20b94603fd62a8f152cf533fbd788305"
+    },
+    {
+      "bytes": 42333,
+      "path": "1024x768/legal--widerruf.png",
+      "sha256": "eebab44f2d42790f0095019dba393afaef988573be79a538690c071556ca6524"
+    },
+    {
+      "bytes": 93747,
+      "path": "1024x768/method.png",
+      "sha256": "ea1d110c1e87e35b4615339955d23d3bcdac21a0dae8af335a03feae1ad7163a"
+    },
+    {
+      "bytes": 855479,
+      "path": "1024x768/root.png",
+      "sha256": "726e9cc15aca87b4143be4b1d4759d2e0de4da0a068287eedfcee00c008bcd47"
+    },
+    {
+      "bytes": 83444,
+      "path": "1440x900/about-heike.png",
+      "sha256": "df8d8a3f72444fa1a1ef8371b64af252ea0e7479fbc910abd002b9fa6060e098"
+    },
+    {
+      "bytes": 40899,
+      "path": "1440x900/blog--erfolg-beginnt-ohne-druck.png",
+      "sha256": "c77b8251d51ea2ae8cb0ad90890485a75c3be5885cc99922bfe0780a62cd4290"
+    },
+    {
+      "bytes": 47478,
+      "path": "1440x900/blog.png",
+      "sha256": "a25b8efd2e3f775825e01b48dff2266640fdb2ae9b0251d0a97e3c0620d3f92e"
+    },
+    {
+      "bytes": 82848,
+      "path": "1440x900/community.png",
+      "sha256": "5a9d305534fdecadb08f0b37a466a28ac0aa1748505b97d2665022e6849f66b9"
+    },
+    {
+      "bytes": 985065,
+      "path": "1440x900/de.png",
+      "sha256": "ecfa045764259fec71e8df0fe36953a2cc0aeacbc5e5e860b6c3f591ac21d58c"
+    },
+    {
+      "bytes": 947000,
+      "path": "1440x900/en.png",
+      "sha256": "2d32202783e473e11f00b0b7a55fb5bd0176a68bedb59c89d740e2fde8c70620"
+    },
+    {
+      "bytes": 174255,
+      "path": "1440x900/instant-success-formula.png",
+      "sha256": "bf7987f32320ae69e42a85dd762ee8a0cb6b3a5467c6f30c6cf10dc30c0d66de"
+    },
+    {
+      "bytes": 168263,
+      "path": "1440x900/isa-alliance.png",
+      "sha256": "359d9956538829ed127554ebea76188f6536d0a2b026beba1a3ba2410220f60e"
+    },
+    {
+      "bytes": 974872,
+      "path": "1440x900/isobl.png",
+      "sha256": "60a3abeda072b7e7fec7546f881fcc90ac4b8eba0d1083e3fb062b9dfcb00215"
+    },
+    {
+      "bytes": 145998,
+      "path": "1440x900/legal--agb.png",
+      "sha256": "3223f32a515b4442e206227d63849694bda32c92883517bae83b4b29ae1a683e"
+    },
+    {
+      "bytes": 89990,
+      "path": "1440x900/legal--datenschutz.png",
+      "sha256": "fd1de57c0488747f8095534493adeb675c4ba5b5e51252c710abd453e61e9776"
+    },
+    {
+      "bytes": 48487,
+      "path": "1440x900/legal--eula.png",
+      "sha256": "a416f380fe4139caedbda039372bce12bc6f0b4adc9642c1c44a30855f4a325d"
+    },
+    {
+      "bytes": 37924,
+      "path": "1440x900/legal--impressum.png",
+      "sha256": "6f5037643a34e63bb28879ccdbc81ca98c83be898c6ad17c1d19318dece5a3b8"
+    },
+    {
+      "bytes": 92967,
+      "path": "1440x900/legal--nutzungsbedingungen.png",
+      "sha256": "1da73ad29582e65dd0f2f5ee6831d907a41d8684f8820582d022c3103a21e99e"
+    },
+    {
+      "bytes": 47013,
+      "path": "1440x900/legal--widerruf.png",
+      "sha256": "dc7cc3c281d03c92bc43aadb071dcb73fbd6b5614e008f336f5db60340002c6d"
+    },
+    {
+      "bytes": 93953,
+      "path": "1440x900/method.png",
+      "sha256": "6beda4e0b60e36b65b988e99da06d5bab6e0c1e1be13d0ce6ca88c987262086e"
+    },
+    {
+      "bytes": 983247,
+      "path": "1440x900/root.png",
+      "sha256": "88d03d912a8b113eef2fecad911e61433eec515339b24b0fafba32c36c72aa6d"
+    },
+    {
+      "bytes": 158312,
+      "path": "390x844/about-heike.png",
+      "sha256": "5ddc68947b3b139efa5fb7c47c13ed17d73b6a51f363190a4cf912a45b7fd680"
+    },
+    {
+      "bytes": 59883,
+      "path": "390x844/blog--erfolg-beginnt-ohne-druck.png",
+      "sha256": "eb645e3ba61bb0dc2ee76b791fec83b746d5cdf419c7866a404286c38f9a27c2"
+    },
+    {
+      "bytes": 48974,
+      "path": "390x844/blog.png",
+      "sha256": "25351df5992ae6f8946cf9b977f90e4c1bb503385d27e1cf02d950df5dfe45da"
+    },
+    {
+      "bytes": 146934,
+      "path": "390x844/community.png",
+      "sha256": "7595b15928b9e2e622ba5a4282d0c107852ac6bbb4c63b4a1035fe856b13fd84"
+    },
+    {
+      "bytes": 88542,
+      "path": "390x844/de.png",
+      "sha256": "107c5eabfe8fd9f9a66a2ab4e30e8fe88432d2e9ea23dc85b328d0e54fd2b859"
+    },
+    {
+      "bytes": 81256,
+      "path": "390x844/en.png",
+      "sha256": "aa0ade750925f2515d4697a3075eda18b78b63e39d46446af878ceebfc770db2"
+    },
+    {
+      "bytes": 371217,
+      "path": "390x844/instant-success-formula.png",
+      "sha256": "d51eacb2a1c74b0c20046a47a0316c689edb267f44a08dcb40fec65c0015918d"
+    },
+    {
+      "bytes": 289235,
+      "path": "390x844/isa-alliance.png",
+      "sha256": "653495fc525e60fe4e0b23ed54aa834dd79b462f4ab96e4547081a4eae66fef8"
+    },
+    {
+      "bytes": 1553388,
+      "path": "390x844/isobl.png",
+      "sha256": "55904e37fcdb76599f5bae8db5a7d59cb090b4512ad70931e01aa3d8b0fc58cb"
+    },
+    {
+      "bytes": 401539,
+      "path": "390x844/legal--agb.png",
+      "sha256": "f75965a0b4d0dd4f84252d93daea0580b9e545d40b1dc7ebebea21a462b01f57"
+    },
+    {
+      "bytes": 158710,
+      "path": "390x844/legal--datenschutz.png",
+      "sha256": "0190df361832fe6a5ff09d5a7ead0dd90471c11043a7c07f2107cd1671dcb1b1"
+    },
+    {
+      "bytes": 88902,
+      "path": "390x844/legal--eula.png",
+      "sha256": "17765a7d90480111cca09affd627d48cfcf43d342414245f57d6c9a774bd9a28"
+    },
+    {
+      "bytes": 66146,
+      "path": "390x844/legal--impressum.png",
+      "sha256": "4a81acf3f90227a3fe325756b7e6875268f8781b4d6e722cec552efe3d36fc14"
+    },
+    {
+      "bytes": 227979,
+      "path": "390x844/legal--nutzungsbedingungen.png",
+      "sha256": "336d23b7830ff275a8d968089b147625e89f2b78930a52411982b4dee5057b73"
+    },
+    {
+      "bytes": 84802,
+      "path": "390x844/legal--widerruf.png",
+      "sha256": "ca3d8b76b9b46f6fb10f155ea3c338d533c7ad1dd50c7f634c6e294dbd6edde8"
+    },
+    {
+      "bytes": 170694,
+      "path": "390x844/method.png",
+      "sha256": "f535983ecb3582f5a9bc92dc932fb0c1919273d017250a6b88cf503b497e2b90"
+    },
+    {
+      "bytes": 85771,
+      "path": "390x844/root.png",
+      "sha256": "170699e30b50338997feb2af1e41df8abde9eeb2aef375ef3fe89b141ceae669"
+    }
+  ],
+  "viewports": [
+    {
+      "count": 17,
+      "name": "1024x768"
+    },
+    {
+      "count": 17,
+      "name": "1440x900"
+    },
+    {
+      "count": 17,
+      "name": "390x844"
+    }
+  ]
+}

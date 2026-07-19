@@ -1,0 +1,981 @@
+[
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 2878,
+    "durationSeconds": null,
+    "height": 48,
+    "path": "public/favicon.png",
+    "publicUrl": "/favicon.png",
+    "sha256": "c24044a217a1112473dfc88a455942853dc934c7ec85eb85aa74549789a6cb40",
+    "usages": [],
+    "width": 48
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/svg+xml",
+    "bytes": 632,
+    "durationSeconds": null,
+    "height": 64,
+    "path": "public/favicon.svg",
+    "publicUrl": "/favicon.svg",
+    "sha256": "f9176e8f63384262d17430e9910593db76627dcef67c324e35085bd491988510",
+    "usages": [],
+    "width": 64
+  },
+  {
+    "kind": "document",
+    "mimeType": "application/pdf",
+    "bytes": 302511,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/legal/HZ MSYH-Refund Policy-Rückgabe-Widerruf-DE-EN.pdf",
+    "publicUrl": "/legal/HZ MSYH-Refund Policy-Rückgabe-Widerruf-DE-EN.pdf",
+    "sha256": "d79205270228a8b06574f6ca018ac14777363bb715ac170ec201947f57895e52",
+    "usages": [],
+    "width": null
+  },
+  {
+    "kind": "document",
+    "mimeType": "application/pdf",
+    "bytes": 384659,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/legal/HZ-MSYH-AGB-T&C.pdf",
+    "publicUrl": "/legal/HZ-MSYH-AGB-T&C.pdf",
+    "sha256": "a7b6a07895c79e8de57ed62ffefc33f96396ea82e471389745f09dc106f44f31",
+    "usages": [],
+    "width": null
+  },
+  {
+    "kind": "document",
+    "mimeType": "application/pdf",
+    "bytes": 289421,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/legal/HZ-MSYH-Datenschutz-Privacy Policy.pdf",
+    "publicUrl": "/legal/HZ-MSYH-Datenschutz-Privacy Policy.pdf",
+    "sha256": "2f8bce5995e575885709ab7a9d246bd2199e86a4777d0b071fb77f2f2559b2db",
+    "usages": [],
+    "width": null
+  },
+  {
+    "kind": "document",
+    "mimeType": "application/pdf",
+    "bytes": 237054,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/legal/HZ-MSYH-EULA-DE-EN.pdf",
+    "publicUrl": "/legal/HZ-MSYH-EULA-DE-EN.pdf",
+    "sha256": "74cdcd01e57a4f91de8e18b46ca8b98fc600f65c4905d3e737aaa953b9bbdf4c",
+    "usages": [],
+    "width": null
+  },
+  {
+    "kind": "document",
+    "mimeType": "application/pdf",
+    "bytes": 323517,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/legal/HZ-MSYH-Terms of Use-Nutzungsbedingungen.pdf",
+    "publicUrl": "/legal/HZ-MSYH-Terms of Use-Nutzungsbedingungen.pdf",
+    "sha256": "fc1f19cee939488e300f01f648dc42450e0ec9155ae940e892587e918b1e10a1",
+    "usages": [],
+    "width": null
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 36840,
+    "durationSeconds": null,
+    "height": 1125,
+    "path": "public/media/images/fuer-wen.webp",
+    "publicUrl": "/media/images/fuer-wen.webp",
+    "sha256": "9bed00d11e6b0e31f05be18141773e4841bfea3b550071e5c1ec13765c03452e",
+    "usages": [],
+    "width": 900
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1557073,
+    "durationSeconds": null,
+    "height": 1402,
+    "path": "public/media/images/für-wen.png",
+    "publicUrl": "/media/images/für-wen.png",
+    "sha256": "2a463d12b708e02005ea7c18026815820611078ccdd97d419efe1d2bed9d6b6e",
+    "usages": [
+      {
+        "alt": "Heike Ziegler – Transformationsmentorin für Unternehmerinnen",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler – Transformationsmentorin für Unternehmerinnen",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler – transformation mentor for women in business",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 1122
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1896070,
+    "durationSeconds": null,
+    "height": 1402,
+    "path": "public/media/images/heike-ziegler.png",
+    "publicUrl": "/media/images/heike-ziegler.png",
+    "sha256": "3ae5973274ad29501258a31007dde74d201be170df5562619e43d52f6fdc3aea",
+    "usages": [
+      {
+        "alt": "Heike Ziegler – Identitätsarbeit & Business-Führung",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler – Identitätsarbeit & Business-Führung",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler – identity work and business leadership",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 1122
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 72514,
+    "durationSeconds": null,
+    "height": 1125,
+    "path": "public/media/images/heike-ziegler.webp",
+    "publicUrl": "/media/images/heike-ziegler.webp",
+    "sha256": "0290ba4aed413577634bf953bdcaf133bd6a9ff7c29855254643e3e77b8774ef",
+    "usages": [
+      {
+        "alt": "Heike Ziegler in ruhiger Portraitsituation",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler in ruhiger Portraitsituation",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler in ruhiger Portraitsituation",
+        "route": "/en",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler in ruhiger Portraitsituation",
+        "route": "/blog",
+        "type": "image"
+      },
+      {
+        "alt": "Heike Ziegler in ruhiger Portraitsituation",
+        "route": "/blog/erfolg-beginnt-ohne-druck",
+        "type": "image"
+      }
+    ],
+    "width": 900
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1629558,
+    "durationSeconds": null,
+    "height": 1024,
+    "path": "public/media/images/hero-image.png",
+    "publicUrl": "/media/images/hero-image.png",
+    "sha256": "e2163523345d5589abaf3d29210cec1a1f80e078631590123705d20df9de6e84",
+    "usages": [],
+    "width": 1536
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 40252,
+    "durationSeconds": null,
+    "height": 1024,
+    "path": "public/media/images/hero-image.webp",
+    "publicUrl": "/media/images/hero-image.webp",
+    "sha256": "a9e5b04a02aa569fe52e1998205c6e78a20f78fb1ef211889b4efd445797613a",
+    "usages": [],
+    "width": 1536
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 13897,
+    "durationSeconds": null,
+    "height": 192,
+    "path": "public/media/images/msyh-logo-192.png",
+    "publicUrl": "/media/images/msyh-logo-192.png",
+    "sha256": "20b08b44787e3ff318e6f49161feeb6daf6dfe7696b9ec87980e67572ef220c9",
+    "usages": [],
+    "width": 192
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 62824,
+    "durationSeconds": null,
+    "height": 512,
+    "path": "public/media/images/msyh-logo-512.png",
+    "publicUrl": "/media/images/msyh-logo-512.png",
+    "sha256": "9d55205786b6e3577a1d65b11ece93984eb1c8ccf55f4ad4a6b4758c723d5835",
+    "usages": [],
+    "width": 512
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 199183,
+    "durationSeconds": null,
+    "height": 500,
+    "path": "public/media/images/msyh-logo.png",
+    "publicUrl": "/media/images/msyh-logo.png",
+    "sha256": "66bf873149218b10de5927f6ab70e26640244de4f550ec4410f0a3de848c8515",
+    "usages": [],
+    "width": 500
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 18110,
+    "durationSeconds": null,
+    "height": 500,
+    "path": "public/media/images/msyh-logo.webp",
+    "publicUrl": "/media/images/msyh-logo.webp",
+    "sha256": "3889ea8b27609f02d4558b187c2c9a945d8d30ddeb38da179b175b192f2eb611",
+    "usages": [
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/en",
+        "type": "image"
+      },
+      {
+        "alt": "",
+        "route": "/en",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/method",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/method",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/about-heike",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/about-heike",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/community",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/community",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/instant-success-formula",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/instant-success-formula",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/isobl",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/isobl",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/isa-alliance",
+        "type": "image"
+      },
+      {
+        "alt": "Make Success Your Habit",
+        "route": "/isa-alliance",
+        "type": "image"
+      },
+      {
+        "alt": "",
+        "route": "/blog",
+        "type": "image"
+      },
+      {
+        "alt": "",
+        "route": "/blog/erfolg-beginnt-ohne-druck",
+        "type": "image"
+      }
+    ],
+    "width": 500
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 678830,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-10b-Andrea Massmann.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-10b-Andrea Massmann.jpg",
+    "sha256": "2ae84356a01b051e02f60f60d224739b16d899a5af430b895cdcf1863f1d6325",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 805415,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-11b-Eugenia Graband.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-11b-Eugenia Graband.jpg",
+    "sha256": "8919071875e6687e55fe1d2c9a8118f9b5cfce9f6c8d83a4c8151b1a54fe0bf1",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 938657,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-12b-Baerbel Mueller-Reinhardt.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-12b-Baerbel Mueller-Reinhardt.jpg",
+    "sha256": "825fcc168489a846e85186efe5562cb6ab170fb77770a3d559927ed6af55ac52",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 726140,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-1b-Karin Schaefer.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-1b-Karin Schaefer.jpg",
+    "sha256": "5f1aff3db847d59f9bce5b51491bf8d4d59198375420b8bf61cf52af6c31f33e",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 933846,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-2b-Tatjana Guerth.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-2b-Tatjana Guerth.jpg",
+    "sha256": "02b640f14f16ae3de521b8c1bd696e8742aae3850810c8c0174763121ce82708",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 950202,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-3b-Joerg Praetorius.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-3b-Joerg Praetorius.jpg",
+    "sha256": "68d18a086a085365895ccd9138f1c6ec142295ba440f7c8a00a485829e33731d",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 862977,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-4b-Oliver Kuenstler.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-4b-Oliver Kuenstler.jpg",
+    "sha256": "3d2593257f2a9b99bf66d99a3e3003f056235bd87f7f919c0d4865f051fb5e9c",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 773390,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-5b-Rosalinde Skowanek.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-5b-Rosalinde Skowanek.jpg",
+    "sha256": "d0d9afe25eb44a12cbd02f8a0e5c0057ce9b7a3e1b810d6b3a768a42d9263799",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 1163795,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-6b-Ina Hantl.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-6b-Ina Hantl.jpg",
+    "sha256": "5259cdbdc972a12411e94e8e4911bd5413ddc9211115ad82f44d7f323815ddea",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 899617,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-7b-Esther Bischop.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-7b-Esther Bischop.jpg",
+    "sha256": "7c3e911920827ec7d74d231ce776cab0a0d348c6ec226f9374d2aeb0327a0ca9",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 801385,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-8b-Alexandra Brunner.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-8b-Alexandra Brunner.jpg",
+    "sha256": "6a326c3a268491e1a437f8f38a4789a7861782201278332e0fc81f5108e8d6d2",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/jpeg",
+    "bytes": 825835,
+    "durationSeconds": null,
+    "height": 2304,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/HZ MSYH-9b-Alice Buechi.jpg",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/HZ MSYH-9b-Alice Buechi.jpg",
+    "sha256": "b0fc81a5f467b4b33ef8879b480b592f06a5d308018a94b58d5b359571dcd79d",
+    "usages": [],
+    "width": 1856
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 26578,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-10b-Andrea Massmann.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-10b-Andrea Massmann.webp",
+    "sha256": "3cf088be092e983684691ed95f44ed350a544d137568e95e2bf267c0e30f488a",
+    "usages": [
+      {
+        "alt": "Porträt von Andrea Massmann",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Andrea Massmann",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Andrea Massmann",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 23666,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-11b-Eugenia Graband.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-11b-Eugenia Graband.webp",
+    "sha256": "baf01946a1dc747adb09b50236997528ef9c860535271cd4b55197e99603129e",
+    "usages": [
+      {
+        "alt": "Porträt von Eugenia Grabandt",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Eugenia Grabandt",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Eugenia Grabandt",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 30230,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-12b-Baerbel Mueller-Reinhardt.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-12b-Baerbel Mueller-Reinhardt.webp",
+    "sha256": "b5bdf3218182e1baaeee5402a40c3d08c7c54ff487c94c1f8f0a5940f798eea6",
+    "usages": [
+      {
+        "alt": "Porträt von Bärbel Müller-Reinhardt",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Bärbel Müller-Reinhardt",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Bärbel Müller-Reinhardt",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 27750,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-1b-Karin Schaefer.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-1b-Karin Schaefer.webp",
+    "sha256": "0681285c8384fe81c4036719cff2ca3a0c517d9883f5e8025829f6a57f6637ff",
+    "usages": [
+      {
+        "alt": "Porträt von Karin Schäfer",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Karin Schäfer",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Karin Schäfer",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 31800,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-2b-Tatjana Guerth.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-2b-Tatjana Guerth.webp",
+    "sha256": "cd323b635a8785441fbb4e00eb8bed5c83ab0a13007fce499ed750a79f924e45",
+    "usages": [
+      {
+        "alt": "Porträt von Tatjana Gürth",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Tatjana Gürth",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Tatjana Gürth",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 20308,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-3b-Joerg Praetorius.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-3b-Joerg Praetorius.webp",
+    "sha256": "140effc34b5d1b56c1714bf7c2462be6fc9b03365900f9ed66e47d61b2832b57",
+    "usages": [
+      {
+        "alt": "Porträt von Jörg Praetorius",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Jörg Praetorius",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Jörg Praetorius",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 23128,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-4b-Oliver Kuenstler.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-4b-Oliver Kuenstler.webp",
+    "sha256": "1b17602ad102ba9106ba48d85dcef01b3b41727c3e161721ec99178949806da3",
+    "usages": [
+      {
+        "alt": "Porträt von Oliver Künstler",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Oliver Künstler",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Oliver Künstler",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 24810,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-5b-Rosalinde Skowanek.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-5b-Rosalinde Skowanek.webp",
+    "sha256": "7ad2bffc9e053e46c9accff45cb00d3864899fb8003915a96a4f2f2322d0dbd0",
+    "usages": [
+      {
+        "alt": "Porträt von Rosalinde Skowanek",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Rosalinde Skowanek",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Rosalinde Skowanek",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 36484,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-6b-Ina Hantl.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-6b-Ina Hantl.webp",
+    "sha256": "e347832f629072337d1e459abcec756f01c6e5dad1c4ed8b5c2158c085c400df",
+    "usages": [
+      {
+        "alt": "Porträt von Ina Hantl",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Ina Hantl",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Ina Hantl",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 31532,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-7b-Esther Bischop.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-7b-Esther Bischop.webp",
+    "sha256": "abf4a850a19698c75c424479e168b057d27a4e23b76660861c2e87f0953bb1d1",
+    "usages": [
+      {
+        "alt": "Porträt von Esther Bischop",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Esther Bischop",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Esther Bischop",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 21200,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-8b-Alexandra Brunner.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-8b-Alexandra Brunner.webp",
+    "sha256": "b91b77263b9464589645250ffc20e25312e1a0fcb2dd1cb2f4be57261b5bdac6",
+    "usages": [
+      {
+        "alt": "Porträt von Alexandra Brunner",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Alexandra Brunner",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Alexandra Brunner",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 28040,
+    "durationSeconds": null,
+    "height": 480,
+    "path": "public/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-9b-Alice Buechi.webp",
+    "publicUrl": "/media/images/msyh-testimonial-profile-pictures/webp/HZ MSYH-9b-Alice Buechi.webp",
+    "sha256": "d00d73f446d0d0937a551f0d4c177af15ce9acf546438389fc5eb26fc614aa64",
+    "usages": [
+      {
+        "alt": "Porträt von Alice Büchi",
+        "route": "/",
+        "type": "image"
+      },
+      {
+        "alt": "Porträt von Alice Büchi",
+        "route": "/de",
+        "type": "image"
+      },
+      {
+        "alt": "Portrait of Alice Büchi",
+        "route": "/en",
+        "type": "image"
+      }
+    ],
+    "width": 480
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1758930,
+    "durationSeconds": null,
+    "height": 941,
+    "path": "public/media/images/see-clear-become.png",
+    "publicUrl": "/media/images/see-clear-become.png",
+    "sha256": "454913c81572b508f214a5683214833a88836598fb8bcd4882cde31e653c1e5f",
+    "usages": [],
+    "width": 1672
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 64230,
+    "durationSeconds": null,
+    "height": 941,
+    "path": "public/media/images/see-clear-become.webp",
+    "publicUrl": "/media/images/see-clear-become.webp",
+    "sha256": "43abdc3f0e0370d45bc0e548f562fb1dce51916c028243101d44144d6ccc0916",
+    "usages": [],
+    "width": 1672
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1970171,
+    "durationSeconds": null,
+    "height": 1672,
+    "path": "public/media/images/succes-section-mobile.png",
+    "publicUrl": "/media/images/succes-section-mobile.png",
+    "sha256": "bd4783642b5e140ba19aa57e114964e646a4ddeb8e64a1a1e86eed3a7540e6de",
+    "usages": [],
+    "width": 941
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 83802,
+    "durationSeconds": null,
+    "height": 1672,
+    "path": "public/media/images/succes-section-mobile.webp",
+    "publicUrl": "/media/images/succes-section-mobile.webp",
+    "sha256": "2279bca29bbb8e2f85c55ecc119d34bdca0f53b6447a5947970b7e97450c17d4",
+    "usages": [],
+    "width": 941
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1895980,
+    "durationSeconds": null,
+    "height": 916,
+    "path": "public/media/images/success-section_de.png",
+    "publicUrl": "/media/images/success-section_de.png",
+    "sha256": "29076f2b87f861ef96396f7fe983bf0d6d702aa8087e81df8c587696d3cfaa70",
+    "usages": [],
+    "width": 1718
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 74410,
+    "durationSeconds": null,
+    "height": 916,
+    "path": "public/media/images/success-section_de.webp",
+    "publicUrl": "/media/images/success-section_de.webp",
+    "sha256": "7d748bd66cf9d24c77cca9c717f77aa76742fb4aa020c5f15456cf2db32faceb",
+    "usages": [],
+    "width": 1718
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/png",
+    "bytes": 1938407,
+    "durationSeconds": null,
+    "height": 916,
+    "path": "public/media/images/success-section_eng.png",
+    "publicUrl": "/media/images/success-section_eng.png",
+    "sha256": "326f3a1d75a88094cd5818809d9f6405eeda61de40ef92d72cb76aad9d779c32",
+    "usages": [],
+    "width": 1718
+  },
+  {
+    "kind": "image",
+    "mimeType": "image/webp",
+    "bytes": 73760,
+    "durationSeconds": null,
+    "height": 916,
+    "path": "public/media/images/success-section_eng.webp",
+    "publicUrl": "/media/images/success-section_eng.webp",
+    "sha256": "bd352fb5658138fdf065a035f39f62b02341e451e5666cc6177a1ebfe748e545",
+    "usages": [],
+    "width": 1718
+  },
+  {
+    "kind": "video",
+    "mimeType": "video/mp4",
+    "bytes": 1250456,
+    "durationSeconds": 6,
+    "height": null,
+    "path": "public/media/videos/hero-image-new.mp4",
+    "publicUrl": "/media/videos/hero-image-new.mp4",
+    "sha256": "9398db04cdc9f5074ef8387ff7ffc97ed09d89684917cff4ab915b073c9ec9fd",
+    "usages": [
+      {
+        "alt": "",
+        "route": "/",
+        "type": "video"
+      },
+      {
+        "alt": "",
+        "route": "/de",
+        "type": "video"
+      },
+      {
+        "alt": "",
+        "route": "/en",
+        "type": "video"
+      }
+    ],
+    "width": null
+  },
+  {
+    "kind": "other",
+    "mimeType": "application/octet-stream",
+    "bytes": 87,
+    "durationSeconds": null,
+    "height": null,
+    "path": "public/robots.txt",
+    "publicUrl": "/robots.txt",
+    "sha256": "d0dedac689e6649428bef99e4a70e3d882ff4091b6117937f7cdc6a230babbd7",
+    "usages": [],
+    "width": null
+  }
+]
