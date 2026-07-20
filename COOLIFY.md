@@ -30,8 +30,8 @@ GEMINI_TRANSLATION_MODEL=gemini-3.1-flash-lite
 ```
 
 The existing custom admin remains at `/admin`; Payload is mounted separately at `/payload-admin`.
-The public site continues to use `www.heike-ziegler.com` until the jointly approved Webstudio cutover.
-Only the read-only endpoints below `/api/public/` are consumed by Webstudio. Do not expose
+The public site continues to use `www.heike-ziegler.com` until the jointly approved customer-platform cutover.
+Only the read-only endpoints below `/api/public/` are consumed by the customer platform. Do not expose
 database, PostgREST, or maintenance ports publicly.
 
 ## Persistent Storage / Volumes

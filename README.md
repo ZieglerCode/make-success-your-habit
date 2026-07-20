@@ -2,8 +2,8 @@
 
 Next.js Website mit Blog-System und geschütztem Adminbereich für Heike Ziegler. Die aktuelle
 öffentliche Website, das Blog-CMS, die Medienverwaltung und das Admin-Dashboard liegen in
-dieser Codebase. Im Zielsystem bleibt diese App als selbst gehostetes Redaktions-CMS bestehen;
-Webstudio liefert nach gemeinsamer Abnahme die visuell bearbeitbare öffentliche Website aus.
+dieser Codebase. Im Zielsystem bleibt diese App als selbst gehostetes Redaktions-CMS bestehen.
+Die öffentliche Website wird getrennt davon über die Kundenplattform erstellt und bereitgestellt.
 
 ## Lokale Entwicklung
 
