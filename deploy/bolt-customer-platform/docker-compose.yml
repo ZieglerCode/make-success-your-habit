@@ -1,0 +1,68 @@
+name: bolt-customer-platform
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: bolt-auth-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - bolt_auth_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+
+  auth:
+    image: bolt-customer-auth:local
+    container_name: bolt-auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      DATABASE_URL: ${DATABASE_URL}
+      BOLT_ROOT_HOST: ${BOLT_ROOT_HOST}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN}
+      SESSION_PEPPER: ${SESSION_PEPPER}
+      SESSION_TTL_DAYS: ${SESSION_TTL_DAYS:-7}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-Platform Admin}
+    networks:
+      - internal
+      - coolify
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.bolt-auth.entrypoints=https
+      - traefik.http.routers.bolt-auth.rule=Host(`${BOLT_ROOT_HOST}`) && PathPrefix(`/_auth`)
+      - traefik.http.routers.bolt-auth.priority=200
+      - traefik.http.routers.bolt-auth.tls=true
+      - traefik.http.routers.bolt-auth.tls.certresolver=letsencrypt
+      - traefik.http.services.bolt-auth.loadbalancer.server.port=4000
+      - traefik.http.middlewares.bolt-customer-auth.forwardauth.address=http://bolt-auth:4000/_auth/verify
+      - traefik.http.middlewares.bolt-customer-auth.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.bolt-customer-auth.forwardauth.authResponseHeaders=X-Auth-User-ID,X-Auth-User-Email,X-Auth-Project-ID,X-Auth-Role
+
+volumes:
+  bolt_auth_db_data:
+    name: bolt_auth_db_data
+
+networks:
+  internal:
+    name: bolt_auth_internal
+    internal: true
+  coolify:
+    external: true
+    name: coolify

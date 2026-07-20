@@ -1,0 +1,80 @@
+services:
+  bolt:
+    image: ${BOLT_PROJECT_IMAGE:-bolt-diy:stable-5d3fb1d7}
+    container_name: bolt-project-${PROJECT_SLUG}
+    command: ["pnpm", "run", "dockerstart"]
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5173
+      COMPOSE_PROFILES: production
+      DEFAULT_NUM_CTX: ${DEFAULT_NUM_CTX:-32768}
+      RUNNING_IN_DOCKER: "true"
+    networks:
+      - coolify
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:5173/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.middlewares.bolt-project-${PROJECT_SLUG}-compress.compress=true
+      - traefik.http.middlewares.bolt-project-${PROJECT_SLUG}-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-http.entrypoints=http
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-http.middlewares=bolt-project-${PROJECT_SLUG}-https-redirect
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-http.rule=Host(`${PROJECT_HOST}`)
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-http.service=bolt-project-${PROJECT_SLUG}
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.entrypoints=https
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.middlewares=bolt-customer-auth@docker,bolt-project-${PROJECT_SLUG}-compress
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.rule=Host(`${PROJECT_HOST}`)
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.priority=100
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.service=bolt-project-${PROJECT_SLUG}
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.tls=true
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-https.tls.certresolver=letsencrypt
+      - traefik.http.services.bolt-project-${PROJECT_SLUG}.loadbalancer.server.port=5173
+
+  storage:
+    image: ${BOLT_STORAGE_IMAGE:-bolt-project-storage:local}
+    container_name: bolt-project-${PROJECT_SLUG}-storage
+    restart: unless-stopped
+    environment:
+      PROJECT_SLUG: ${PROJECT_SLUG}
+      PROJECT_HOST: ${PROJECT_HOST}
+      REPOSITORY_ROOT: /repository
+    volumes:
+      - ${PROJECT_REPOSITORY_PATH}:/repository
+    networks:
+      - coolify
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:4100/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.entrypoints=https
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.middlewares=bolt-customer-auth@docker
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.rule=Host(`${PROJECT_HOST}`) && PathPrefix(`/__project_storage`)
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.priority=300
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.service=bolt-project-${PROJECT_SLUG}-storage
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.tls=true
+      - traefik.http.routers.bolt-project-${PROJECT_SLUG}-storage.tls.certresolver=letsencrypt
+      - traefik.http.services.bolt-project-${PROJECT_SLUG}-storage.loadbalancer.server.port=4100
+
+networks:
+  coolify:
+    external: true
+    name: coolify

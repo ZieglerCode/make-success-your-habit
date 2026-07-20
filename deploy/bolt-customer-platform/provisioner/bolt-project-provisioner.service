@@ -1,0 +1,12 @@
+[Unit]
+Description=Provision pending Bolt customer projects
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/data/bolt-customer-platform/provisioner/provision-projects.sh
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=Encrypted off-site backup of Bolt customer projects and auth database
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+ConditionPathExists=/data/bolt-customer-platform/.env.offsite
+
+[Service]
+Type=oneshot
+EnvironmentFile=/data/bolt-customer-platform/.env.offsite
+ExecStart=/data/bolt-customer-platform/provisioner/offsite-backup.sh
+User=root
+Group=root
+UMask=0077
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/data/bolt-project-backups /data/bolt-offsite-staging /data/bolt-restic-cache
+NoNewPrivileges=true
