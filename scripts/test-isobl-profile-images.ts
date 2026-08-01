@@ -1,0 +1,72 @@
+import assert from "node:assert/strict";
+import {access, stat} from "node:fs/promises";
+import path from "node:path";
+import sharp from "sharp";
+
+const imageDirectory = path.join(
+  process.cwd(),
+  "public/media/images/isoble-experience-pictures",
+);
+
+const portraits = [
+  {
+    source: "ISA 1 Angela H. - Fitness Instructor.png",
+    output: "isa-1-angela-hancock.webp",
+  },
+  {
+    source: "ISA 2 - Heather - Business-Personal Trainer -Nutritionist.png",
+    output: "isa-2-heather.webp",
+  },
+  {
+    source: "ISA 3 - Ilse & Tim - Police officer & Sales Rep.png",
+    output: "isa-3-ilse-and-tim.webp",
+  },
+  {
+    source: "ISA 4 - Lara E. - NHS Nurse.png",
+    output: "isa-4-lara-eastwood.webp",
+  },
+  {
+    source: "ISA 5 - Lissa A. - Beauty Salon Owner.png",
+    output: "isa-5-lissa-asselbergs.webp",
+  },
+  {
+    source: "ISA 6 - SASKIA - Personal Trainer & Nutritionist.png",
+    output: "isa-6-saskia.webp",
+  },
+  {
+    source: "ISA 7 - Tinashe - Sales Professional with Health Background.png",
+    output: "isa-7-tinashe.webp",
+  },
+  {
+    source: "ISA 8 - Michael B. - Gym Owner & Personal Trainer.png",
+    output: "isa-8-michael-bockaert.webp",
+  },
+] as const;
+
+assert.equal(portraits.length, 8);
+assert.equal(new Set(portraits.map(({source}) => source)).size, 8);
+assert.equal(new Set(portraits.map(({output}) => output)).size, 8);
+
+for (const portrait of portraits) {
+  const sourcePath = path.join(imageDirectory, portrait.source);
+  const outputPath = path.join(imageDirectory, "webp", portrait.output);
+  const outputExists = await access(outputPath).then(
+    () => true,
+    () => false,
+  );
+
+  assert.ok(outputExists, `Missing optimized portrait: ${portrait.output}`);
+
+  const [metadata, sourceStats, outputStats] = await Promise.all([
+    sharp(outputPath).metadata(),
+    stat(sourcePath),
+    stat(outputPath),
+  ]);
+
+  assert.equal(metadata.format, "webp");
+  assert.equal(metadata.width, 480);
+  assert.equal(metadata.height, 480);
+  assert.ok(outputStats.size < sourceStats.size);
+}
+
+console.log("ISOBL profile image tests passed");

@@ -9,6 +9,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start --port=3000",
     "preview": "cross-env NODE_OPTIONS=--no-deprecation next start --port=3000",
     "clean": "rm -rf dist server.js",
+    "generate:isobl-images": "node scripts/generate-isobl-profile-images.mjs",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "tsc --noEmit",
@@ -16,6 +17,7 @@
     "test:content": "tsx scripts/test-editor-insights.ts",
     "test:covers": "tsx scripts/test-cover-crop.ts",
     "test:cover-persistence": "tsx scripts/test-cover-persistence.ts",
+    "test:isobl-images": "tsx scripts/test-isobl-profile-images.ts",
     "test:uploads": "tsx scripts/test-upload-serving.ts",
     "hash:admin-password": "node scripts/hash-admin-password.mjs"
   },
