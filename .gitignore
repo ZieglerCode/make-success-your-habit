@@ -6,6 +6,7 @@ coverage/
 .DS_Store
 *.log
 *.tsbuildinfo
+content-db/ai-usage.sqlite*
 .env*
 !.env.example
 .vercel

@@ -96,7 +96,7 @@ export function parseAssistantReply(value: unknown, locale: SiteLang): Assistant
   if (!answer || answer.length > 1_200) return null;
   if (/<[^>]+>|javascript:|data:text\/html|https?:\/\//i.test(answer)) return null;
   if (/\[[^\]]+\]\([^)]+\)/.test(answer)) return null;
-  const emails = answer.match(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g) ?? [];
+  const emails: string[] = answer.match(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g) ?? [];
   if (emails.some((email) => email.toLowerCase() !== APPROVED_EMAIL)) return null;
   if (!(KNOWLEDGE_DESTINATIONS as readonly string[]).includes(candidate.destination)) return null;
 
