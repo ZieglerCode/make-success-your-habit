@@ -18,6 +18,7 @@
     "test:content": "tsx scripts/test-editor-insights.ts",
     "test:ai-knowledge": "tsx scripts/test-ai-knowledge.ts",
     "test:ai-core": "tsx scripts/test-ai-core.ts",
+    "test:ai-chat": "tsx scripts/test-ai-chat-service.ts",
     "test:ai-usage": "tsx scripts/test-ai-usage.ts",
     "test:covers": "tsx scripts/test-cover-crop.ts",
     "test:cover-persistence": "tsx scripts/test-cover-persistence.ts",
