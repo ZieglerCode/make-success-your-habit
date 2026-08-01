@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { AiChatWidget } from '@/components/ai-chat-widget';
 import { TestimonialsSection } from '@/components/testimonials-section';
 
 const fadeIn: Variants = {
@@ -1249,8 +1248,6 @@ export default function App({
           </div>
         </section>
       </main>
-
-      <AiChatWidget locale={lang} />
 
       {/* Footer */}
       <footer className="border-t border-brand-primary/5 bg-brand-secondary py-14 md:py-20">

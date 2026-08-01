@@ -1,4 +1,5 @@
 import type {Metadata} from "next";
+import {GlobalAiAssistant} from "@/components/global-ai-assistant";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,7 +34,10 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
   return (
     <html lang="de" suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        <GlobalAiAssistant />
+      </body>
     </html>
   );
 }
