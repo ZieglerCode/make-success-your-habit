@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {ArrowRight} from "lucide-react";
 import {MarketingOfferHeader} from "@/components/marketing-offer-header";
+import {PartnerStoryProfile} from "@/components/partner-story-profile";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>> | undefined;
 
@@ -63,6 +64,8 @@ type OfferPageProps = {
     name: string;
     quote: string;
     paragraphs: string[];
+    imageSrc?: string;
+    imageAlt?: string;
   }>;
 };
 
@@ -267,9 +270,11 @@ export function MarketingOfferPage({
                   key={interview.name}
                 >
                   <div className="mb-8 flex min-w-0 flex-col gap-4 border-b border-brand-primary/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
-                    <h3 className="break-words font-serif text-2xl text-brand-primary md:text-3xl">
-                      {interview.name}
-                    </h3>
+                    <PartnerStoryProfile
+                      imageAlt={interview.imageAlt}
+                      imageSrc={interview.imageSrc}
+                      name={interview.name}
+                    />
                     <span className="font-display text-[10px] uppercase tracking-widest text-brand-accent font-semibold px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/10">
                       Partner Story {index + 1}
                     </span>

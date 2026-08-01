@@ -2,6 +2,7 @@
 
 import {usePathname} from "next/navigation";
 import {MarketingOfferPage} from "@/components/marketing-offer-page";
+import {getIsoblPartnerImage} from "@/lib/isobl-partner-images";
 
 export function IsoblPageClient() {
   const pathname = usePathname();
@@ -128,6 +129,7 @@ export function IsoblPageClient() {
         interviewsTitle="ISOBL-Erfolgsgeschichten – 8 Kunden-Interviews von ISOBL-Partnern"
         interviews={[
           {
+            ...getIsoblPartnerImage(1, "de"),
             name: "ISA 1 – Angela H. - Fitnesstrainerin",
             quote: "„Ich habe innerhalb weniger Tage 10 hartnäckige Pfund abgenommen – und halte mein Gewicht seit 9 Jahren.\"",
             paragraphs: [
@@ -138,6 +140,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(2, "de"),
             name: "ISA 2 – Heather - Personal Trainerin und Ernährungsberaterin",
             quote: "Wie eine skeptische Sporttrainerin ein florierendes Unternehmen aufbaute, indem sie weitergab, was bei ihren Kunden tatsächlich funktionierte.",
             paragraphs: [
@@ -150,6 +153,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(3, "de"),
             name: "ISA 3 – Ilse & Tim, Vertriebsmitarbeiterin & Polizeibeamter",
             quote: "Ein Paar, das durch Schichtarbeit auseinandergerissen wurde, baute gemeinsam ein Geschäft auf – und gewann sein Leben zurück.",
             paragraphs: [
@@ -164,6 +168,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(4, "de"),
             name: "ISA 4 – Lara E. - Krankenschwester im NHS",
             quote: "Ich habe genug zusätzliches Einkommen erzielt, um meinen Mutterschaftsurlaub von 5 auf 15 Monate zu verlängern.",
             paragraphs: [
@@ -174,6 +179,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(5, "de"),
             name: "ISA 5 – Lissa A. - Inhaberin eines Kosmetiksalons",
             quote: "Ich habe eine Produktlinie eingeführt, die meine Kundinnen von sich aus nachbestellen – und dadurch eine bessere Work-Life-Balance gefunden.",
             paragraphs: [
@@ -185,6 +191,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(6, "de"),
             name: "ISA 6 – Saskia - Personal Trainerin & Ernährungsberaterin",
             quote: "Mit 50 hat sie ihren Körper transformiert – und dann anderen Frauen geholfen, dasselbe zu tun.",
             paragraphs: [
@@ -194,6 +201,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(7, "de"),
             name: "ISA 7 – Tinashe - Vertriebsprofi mit Hintergrund im Gesundheitswesen",
             quote: "Hat nach jahrelangen Versuchen 3 kg fettfreie Muskelmasse zugenommen – und seine Energie und sein Selbstvertrauen zurückgewonnen.",
             paragraphs: [
@@ -204,6 +212,7 @@ export function IsoblPageClient() {
             ]
           },
           {
+            ...getIsoblPartnerImage(8, "de"),
             name: "ISA 8 – Michael B. - Fitnessstudio-Besitzer & Personal Trainer",
             quote: "Er hat seinen Fitnessstudio-Kunden bessere Ergebnisse ermöglicht – und sich daraus eine zweite Einnahmequelle aufgebaut.",
             paragraphs: [
@@ -412,6 +421,7 @@ export function IsoblPageClient() {
       interviewsTitle="8 interviews"
       interviews={[
         {
+          ...getIsoblPartnerImage(1, "en"),
           name: "ISA 1 - Angela Hancock, Fitness Instructor",
           quote: "Lost 10 stubborn pounds in days - and kept them off for 9 years.",
           paragraphs: [
@@ -425,6 +435,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(2, "en"),
           name: "ISA 2 - Heather, Personal Trainer & Nutritionist",
           quote: "How a skeptical sports coach built a thriving business by sharing what actually worked for her clients.",
           paragraphs: [
@@ -443,6 +454,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(3, "en"),
           name: "ISA 3 - Ilse & Tim, Sales Rep & Police Officer",
           quote: "A couple pulled apart by shift work built a business together - and got their life back.",
           paragraphs: [
@@ -457,6 +469,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(4, "en"),
           name: "ISA 4 - Lara Eastwood, NHS Nurse",
           quote: "Made enough extra income to extend maternity leave from 5 months to 15 months.",
           paragraphs: [
@@ -471,6 +484,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(5, "en"),
           name: "ISA 5 - Lissa Asselbergs, Beauty Salon Owner",
           quote: "Added a product line that clients reorder on their own - and found better work-life balance.",
           paragraphs: [
@@ -484,6 +498,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(6, "en"),
           name: "ISA 6 - Saskia, Personal Trainer & Nutritionist",
           quote: "Transformed her body at 50 - then helped other women do the same.",
           paragraphs: [
@@ -496,6 +511,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(7, "en"),
           name: "ISA 7 - Tinashe, Sales Professional with Health Background",
           quote: "Gained 3 kg of lean muscle after years of trying - and got his energy and confidence back.",
           paragraphs: [
@@ -510,6 +526,7 @@ export function IsoblPageClient() {
           ]
         },
         {
+          ...getIsoblPartnerImage(8, "en"),
           name: "ISA 8 - Michael Bockaert, Gym Owner & Personal Trainer",
           quote: "Gave his gym clients better results - then built a second income stream from it.",
           paragraphs: [

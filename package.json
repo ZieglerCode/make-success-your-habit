@@ -18,6 +18,8 @@
     "test:covers": "tsx scripts/test-cover-crop.ts",
     "test:cover-persistence": "tsx scripts/test-cover-persistence.ts",
     "test:isobl-images": "tsx scripts/test-isobl-profile-images.ts",
+    "test:isobl-mapping": "tsx scripts/test-isobl-partner-images.ts",
+    "test:partner-story-profile": "tsx scripts/test-partner-story-profile.ts",
     "test:uploads": "tsx scripts/test-upload-serving.ts",
     "hash:admin-password": "node scripts/hash-admin-password.mjs"
   },
