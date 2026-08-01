@@ -17,6 +17,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "test:content": "tsx scripts/test-editor-insights.ts",
     "test:ai-knowledge": "tsx scripts/test-ai-knowledge.ts",
+    "test:ai-core": "tsx scripts/test-ai-core.ts",
     "test:covers": "tsx scripts/test-cover-crop.ts",
     "test:cover-persistence": "tsx scripts/test-cover-persistence.ts",
     "test:isobl-images": "tsx scripts/test-isobl-profile-images.ts",
