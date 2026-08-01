@@ -57,8 +57,8 @@ export default function EulaPage() {
           <Section title="5. Kontakt">
             <p>
               Fragen zur Nutzung:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>
@@ -95,8 +95,8 @@ export default function EulaPage() {
           <Section title="5. Contact">
             <p>
               Questions regarding usage:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>

@@ -38,8 +38,8 @@ export default function DatenschutzPage() {
             <p>Wexstraße 39, 20355 Hamburg, Deutschland</p>
             <p>
               E-Mail:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:heike@heike-ziegler.com">
-                heike@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>
@@ -115,8 +115,8 @@ export default function DatenschutzPage() {
             <p>Wexstraße 39, 20355 Hamburg, Germany</p>
             <p>
               E-Mail:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:heike@heike-ziegler.com">
-                heike@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>

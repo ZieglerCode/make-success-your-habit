@@ -1201,7 +1201,7 @@ export default function App({
                   autoComplete="email"
                   spellCheck={false}
                   suppressHydrationWarning
-                  placeholder={tx("z. B. heike@example.com…", "e.g. heike@example.com…")}
+                  placeholder={tx("Deine E-Mail-Adresse…", "Your email address…")}
                   className="min-w-0 flex-grow rounded-full border border-brand-muted/20 bg-brand-secondary px-6 py-4 text-base text-brand-primary outline-none transition focus:border-brand-accent focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)] md:px-7"
                 />
                 <button type="submit" className="rounded-full border border-brand-primary bg-brand-primary px-8 py-4 font-medium text-brand-secondary transition-colors duration-500 hover:border-brand-accent hover:bg-brand-shadow active:translate-y-px">

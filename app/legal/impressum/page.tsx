@@ -26,14 +26,14 @@ export default function ImpressumPage() {
         <Section title="Contact">
           <p>
             E-Mail:{" "}
-            <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2 hover:text-[#6b5f50]" href="mailto:heike@heike-ziegler.com">
-              heike@heike-ziegler.com
+            <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2 hover:text-[#6b5f50]" href="mailto:contact@heike-ziegler.com">
+              contact@heike-ziegler.com
             </a>
           </p>
           <p>
             Support:{" "}
-            <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2 hover:text-[#6b5f50]" href="mailto:care@heike-ziegler.com">
-              care@heike-ziegler.com
+            <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2 hover:text-[#6b5f50]" href="mailto:contact@heike-ziegler.com">
+              contact@heike-ziegler.com
             </a>
           </p>
         </Section>

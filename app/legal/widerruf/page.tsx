@@ -51,8 +51,8 @@ export default function WiderrufPage() {
 
           <Section title="Kontakt bei Fragen">
             <p>
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>
@@ -84,8 +84,8 @@ export default function WiderrufPage() {
           <Section title="Contact">
             <p>
               For questions regarding the refund policy:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>

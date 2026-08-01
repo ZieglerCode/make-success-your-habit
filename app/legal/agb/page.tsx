@@ -41,7 +41,7 @@ export default function AGBPage() {
             <p>
               <strong>Heike Ziegler – Make Success Your Habit</strong><br />
               Wexstraße 39, 20355 Hamburg, Deutschland<br />
-              E-Mail: care@heike-ziegler.com
+              E-Mail: contact@heike-ziegler.com
             </p>
           </Section>
 
@@ -135,7 +135,7 @@ export default function AGBPage() {
             <p>
               <strong>Heike Ziegler – Make Success Your Habit</strong><br />
               Wexstraße 39, 20355 Hamburg, Germany<br />
-              Email: care@heike-ziegler.com
+              Email: contact@heike-ziegler.com
             </p>
           </Section>
 

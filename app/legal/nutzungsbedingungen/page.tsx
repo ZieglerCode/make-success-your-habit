@@ -41,7 +41,7 @@ export default function NutzungsbedingungenPage() {
             <p>
               <strong>Heike Ziegler – Make Success Your Habit</strong><br />
               Wexstraße 39, 20355 Hamburg, Deutschland<br />
-              E-Mail: care@heike-ziegler.com
+              E-Mail: contact@heike-ziegler.com
             </p>
             <p>Sie gelten insbesondere für folgende Programme:</p>
             <ul>
@@ -86,8 +86,8 @@ export default function NutzungsbedingungenPage() {
             </ul>
             <p>
               Bei Fragen zur Nutzung:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>
@@ -108,7 +108,7 @@ export default function NutzungsbedingungenPage() {
             <p>
               <strong>Heike Ziegler – Make Success Your Habit</strong><br />
               Wexstraße 39, 20355 Hamburg, Germany<br />
-              Email: care@heike-ziegler.com
+              Email: contact@heike-ziegler.com
             </p>
             <p>They apply in particular to the following programs:</p>
             <ul>
@@ -153,8 +153,8 @@ export default function NutzungsbedingungenPage() {
             </ul>
             <p>
               For questions regarding usage:{" "}
-              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:support@heike-ziegler.com">
-                support@heike-ziegler.com
+              <a className="text-[#03182e] underline decoration-[#d4af37] underline-offset-2" href="mailto:contact@heike-ziegler.com">
+                contact@heike-ziegler.com
               </a>
             </p>
           </Section>

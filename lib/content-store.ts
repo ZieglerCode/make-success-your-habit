@@ -61,6 +61,7 @@ type ListPostsOptions = {
 };
 
 const DEFAULT_AUTHOR = "Heike Ziegler";
+const PUBLIC_CONTACT_EMAIL = "contact@heike-ziegler.com";
 
 const DB_DIR =
   process.env.VERCEL && !process.env.CONTENT_DB_DIR
@@ -72,7 +73,7 @@ const DEFAULT_SITE_CONTENT: SiteContent = {
   ctaHeadline: "Quiet thoughts on success, identity, and inner leadership.",
   ctaText:
     "The blog shares essays and impulses for women who want to shape their next phase of growth through clarity and self-leadership, not pressure.",
-  footerEmail: "hello@make-success-your-habit.com",
+  footerEmail: "contact@heike-ziegler.com",
   seoTitle: "Make Success Your Habit | Heike Ziegler",
   seoDescription:
     "A premium transformation space for ambitious founders, coaches, and experts.",
@@ -614,22 +615,31 @@ export async function getSiteContent(): Promise<SiteContent> {
       ? await pgClient()`SELECT key, value FROM site_content`
       : (await libsqlClient().execute("SELECT key, value FROM site_content")).rows;
 
-  return (rows as Array<Record<string, unknown>>).reduce(
+  const content = (rows as Array<Record<string, unknown>>).reduce(
     (content, row) => ({...content, [String(row.key)]: String(row.value)}),
     {...DEFAULT_SITE_CONTENT},
   ) as SiteContent;
+  return enforcePublicContactEmail(content);
 }
 
 export async function updateSiteContent(input: Partial<SiteContent>) {
   await ensureInitialized();
 
+  const safeInput = "footerEmail" in input
+    ? {...input, footerEmail: PUBLIC_CONTACT_EMAIL}
+    : input;
+
   await Promise.all(
-    Object.entries(input).map(([key, value]) =>
+    Object.entries(safeInput).map(([key, value]) =>
       typeof value === "string" ? upsertSiteContent(key, value) : Promise.resolve(),
     ),
   );
 
   return getSiteContent();
+}
+
+export function enforcePublicContactEmail(content: SiteContent): SiteContent {
+  return {...content, footerEmail: PUBLIC_CONTACT_EMAIL};
 }
 
 async function upsertSiteContent(key: string, value: string) {
