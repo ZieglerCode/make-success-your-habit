@@ -1,6 +1,6 @@
 import Link from "next/link";
-import {ArrowRight, ChevronLeft} from "lucide-react";
-import {LanguageSwitcher} from "@/components/language-switcher";
+import {ArrowRight} from "lucide-react";
+import {MarketingOfferHeader} from "@/components/marketing-offer-header";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>> | undefined;
 
@@ -92,62 +92,9 @@ export function MarketingOfferPage({
   interviewsSub,
   interviews,
 }: OfferPageProps) {
-  const navItems = [
-    {label: "Start", href: "/en#start"},
-    {label: "Method", href: "/en#methode"},
-    {label: "Services", href: "/en#angebote"},
-    {label: "About Heike", href: "/en#ueber-heike"},
-    {label: "Insights", href: "/blog"},
-    {label: "Community", href: "/en#community"},
-  ];
-
   return (
     <main className="min-h-screen bg-brand-secondary text-brand-primary">
-      <header className="border-b border-brand-brass/20 bg-brand-secondary/92 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl flex-col gap-5 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center justify-between gap-5">
-            <Link className="flex items-center gap-3" href="/en#start" aria-label="Make Success Your Habit home">
-              <img
-                alt="Make Success Your Habit"
-                className="h-10 w-10 rounded-full object-contain shadow-[0_8px_24px_rgba(16,15,15,0.08)]"
-                src="/media/images/msyh-logo.webp"
-              />
-              <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-brand-primary">
-                Make Success Your Habit
-              </span>
-            </Link>
-            <Link
-              className="inline-flex items-center gap-2 text-sm font-medium text-brand-muted transition-colors hover:text-brand-primary lg:hidden"
-              href={backHref}
-            >
-              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              Back
-            </Link>
-          </div>
-
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Main navigation">
-            {navItems.map((item) => (
-              <Link
-                className="text-sm font-medium text-brand-muted transition-colors hover:text-brand-primary"
-                href={item.href}
-                key={item.href}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <LanguageSwitcher />
-          </nav>
-
-          <a
-            className="w-fit rounded-full border border-brand-primary bg-brand-primary px-5 py-2.5 text-sm font-medium text-brand-secondary transition-colors hover:border-brand-accent hover:bg-brand-shadow"
-            href="https://cal.com/heikeziegler/clarity-call"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Clarity Call
-          </a>
-        </div>
-      </header>
+      <MarketingOfferHeader backHref={backHref} />
 
       <section className="px-6 py-24 md:py-32">
         <div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-[0.9fr_1.1fr] md:items-end">
