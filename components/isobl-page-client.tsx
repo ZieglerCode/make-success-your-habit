@@ -5,12 +5,13 @@ import {MarketingOfferPage} from "@/components/marketing-offer-page";
 import {getIsoblPartnerImage} from "@/lib/isobl-partner-images";
 
 export function IsoblPageClient() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const isGerman = pathname === "/de/isobl" || pathname.startsWith("/de/isobl");
 
   if (isGerman) {
     return (
       <MarketingOfferPage
+        locale="de"
         eyebrow="ISOBL"
         title="Erweitere deine Praxis online - und verdiene wiederkehrend mit deinem Fachwissen"
         intro="Betreue deine Kunden über jede Sitzung hinaus. Schaffe dir ein stabiles, wiederkehrendes Einkommen auf Grundlage deines vorhandenen Fachwissens."
@@ -134,7 +135,7 @@ export function IsoblPageClient() {
             quote: "„Ich habe innerhalb weniger Tage 10 hartnäckige Pfund abgenommen – und halte mein Gewicht seit 9 Jahren.\"",
             paragraphs: [
               "Ich hatte die Unternehmenswelt hinter mir gelassen und mich zur Lehrerin umschulen lassen.",
-              "Während meines Praktikums nahm ich zu. Das Gewicht ließ sich einfach nicht loswerden. Sport half nicht. Kalorien reduzieren half nicht. Nichts funktionierte. Ich war verzweelt genug, um etwas Neues auszuprobieren.",
+              "Während meines Praktikums nahm ich zu. Das Gewicht ließ sich einfach nicht loswerden. Sport half nicht. Kalorien reduzieren half nicht. Nichts funktionierte. Ich war verzweifelt genug, um etwas Neues auszuprobieren.",
               "Nach drei oder vier Tagen dachte ich: „Das kann doch nicht sein.“ Diese 10 Pfund, die mich monatelang begleitet hatten? Weg. Und sie sind seitdem weggeblieben. Das ist jetzt fast neun Jahre her.",
               "Heute fühle ich mich körperlich besser als je zuvor. Meine Energie ist durch die Decke gegangen. Ich gebe eine Trainingseinheit nach der anderen, verbringe den ganzen Tag im Garten und fühle mich abends immer noch großartig. Meine Erholung zwischen den Trainingseinheiten? Phänomenal."
             ]
@@ -303,6 +304,7 @@ export function IsoblPageClient() {
   // English Copy
   return (
     <MarketingOfferPage
+      locale="en"
       eyebrow="ISOBL"
       title="Instant Success Online Business Launch"
       intro="Serve Your Clients Beyond Every Session - and Build Stable, Recurring Income From Your Existing Expertise"
@@ -418,7 +420,7 @@ export function IsoblPageClient() {
         }
       ]}
       interviewsSub="ISOBL Success Stories"
-      interviewsTitle="8 interviews"
+      interviewsTitle="ISOBL Success Stories – 8 Customer Interviews from ISOBL Partners"
       interviews={[
         {
           ...getIsoblPartnerImage(1, "en"),

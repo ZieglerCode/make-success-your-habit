@@ -1,11 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 import {ChevronLeft, Menu, X} from "lucide-react";
 import {useState} from "react";
 import {LanguageSwitcher} from "@/components/language-switcher";
 
-const navItems = [
+const deNavItems = [
+  {label: "Start", href: "/de#start"},
+  {label: "Methode", href: "/de#methode"},
+  {label: "Angebote", href: "/de#angebote"},
+  {label: "Über Heike", href: "/de#ueber-heike"},
+  {label: "Insights", href: "/blog"},
+  {label: "Community", href: "/de#community"},
+];
+
+const enNavItems = [
   {label: "Start", href: "/en#start"},
   {label: "Method", href: "/en#methode"},
   {label: "Services", href: "/en#angebote"},
@@ -14,17 +24,31 @@ const navItems = [
   {label: "Community", href: "/en#community"},
 ];
 
-export function MarketingOfferHeader({backHref}: {backHref: string}) {
+export function MarketingOfferHeader({
+  backHref,
+  locale,
+}: {
+  backHref: string;
+  locale?: "de" | "en";
+}) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  const isGerman = locale
+    ? locale === "de"
+    : pathname === "/de" || pathname.startsWith("/de/") || backHref.startsWith("/de");
+
+  const navItems = isGerman ? deNavItems : enNavItems;
+  const homeHref = isGerman ? "/de#start" : "/en#start";
 
   return (
     <header className="border-b border-brand-brass/20 bg-brand-secondary/92 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-5 py-4 sm:px-6 lg:flex lg:items-center lg:justify-between lg:gap-6 lg:py-5">
         <div className="flex min-w-0 items-center justify-between gap-3">
           <Link
-            aria-label="Make Success Your Habit home"
+            aria-label={isGerman ? "Zur Startseite" : "Make Success Your Habit home"}
             className="flex min-w-0 items-center gap-3"
-            href="/en#start"
+            href={homeHref}
           >
             <img
               alt="Make Success Your Habit"
@@ -38,7 +62,7 @@ export function MarketingOfferHeader({backHref}: {backHref: string}) {
 
           <div className="flex shrink-0 items-center gap-1 lg:hidden">
             <Link
-              aria-label="Back"
+              aria-label={isGerman ? "Zurück" : "Back"}
               className="grid h-11 w-11 place-items-center rounded-full text-brand-muted transition-colors hover:bg-brand-primary/5 hover:text-brand-primary"
               href={backHref}
             >
@@ -47,7 +71,15 @@ export function MarketingOfferHeader({backHref}: {backHref: string}) {
             <button
               aria-controls="offer-mobile-menu"
               aria-expanded={open}
-              aria-label={open ? "Close menu" : "Open menu"}
+              aria-label={
+                isGerman
+                  ? open
+                    ? "Menü schließen"
+                    : "Menü öffnen"
+                  : open
+                    ? "Close menu"
+                    : "Open menu"
+              }
               className="grid h-11 w-11 place-items-center rounded-full text-brand-primary transition-colors hover:bg-brand-primary/5 lg:hidden"
               onClick={() => setOpen((current) => !current)}
               type="button"
@@ -58,7 +90,10 @@ export function MarketingOfferHeader({backHref}: {backHref: string}) {
         </div>
 
         <div className="hidden lg:flex lg:items-center lg:gap-6">
-          <nav aria-label="Main navigation" className="hidden items-center gap-6 lg:flex">
+          <nav
+            aria-label={isGerman ? "Hauptnavigation" : "Main navigation"}
+            className="hidden items-center gap-6 lg:flex"
+          >
             {navItems.map((item) => (
               <Link
                 className="text-sm font-medium text-brand-muted transition-colors hover:text-brand-primary"
@@ -82,7 +117,10 @@ export function MarketingOfferHeader({backHref}: {backHref: string}) {
 
         {open ? (
           <div className="border-t border-brand-primary/10 pb-2 pt-4 lg:hidden" id="offer-mobile-menu">
-            <nav aria-label="Mobile navigation" className="grid gap-1">
+            <nav
+              aria-label={isGerman ? "Mobile Navigation" : "Mobile navigation"}
+              className="grid gap-1"
+            >
               {navItems.map((item) => (
                 <Link
                   className="min-h-11 rounded-xl px-3 py-3 text-base font-medium text-brand-primary transition-colors hover:bg-brand-primary/5"

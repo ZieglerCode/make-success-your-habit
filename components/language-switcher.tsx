@@ -10,20 +10,21 @@ type LanguageSwitcherProps = {
 };
 
 export function LanguageSwitcher({className = "", tone = "brand"}: LanguageSwitcherProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [search, setSearch] = useState("");
   const isGerman = pathname === "/de" || pathname.startsWith("/de/");
-  const normalizedPath = pathname === "/"
-    ? ""
-    : pathname.startsWith("/en/")
-      ? pathname.slice(3)
-      : pathname === "/en"
-        ? ""
-        : pathname.startsWith("/de/")
-          ? pathname.slice(3)
-          : pathname === "/de"
-            ? ""
-            : pathname;
+  const normalizedPath =
+    pathname === "" || pathname === "/"
+      ? ""
+      : pathname.startsWith("/en/")
+        ? pathname.slice(3)
+        : pathname === "/en"
+          ? ""
+          : pathname.startsWith("/de/")
+            ? pathname.slice(3)
+            : pathname === "/de"
+              ? ""
+              : pathname;
   const englishPath = `/en${normalizedPath}${search}`;
   const germanPath = `/de${normalizedPath}${search}`;
   const activeClasses =
