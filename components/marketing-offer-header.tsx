@@ -31,7 +31,7 @@ export function MarketingOfferHeader({
   backHref: string;
   locale?: "de" | "en";
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
 
   const isGerman = locale

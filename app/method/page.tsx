@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
-import {MarketingOfferPage, resolveBackHref} from "@/components/marketing-offer-page";
+import {MarketingOfferPage} from "@/components/marketing-offer-page";
+import {resolveBackHref} from "@/lib/resolve-back-href";
 
 export const metadata: Metadata = {
   title: "Method | Make Success Your Habit",

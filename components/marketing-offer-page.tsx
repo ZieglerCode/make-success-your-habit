@@ -7,36 +7,6 @@ import {ArrowRight, ChevronDown} from "lucide-react";
 import {MarketingOfferHeader} from "@/components/marketing-offer-header";
 import {PartnerStoryProfile} from "@/components/partner-story-profile";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>> | undefined;
-
-const backTargets: Record<string, string> = {
-  start: "/en#start",
-  methode: "/en#methode",
-  angebote: "/en#angebote",
-  "ueber-heike": "/en#ueber-heike",
-  insights: "/blog",
-  community: "/en#community",
-  kontakt: "/en#kontakt",
-  footer: "/en#angebote",
-};
-
-export async function resolveBackHref(searchParams: SearchParams, fallback: string) {
-  const params = await searchParams;
-  const value = params?.from;
-  const from = Array.isArray(value) ? value[0] : value;
-  const isGermanFallback = fallback.startsWith("/de");
-
-  if (!from) return fallback;
-
-  const target = backTargets[from];
-  if (!target) return fallback;
-
-  if (isGermanFallback && target.startsWith("/en")) {
-    return `/de${target.slice(3)}`;
-  }
-  return target;
-}
-
 type OfferPageProps = {
   locale?: "de" | "en";
   eyebrow: string;
@@ -88,37 +58,37 @@ type OfferPageProps = {
 };
 
 export function MarketingOfferPage({
-  locale,
   eyebrow,
   title,
   intro,
-  primaryCta = "Request a Clarity Call",
-  primaryHref = "https://cal.com/heikeziegler/clarity-call",
+  locale,
+  backHref = "/en",
+  primaryCta = "YES, I'D LIKE TO LEARN MORE ABOUT ISOBL",
+  primaryHref = "https://cal.com/heikeziegler/application-instant-success-online-business-launch",
   secondaryCta = "Back to the homepage",
-  backHref = "/",
+  sections = [],
   audienceEyebrow,
   audienceTitle,
   audienceItems,
   outcomesEyebrow,
   outcomesTitle,
   outcomes,
-  sections,
   processEyebrow,
   processTitle,
   steps,
-  faqEyebrow,
-  faqTitle,
-  faq,
-  finalTitle = "When you can feel that your next step needs more clarity.",
-  finalText = "The Clarity Call is a strategic space for orientation. We look at where you are, what matters now, and which path actually makes sense.",
+  finalTitle = "Transform your expertise into steady online income.",
+  finalText = "Without starting from scratch. Without complicated tech. With a clear, guided framework.",
   storiesTitle,
   storiesSub,
   stories,
   interviewsTitle,
   interviewsSub,
   interviews,
+  faqEyebrow,
+  faqTitle,
+  faq,
 }: OfferPageProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const isGerman =
     locale === "de" ||
     (locale === undefined &&
