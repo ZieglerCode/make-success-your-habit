@@ -77,10 +77,72 @@ function withNavigation(
   };
 }
 
-export function answerDeterministically(question: string, locale: SiteLang): AssistantReply | null {
+export function answerDeterministically(
+  question: string,
+  locale: SiteLang,
+  messages?: Array<{role: string; content: string}>,
+): AssistantReply | null {
   const normalized = question.normalize("NFKC").trim();
+
+  // 1. Follow-up navigation intent (e.g. "öffne die seite", "bring mich dorthin", "open the page")
+  const followUpNavPattern = /^(?:öffne(?: die seite| sie)?|oeffne(?: die seite| sie)?|seite öffnen|seite oeffnen|bring mich (?:dorthin|hin)|geh (?:dorthin|hin)|gehe (?:dorthin|hin)|zeig sie mir|zeige sie mir|open(?: the page| it)?|take me there|go there)[.!]?$/i;
+
+  if (followUpNavPattern.test(normalized) && messages && messages.length > 1) {
+    const prevText = messages.slice(-3, -1).map((m) => m.content).join(" ");
+    for (const [destination, pattern] of intentPatterns) {
+      if (pattern.test(prevText)) {
+        const directNavAnswers: Record<SiteLang, Record<Exclude<KnowledgeDestination, "none" | "home">, string>> = {
+          de: {
+            isobl: "Ich öffne jetzt die ISOBL-Seite für dich.",
+            method: "Ich öffne jetzt die Methodenseite für dich.",
+            about: "Ich bringe dich jetzt zur Seite über Heike.",
+            community: "Ich öffne jetzt die Community-Seite für dich.",
+            blog: "Ich bringe dich jetzt zum Blog.",
+            isf: "Ich öffne jetzt die Seite zur Instant Success Formula für dich.",
+            isa: "Ich öffne jetzt die ISA Alliance Seite für dich.",
+            contact: "Ich bringe dich jetzt zum Kontaktbereich.",
+            legal_agb: "Ich öffne jetzt die AGB für dich.",
+            legal_privacy: "Ich öffne jetzt die Datenschutzseite für dich.",
+            legal_imprint: "Ich öffne jetzt das Impressum für dich.",
+            legal_eula: "Ich öffne jetzt die EULA für dich.",
+            legal_terms: "Ich öffne jetzt die Nutzungsbedingungen für dich.",
+            legal_withdrawal: "Ich öffne jetzt die Widerrufsbelehrung für dich.",
+          },
+          en: {
+            isobl: "Opening the ISOBL page for you now.",
+            method: "Opening the method page for you now.",
+            about: "Taking you to the About Heike page now.",
+            community: "Opening the community page for you now.",
+            blog: "Taking you to the blog now.",
+            isf: "Opening the Instant Success Formula page for you now.",
+            isa: "Opening the ISA Alliance page for you now.",
+            contact: "Taking you to the contact section now.",
+            legal_agb: "Opening the terms and conditions for you now.",
+            legal_privacy: "Opening the privacy policy for you now.",
+            legal_imprint: "Opening the legal notice for you now.",
+            legal_eula: "Opening the EULA for you now.",
+            legal_terms: "Opening the terms of use for you now.",
+            legal_withdrawal: "Opening the withdrawal policy for you now.",
+          },
+        };
+        const directAnswer = directNavAnswers[locale][destination];
+        if (directAnswer) {
+          return withNavigation(directAnswer, destination, locale, "local");
+        }
+      }
+    }
+  }
+
+  // 2. Direct intent matching
   for (const [destination, pattern] of intentPatterns) {
     if (pattern.test(normalized)) {
+      const isDirectOpen = /\b(öffne|oeffne|bring mich|geh|gehe|zeig|zeige|navigier|navigiere|open|take me|show|go to)\b/i.test(normalized);
+      if (isDirectOpen && destination === "isobl") {
+        const text = locale === "de"
+          ? "Ich öffne jetzt die ISOBL-Seite für dich."
+          : "Opening the ISOBL page for you now.";
+        return withNavigation(text, destination, locale, "local");
+      }
       return withNavigation(localAnswers[locale][destination], destination, locale, "local");
     }
   }

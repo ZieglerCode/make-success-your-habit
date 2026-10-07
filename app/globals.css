@@ -86,3 +86,42 @@
   font-size: 0.95rem;
   line-height: 1.4;
 }
+
+@keyframes luxury-dot-pulse {
+  0%, 80%, 100% {
+    transform: scale(0.75);
+    opacity: 0.35;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes luxury-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-luxury-dot-1 {
+  animation: luxury-dot-pulse 1.4s ease-in-out infinite;
+  animation-delay: 0ms;
+}
+
+.animate-luxury-dot-2 {
+  animation: luxury-dot-pulse 1.4s ease-in-out infinite;
+  animation-delay: 200ms;
+}
+
+.animate-luxury-dot-3 {
+  animation: luxury-dot-pulse 1.4s ease-in-out infinite;
+  animation-delay: 400ms;
+}
+
+.animate-luxury-shimmer {
+  animation: luxury-shimmer 2.2s ease-in-out infinite;
+}

@@ -89,6 +89,26 @@ try {
     fingerprint,
     createClientFingerprint(request, "test-secret", "browser-token"),
   );
+
+  // Test IP rate limiting and prevention of token-rotation attacks
+  const ipStoreDb = path.join(directory, "ip-limits.sqlite");
+  const ipStore = new AiUsageStore({
+    path: ipStoreDb,
+    limits: {...limits, perMinute: 10, perVisitorDay: 10, perIpMinute: 2, perIpDay: 5},
+  });
+
+  // Client rotating visitor tokens from the same IP
+  const identity1 = {ipId: "ip-attacker", visitorId: "token-1"};
+  const identity2 = {ipId: "ip-attacker", visitorId: "token-2"};
+  const identity3 = {ipId: "ip-attacker", visitorId: "token-3"};
+
+  assert.equal((await ipStore.consume(identity1, now)).allowed, true);
+  assert.equal((await ipStore.consume(identity2, now)).allowed, true);
+  // Third request from same IP must be BLOCKED despite new visitor token!
+  const blocked = await ipStore.consume(identity3, now);
+  assert.equal(blocked.allowed, false);
+  assert.equal((blocked as {allowed: false; reason: string}).reason, "ip_minute");
+  ipStore.close();
 } finally {
   await rm(directory, {recursive: true, force: true});
 }

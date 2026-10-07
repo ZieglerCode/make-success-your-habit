@@ -1,6 +1,7 @@
 "use client";
 
 import {ArrowRight, ChatCircleDots, PaperPlaneTilt, Sparkle, X} from "@phosphor-icons/react";
+import {useRouter} from "next/navigation";
 import {FormEvent, KeyboardEvent, useEffect, useRef, useState} from "react";
 import type {SiteLang} from "@/lib/ai/knowledge-types";
 
@@ -18,6 +19,12 @@ const copy = {
     close: "AI-Assistenten schließen",
     send: "Nachricht senden",
     thinking: "Ich prüfe die Website …",
+    thinkingStages: [
+      "Prüfe Website & Inhalte …",
+      "Formuliere deine Antwort …",
+      "Fasse das Wissen zusammen …",
+    ],
+    streamingStatus: "Antwort wird formuliert …",
     fallback: "Der Assistent ist gerade nicht verfügbar. Du kannst Heike direkt kontaktieren.",
     disclaimer: "Antworten basieren auf den Inhalten dieser Website. Keine medizinische, rechtliche oder finanzielle Beratung.",
     contact: "E-Mail schreiben",
@@ -35,6 +42,12 @@ const copy = {
     close: "Close AI assistant",
     send: "Send message",
     thinking: "Checking the website …",
+    thinkingStages: [
+      "Checking website & content …",
+      "Composing your response …",
+      "Summarizing knowledge …",
+    ],
+    streamingStatus: "Formulating response …",
     fallback: "The assistant is currently unavailable. You can contact Heike directly.",
     disclaimer: "Answers are based on this website. No medical, legal, or financial advice.",
     contact: "Send an email",
@@ -57,10 +70,56 @@ function safeNavigation(value: unknown, locale: SiteLang): Navigation | undefine
   return {href: navigation.href, label: navigation.label};
 }
 
-function MessageText({content}: {content: string}) {
+function ThinkingIndicator({stages}: {stages: readonly string[]}) {
+  const [stageIndex, setStageIndex] = useState(0);
+
+  useEffect(() => {
+    const timer1 = window.setTimeout(() => setStageIndex(1), 1800);
+    const timer2 = window.setTimeout(() => setStageIndex(2), 4200);
+    return () => {
+      window.clearTimeout(timer1);
+      window.clearTimeout(timer2);
+    };
+  }, []);
+
+  const currentLabel = stages[stageIndex] ?? stages[0] ?? "Prüfe Website …";
+
+  return (
+    <div
+      aria-label={currentLabel}
+      className="max-w-[88%] rounded-2xl rounded-bl-[4px] border border-brand-accent/25 bg-white/95 px-4 py-3.5 shadow-[0_8px_24px_rgba(3,24,46,0.06)] backdrop-blur-sm"
+      role="status"
+    >
+      <div className="flex items-center gap-3">
+        <div aria-hidden="true" className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-brand-accent animate-luxury-dot-1" />
+          <span className="h-2 w-2 rounded-full bg-brand-accent animate-luxury-dot-2" />
+          <span className="h-2 w-2 rounded-full bg-brand-accent animate-luxury-dot-3" />
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs font-medium text-brand-muted">
+          <Sparkle aria-hidden className="h-3.5 w-3.5 shrink-0 text-brand-accent animate-pulse" weight="fill" />
+          <span className="transition-opacity duration-300">{currentLabel}</span>
+        </div>
+      </div>
+
+      <div aria-hidden="true" className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-brand-cream/50">
+        <div className="h-full w-2/5 rounded-full bg-gradient-to-r from-transparent via-brand-accent to-transparent animate-luxury-shimmer" />
+      </div>
+    </div>
+  );
+}
+
+function MessageText({content, isStreaming}: {content: string; isStreaming?: boolean}) {
   return (
     <div className="whitespace-pre-wrap break-words leading-6">
       {content}
+      {isStreaming ? (
+        <span
+          aria-hidden="true"
+          className="ml-1 inline-block h-3.5 w-1.5 translate-y-[2px] rounded-[1px] bg-brand-accent animate-pulse"
+        />
+      ) : null}
     </div>
   );
 }
@@ -77,6 +136,7 @@ function getClientToken() {
 }
 
 export function AiChatWidget({locale}: {locale: SiteLang}) {
+  const router = useRouter();
   const labels = copy[locale];
   const [open, setOpen] = useState(false);
   const [showTeaser, setShowTeaser] = useState(false);
@@ -88,8 +148,85 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  function updateOpen(val: boolean | ((current: boolean) => boolean)) {
+    setOpen((prev) => {
+      const next = typeof val === "function" ? val(prev) : val;
+      try {
+        window.sessionStorage.setItem("msyh-ai-widget-open", next ? "true" : "false");
+      } catch {}
+      return next;
+    });
+  }
+
+  function navigateTo(href: string) {
+    if (!href) return;
+    try {
+      const [pathPart, hashPart] = href.split("#");
+      const currentPath = window.location.pathname;
+      const targetPath = pathPart || currentPath;
+
+      const isSamePath =
+        targetPath === currentPath ||
+        (currentPath === "/" && (targetPath === "/de" || targetPath === "/en")) ||
+        (targetPath === "/" && (currentPath === "/de" || currentPath === "/en"));
+
+      if (hashPart && isSamePath) {
+        const el = document.getElementById(hashPart);
+        if (el) {
+          el.scrollIntoView({behavior: "smooth", block: "start"});
+          window.history.pushState(null, "", `#${hashPart}`);
+          return;
+        }
+      }
+
+      router.push(href);
+
+      if (hashPart) {
+        const tryScroll = (attempts = 0) => {
+          const el = document.getElementById(hashPart);
+          if (el) {
+            el.scrollIntoView({behavior: "smooth", block: "start"});
+          } else if (attempts < 8) {
+            window.setTimeout(() => tryScroll(attempts + 1), 150);
+          }
+        };
+        window.setTimeout(() => tryScroll(), 250);
+      }
+    } catch {
+      window.location.href = href;
+    }
+  }
+
   useEffect(() => {
-    setMessages([{role: "assistant", content: labels.welcome}]);
+    try {
+      if (window.sessionStorage.getItem("msyh-ai-widget-open") === "true") {
+        setOpen(true);
+      }
+      const saved = window.sessionStorage.getItem("msyh-ai-widget-messages");
+      if (saved) {
+        const parsed = JSON.parse(saved) as Message[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 1 || (messages[0] && messages[0].content !== labels.welcome)) {
+      try {
+        window.sessionStorage.setItem("msyh-ai-widget-messages", JSON.stringify(messages));
+      } catch {}
+    }
+  }, [messages, labels.welcome]);
+
+  useEffect(() => {
+    setMessages((current) => {
+      if (current.length === 1 && current[0].role === "assistant") {
+        return [{role: "assistant", content: labels.welcome}];
+      }
+      return current;
+    });
     setInput("");
   }, [labels.welcome]);
 
@@ -109,7 +246,7 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
 
   useEffect(() => {
     const closeOnEscape = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") updateOpen(false);
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
@@ -122,18 +259,18 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
 
   function openAssistant() {
     dismissTeaser();
-    setOpen(true);
+    updateOpen(true);
   }
 
   async function sendMessage(prompt?: string) {
     const content = (prompt ?? input).trim();
     if (!content || loading) return;
 
-    setOpen(true);
+    updateOpen(true);
     setShowTeaser(false);
     const userMessage: Message = {role: "user", content};
     const nextMessages = [...messages, userMessage].slice(-6);
-    setMessages(nextMessages);
+    setMessages([...nextMessages, {role: "assistant", content: ""}]);
     setInput("");
     setLoading(true);
 
@@ -146,17 +283,103 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
         },
         body: JSON.stringify({
           locale,
+          stream: true,
           messages: nextMessages.map(({role, content: messageContent}) => ({role, content: messageContent})),
         }),
       });
-      const data = (await response.json()) as {message?: unknown; navigation?: unknown};
-      const answer = typeof data.message === "string" && data.message.trim() ? data.message.trim() : labels.fallback;
-      setMessages((current) => [
-        ...current,
-        {role: "assistant", content: answer, navigation: safeNavigation(data.navigation, locale)},
-      ]);
+
+      if (!response.ok || !response.body) {
+        throw new Error("Chat request failed");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let accumulatedText = "";
+      let finalNav: Navigation | undefined = undefined;
+
+      while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, {stream: true});
+        const events = buffer.split("\n\n");
+        buffer = events.pop() ?? "";
+
+        for (const evt of events) {
+          const trimmed = evt.trim();
+          if (!trimmed.startsWith("data:")) continue;
+          try {
+            const data = JSON.parse(trimmed.slice(5).trim()) as {
+              type?: string;
+              text?: string;
+              message?: string;
+              navigation?: unknown;
+            };
+
+            if (data.type === "delta" && typeof data.text === "string") {
+              accumulatedText += data.text;
+              setMessages((current) => {
+                const next = [...current];
+                const lastIdx = next.length - 1;
+                if (lastIdx >= 0 && next[lastIdx].role === "assistant") {
+                  next[lastIdx] = {...next[lastIdx], content: accumulatedText};
+                }
+                return next;
+              });
+            } else if (data.type === "done" || data.type === "error") {
+              const textToUse =
+                typeof data.message === "string" && data.message.trim()
+                  ? data.message.trim()
+                  : accumulatedText || labels.fallback;
+              finalNav = safeNavigation(data.navigation, locale);
+              setMessages((current) => {
+                const next = [...current];
+                const lastIdx = next.length - 1;
+                if (lastIdx >= 0 && next[lastIdx].role === "assistant") {
+                  next[lastIdx] = {
+                    ...next[lastIdx],
+                    content: textToUse,
+                    navigation: finalNav,
+                  };
+                }
+                return next;
+              });
+
+              if (finalNav?.href) {
+                const isNavIntent = /\b(geh|gehe|bring|bring mich|zeig|zeige|scroll|scrolle|navigier|navigiere|wo ist|wo finde|öffne|oeffne|öffnen|oeffnen|führ mich|fuehr mich|wechsel|wechsle|aufrufen|ansehen|anschauen|hingehen|hin|dorthin|dahin|go to|take me|show|open|navigate|scroll to|visit|view)\b/i.test(content);
+                const isSamePageAnchor = finalNav.href.includes("#");
+                const isNavAnswer = /^(?:Ich öffne|Ich bringe dich|Gerne, ich|Sehr gerne|Opening|Taking you)/i.test(textToUse);
+                if (isNavIntent || isSamePageAnchor || isNavAnswer) {
+                  navigateTo(finalNav.href);
+                }
+              }
+            }
+          } catch {
+            // Ignore partial event
+          }
+        }
+      }
+
+      if (!accumulatedText.trim()) {
+        setMessages((current) => {
+          const next = [...current];
+          const lastIdx = next.length - 1;
+          if (lastIdx >= 0 && next[lastIdx].role === "assistant" && !next[lastIdx].content) {
+            next[lastIdx] = {role: "assistant", content: labels.fallback};
+          }
+          return next;
+        });
+      }
     } catch {
-      setMessages((current) => [...current, {role: "assistant", content: labels.fallback}]);
+      setMessages((current) => {
+        const next = [...current];
+        const lastIdx = next.length - 1;
+        if (lastIdx >= 0 && next[lastIdx].role === "assistant" && !next[lastIdx].content) {
+          next[lastIdx] = {role: "assistant", content: labels.fallback};
+          return next;
+        }
+        return [...current, {role: "assistant", content: labels.fallback}];
+      });
     } finally {
       setLoading(false);
     }
@@ -214,23 +437,46 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
                 <p className="mt-1 text-[11px] text-brand-secondary/60">{labels.online}</p>
               </div>
             </div>
-            <button aria-label={labels.close} className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-brand-secondary/75 hover:bg-white/10 hover:text-white" onClick={() => setOpen(false)} type="button">
+            <button aria-label={labels.close} className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-brand-secondary/75 hover:bg-white/10 hover:text-white" onClick={() => updateOpen(false)} type="button">
               <X aria-hidden size={20} />
             </button>
           </div>
         </header>
 
         <div aria-live="polite" className="flex-1 space-y-3 overflow-y-auto bg-[linear-gradient(180deg,#fcf3e3_0%,#f9f4e7_100%)] px-4 py-5" role="log">
-          {messages.map((message, index) => (
-            <div className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm shadow-[0_6px_24px_rgba(3,24,46,0.05)] ${message.role === "user" ? "ml-auto rounded-br-[4px] bg-brand-primary text-brand-secondary" : "rounded-bl-[4px] border border-brand-primary/8 bg-white text-brand-espresso"}`} key={`${message.role}-${index}`}>
-              <MessageText content={message.content} />
-              {message.navigation ? (
-                <a className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-primary px-4 py-2 text-xs font-semibold text-brand-secondary transition hover:bg-brand-shadow" href={message.navigation.href}>
-                  {message.navigation.label}<ArrowRight aria-hidden size={14} />
-                </a>
-              ) : null}
-            </div>
-          ))}
+          {messages.map((message, index) => {
+            const isLatestAssistant = index === messages.length - 1 && message.role === "assistant";
+            const isStreamingThis = loading && isLatestAssistant && Boolean(message.content);
+
+            return message.content ? (
+              <div
+                className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm shadow-[0_6px_24px_rgba(3,24,46,0.05)] ${
+                  message.role === "user"
+                    ? "ml-auto rounded-br-[4px] bg-brand-primary text-brand-secondary"
+                    : "rounded-bl-[4px] border border-brand-primary/8 bg-white text-brand-espresso"
+                }`}
+                key={`${message.role}-${index}`}
+              >
+                <MessageText content={message.content} isStreaming={isStreamingThis} />
+                {isStreamingThis ? (
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-brand-muted/75">
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-accent animate-pulse" />
+                    <span>{labels.streamingStatus}</span>
+                  </div>
+                ) : null}
+                {message.navigation ? (
+                  <button
+                    className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-primary px-4 py-2 text-xs font-semibold text-brand-secondary transition hover:bg-brand-shadow cursor-pointer"
+                    onClick={() => navigateTo(message.navigation!.href)}
+                    type="button"
+                  >
+                    {message.navigation.label}
+                    <ArrowRight aria-hidden size={14} />
+                  </button>
+                ) : null}
+              </div>
+            ) : null;
+          })}
           {messages.length === 1 ? (
             <div className="grid gap-2 pt-1">
               {labels.suggestions.map((suggestion) => (
@@ -240,15 +486,26 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
               ))}
             </div>
           ) : null}
-          {loading ? <div className="flex max-w-[88%] items-center gap-2 rounded-2xl rounded-bl-[4px] border border-brand-primary/8 bg-white px-4 py-3 text-sm text-brand-muted"><span className="h-2 w-2 animate-pulse rounded-full bg-brand-accent" />{labels.thinking}</div> : null}
+          {loading && !messages[messages.length - 1]?.content ? (
+            <ThinkingIndicator stages={labels.thinkingStages} />
+          ) : null}
           <div ref={endRef} />
         </div>
 
         <form className="border-t border-brand-primary/8 bg-white p-3" onSubmit={handleSubmit}>
           <div className="flex items-end gap-2 rounded-xl border border-brand-primary/14 bg-brand-secondary/40 px-3 py-2 focus-within:border-brand-accent focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-accent/10">
             <textarea aria-label={labels.placeholder} className="max-h-28 min-h-11 flex-1 resize-none bg-transparent px-1 py-2 text-sm leading-5 text-brand-primary outline-none placeholder:text-brand-muted/65" disabled={loading} maxLength={1_000} onChange={(event) => setInput(event.target.value)} onKeyDown={handleKeyDown} placeholder={labels.placeholder} ref={inputRef} rows={1} value={input} />
-            <button aria-label={labels.send} className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-primary text-brand-secondary hover:bg-brand-shadow disabled:cursor-not-allowed disabled:opacity-35" disabled={!input.trim() || loading} type="submit">
-              <PaperPlaneTilt aria-hidden size={18} weight="fill" />
+            <button
+              aria-label={loading ? labels.thinkingStages[0] : labels.send}
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-primary text-brand-secondary hover:bg-brand-shadow disabled:cursor-not-allowed disabled:opacity-35"
+              disabled={!input.trim() || loading}
+              type="submit"
+            >
+              {loading ? (
+                <Sparkle aria-hidden className="text-brand-accent animate-pulse" size={18} weight="fill" />
+              ) : (
+                <PaperPlaneTilt aria-hidden size={18} weight="fill" />
+              )}
             </button>
           </div>
           <div className="flex items-start justify-between gap-3 px-2 pt-2 text-[10px] leading-4 text-brand-muted/70">
@@ -258,7 +515,7 @@ export function AiChatWidget({locale}: {locale: SiteLang}) {
         </form>
       </section>
 
-      <button aria-expanded={open} aria-label={open ? labels.close : labels.open} className="group flex h-14 items-center justify-center gap-3 rounded-full border border-brand-accent/55 bg-brand-primary px-4 text-brand-secondary shadow-[0_14px_40px_rgba(3,24,46,0.3)] transition duration-300 hover:-translate-y-1 hover:bg-brand-shadow focus-visible:outline-brand-accent sm:h-16 sm:px-5" onClick={() => { dismissTeaser(); setOpen((current) => !current); }} type="button">
+      <button aria-expanded={open} aria-label={open ? labels.close : labels.open} className="group flex h-14 items-center justify-center gap-3 rounded-full border border-brand-accent/55 bg-brand-primary px-4 text-brand-secondary shadow-[0_14px_40px_rgba(3,24,46,0.3)] transition duration-300 hover:-translate-y-1 hover:bg-brand-shadow focus-visible:outline-brand-accent sm:h-16 sm:px-5" onClick={() => { dismissTeaser(); updateOpen((current) => !current); }} type="button">
         {open ? <X aria-hidden size={24} /> : <><ChatCircleDots aria-hidden size={26} weight="fill" /><span className="hidden whitespace-nowrap font-display text-xs font-semibold sm:inline">{locale === "de" ? "Frag Heikes AI" : "Ask Heike's AI"}</span></>}
       </button>
     </div>

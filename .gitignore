@@ -10,3 +10,5 @@ content-db/ai-usage.sqlite*
 .env*
 !.env.example
 .vercel
+.secrets/
+backups/
