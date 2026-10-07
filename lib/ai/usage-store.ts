@@ -21,7 +21,10 @@ export type UsageLimitReason =
   | "global_month"
   | "unconfigured";
 
-export type UsageDecision = {allowed: true} | {allowed: false; reason: UsageLimitReason};
+export type UsageDecision = {
+  allowed: boolean;
+  reason?: UsageLimitReason;
+};
 
 export type ClientIdentity = {
   visitorId: string;

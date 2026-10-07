@@ -1,4 +1,4 @@
-import {HomePageContent} from "@/app/page";
+import {HomePageContent} from "@/components/home-page-content";
 
 export const dynamic = "force-dynamic";
 
